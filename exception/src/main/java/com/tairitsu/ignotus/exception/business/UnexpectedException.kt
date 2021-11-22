@@ -1,6 +1,6 @@
 package com.tairitsu.ignotus.exception.business
 
-import com.tairitsu.ignotus.exception.Config
+import com.tairitsu.ignotus.exception.ExceptionConfig
 import com.tairitsu.ignotus.exception.SingleApiException
 import org.apache.commons.lang3.exception.ExceptionUtils
 
@@ -16,7 +16,7 @@ class UnexpectedException : SingleApiException {
 
     override fun toJSONObject(): HashMap<String, Any> {
         val e = super.toJSONObject()
-        if (exception != null && Config.IS_DEBUG) {
+        if (exception != null && ExceptionConfig.IS_DEBUG) {
             e["meta"] = getMate()
         }
         return e
