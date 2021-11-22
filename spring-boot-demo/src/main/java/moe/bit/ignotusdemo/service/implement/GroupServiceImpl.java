@@ -12,7 +12,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transaction
     public GroupVo createGroup(CreateGroupDto body) {
-        var group = GroupEntity.create(s -> {
+        GroupEntity group = GroupEntity.create(s -> {
             s.setName(body.getName());
         });
         group.flush(null);

@@ -24,7 +24,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Nullable
     public FAuthInfo authenticateWithHeader(String token) {
-        var tokenArr = token.split(" ");
+        String[] tokenArr = token.split(" ");
         if (tokenArr.length != 2 || !tokenArr[0].equalsIgnoreCase("bearer")) {
             return null;
         }
@@ -39,18 +39,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         //noinspection ConstantConditions
         authInfo.setUpdatedAt(user.getUpdatedAt());
 
-        var roles = new ArrayList<String>();
+        ArrayList<String> roles = new ArrayList<String>();
         // TODO 先随便整一个用户组
         roles.add("USER");
         authInfo.setRoles(roles);
 
-        var token = generateToken();
-        var validDuration = Duration.ofHours(8);
+        String token = generateToken();
+        Duration validDuration = Duration.ofHours(8);
         cache.put("user:token:" + token, authInfo, validDuration);
 
-        var credentials = new Credentials();
+        Credentials credentials = new Credentials();
         credentials.setAccessToken(token);
-        credentials.setExpiresIn((int) validDuration.toSeconds());
+        credentials.setExpiresIn((int) validDuration.getSeconds());
         credentials.setStatus(0);
 
         return new Pair<FAuthInfo, Credentials>(authInfo, credentials);
