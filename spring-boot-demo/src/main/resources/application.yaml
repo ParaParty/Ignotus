@@ -1,0 +1,27 @@
+spring:
+    main:
+        allow-bean-definition-overriding: false
+    application:
+        name: Authorization
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: root
+        password: ""
+        url: jdbc:mysql://localhost:3306/forestsay?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    redis:
+        host: localhost
+        port: 6379
+        database: 0
+    jackson:
+        property-naming-strategy: com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy
+
+application:
+    repository:
+        source: "local"
+
+ignotus:
+    exception:
+        debug: false
+
+server:
+    port: 12300

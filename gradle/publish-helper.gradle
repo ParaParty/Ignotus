@@ -1,0 +1,84 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+def selfProject = project
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = selfProject.group
+            version = selfProject.version
+            artifactId = selfProject.name
+
+            from components.java
+            artifacts {
+                archives javadocJar, sourcesJar
+            }
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = selfProject.ext.getProperty('POM_NAME')
+                description = selfProject.ext.getProperty('POM_DESCRIPTION')
+                url = 'https://github.com/paraparty/Ignotus'
+//                properties = [                ]
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'ericlian'
+                        name = 'Eric_Lian'
+                        email = 'public@superexercisebook.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/paraparty/Ignotus.git'
+                    developerConnection = 'scm:git:https://github.com/paraparty/Ignotus.git'
+                    url = 'https://github.com/paraparty/Ignotus'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+//            def releasesRepoUrl = layout.buildDirectory.dir('repos/releases')
+//            def snapshotsRepoUrl = layout.buildDirectory.dir('repos/snapshots')
+
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            credentials {
+                username = findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")
+                password = findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")
+            }
+
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}

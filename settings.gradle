@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+}
+
+rootProject.name = 'ParaParty-Ignotus'
+
+def modules = [
+    'cache',
+    'database-exposed',
+    'exception',
+    'foundation',
+    'serializer',
+    'support',
+    'translation',
+    'validation',
+    'spring-boot-demo',
+]
+
+for (item in modules) {
+    include ":$item"
+}
+
+for (item in modules) {
+    project(":$item").projectDir = "$rootDir/$item" as File
+}

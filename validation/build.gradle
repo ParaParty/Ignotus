@@ -1,0 +1,46 @@
+plugins {
+    id 'java-library'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Kotlin Support
+    compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
+
+    // Spring Boot
+    compileOnly 'org.springframework.boot:spring-boot:2.5.6'
+
+    // SLF4J
+    compileOnly 'org.slf4j:slf4j-api:1.7.32'
+
+    api project(path: ':support')
+    api project(path: ':exception')
+}
+
+
+test {
+    useJUnitPlatform()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
+}
+
+project.ext.setProperty('POM_NAME', "ParaParty Spring-Boot Common Library : ${project.name}")
+project.ext.setProperty('POM_DESCRIPTION', "Laravel like data validation.")
+apply from: "$rootDir/gradle/publish-helper.gradle"
+

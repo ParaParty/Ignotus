@@ -1,0 +1,43 @@
+plugins {
+    id 'java-library'
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Kotlin Support
+    compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
+
+    // Spring Boot
+    compileOnly 'org.springframework.boot:spring-boot-starter-aop:2.5.6'
+
+    // JetBrains Exposed
+    api 'org.jetbrains.exposed:exposed-spring-boot-starter:0.36.2'
+    // api 'org.jetbrains.exposed:exposed-kotlin-datetime:0.36.2'
+    api 'org.jetbrains.exposed:exposed-java-time:0.36.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "16"
+    }
+}
+
+project.ext.setProperty('POM_NAME', "ParaParty Spring-Boot Common Library : ${project.name}")
+project.ext.setProperty('POM_DESCRIPTION', "JetBrains Exposed ORM extension.")
+apply from: "$rootDir/gradle/publish-helper.gradle"
