@@ -14,7 +14,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = selfProject.group
             version = selfProject.version
-            artifactId = selfProject.name
+            artifactId = "ignotus-${selfProject.name}"
 
             from components.java
             artifacts {
