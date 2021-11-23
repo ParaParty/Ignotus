@@ -1,4 +1,4 @@
-# ParaParty Ignotus Spring-Boot 常用组件
+# ParaParty Ignotus, Spring-Boot 常用组件
 
 - 支持了一点 [JSON:API](https://jsonapi.org/)
 - 实现了一些 [Laravel](https://laravel.com/) 风格的 api
@@ -6,14 +6,14 @@
 ## 使用
 
 ### Maven
-在 `pom.xml` 中添加依赖：````
+在 `pom.xml` 中添加依赖：
 ```xml
 <dependency>
   <groupId>com.tairitsu</groupId>
   <artifactId>ignotus-exception</artifactId> <!-- 以全局异常处理模块为例 -->
   <version>1.0.3</version>
 </dependency>
-````
+```
 
 ### Gradle
 ```groovy
