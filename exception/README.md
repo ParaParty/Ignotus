@@ -1,24 +1,5 @@
-# 全局异常处理模块
+# JSON:API 格式的全局异常处理模块
 [JSON:API 输出格式](https://jsonapi.org/format/#errors) 的全局异常处理模块
-
-## 安装
-
-### Maven
-在 `pom.xml` 中添加依赖：
-```xml
-<dependency>
-  <groupId>com.tairitsu</groupId>
-  <artifactId>ignotus-exception</artifactId> <!-- 以全局异常处理模块为例 -->
-  <version>1.0.3</version>
-</dependency>
-```
-
-### Gradle
-
-```groovy
-// JSON:API 输出格式的全局异常处理模块
-implementation 'com.tairitsu:ignotus-exception:1.0.3'
-```
 
 ## 快速上手
 
