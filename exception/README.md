@@ -67,7 +67,7 @@ public class Test {
 ## 定义一个错误
 
 ```java
-import com.tairitsu.ignotus.exception.business.SingleApiException;
+import com.tairitsu.ignotus.exception.SingleApiException;
 
 public class MyDemoException extends SingleApiException {
     public MyDemoException() {

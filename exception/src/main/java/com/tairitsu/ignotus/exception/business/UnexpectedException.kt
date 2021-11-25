@@ -4,6 +4,9 @@ import com.tairitsu.ignotus.exception.ExceptionConfig
 import com.tairitsu.ignotus.exception.SingleApiException
 import org.apache.commons.lang3.exception.ExceptionUtils
 
+/**
+ * 业务异常：未知异常
+ */
 class UnexpectedException : SingleApiException {
     private var name: String?
 
