@@ -1,6 +1,7 @@
 package com.tairitsu.ignotus.support.util
 
-import com.tairitsu.ignotus.support.model.vo.Pagination
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import javax.servlet.ServletRequest
 
 class ServletRequestAttribute(private val self: ServletRequest) {
@@ -23,12 +24,12 @@ object ServletRequestExtension {
 
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun ServletRequest.getExtractedSort(): ArrayList<Pair<String, String>>? =
-        this.getAttribute("extracted_sort") as ArrayList<Pair<String, String>>?
+    fun ServletRequest.getExtractedSort(): Sort? =
+        this.getAttribute("extracted_sort") as Sort?
 
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun ServletRequest.setExtractedSort(value: ArrayList<Pair<String, String>>) =
+    fun ServletRequest.setExtractedSort(value: Sort) =
         this.setAttribute("extracted_sort", value)
 
     @JvmStatic
@@ -43,11 +44,11 @@ object ServletRequestExtension {
 
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun ServletRequest.getExtractedPagination(): Pagination? =
-        this.getAttribute("extracted_pagination") as Pagination?
+    fun ServletRequest.getExtractedPagination(): Pageable? =
+        this.getAttribute("extracted_pagination") as Pageable?
 
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun ServletRequest.setExtractedPagination(value: Pagination) =
+    fun ServletRequest.setExtractedPagination(value: Pageable) =
         this.setAttribute("extracted_pagination", value)
 }

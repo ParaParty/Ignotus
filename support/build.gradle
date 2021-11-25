@@ -18,6 +18,7 @@ dependencies {
     // Spring Boot
     compileOnly 'org.springframework:spring-webmvc:5.3.13'
     compileOnly 'org.springframework.boot:spring-boot-autoconfigure:2.5.6'
+    compileOnly 'org.springframework.data:spring-data-commons:2.6.0'
 
     // Tomcat
     compileOnly 'org.apache.tomcat.embed:tomcat-embed-core:9.0.54'

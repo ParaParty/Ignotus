@@ -1,10 +1,12 @@
 package com.tairitsu.ignotus.foundation
 
-import com.tairitsu.ignotus.support.model.vo.Pagination
-import com.tairitsu.ignotus.foundation.annotation.JsonApiController
 import com.tairitsu.ignotus.exception.business.PageNumberInvalidException
+import com.tairitsu.ignotus.exception.business.PageOffsetInvalidException
+import com.tairitsu.ignotus.exception.business.PageSizeInvalidException
 import com.tairitsu.ignotus.exception.relation.IncludeInvalidException
 import com.tairitsu.ignotus.exception.relation.SortInvalidException
+import com.tairitsu.ignotus.foundation.annotation.JsonApiController
+import com.tairitsu.ignotus.support.model.vo.OffsetBasedPagination
 import com.tairitsu.ignotus.support.util.ServletRequestExtension.getExtractedInclude
 import com.tairitsu.ignotus.support.util.ServletRequestExtension.setExtractedFilter
 import com.tairitsu.ignotus.support.util.ServletRequestExtension.setExtractedInclude
@@ -17,6 +19,9 @@ import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Before
 import org.aspectj.lang.reflect.MethodSignature
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.context.request.RequestAttributes
@@ -92,8 +97,8 @@ open class ControllerAspect {
         // 开始处理
         extractInclude(jsonApiController.optionalInclude.toList(), request, allRequestParams)
         extractFilter(request, allRequestParams)
-        extractSort(jsonApiController.optionalSort.toList(), request, allRequestParams)
-        extractPage(request, allRequestParams)
+        val sort = extractSort(jsonApiController.optionalSort.toList(), request, allRequestParams)
+        extractPage(request, allRequestParams, sort)
     }
 
     /**
@@ -156,8 +161,8 @@ open class ControllerAspect {
         optionalSort: List<String>,
         request: HttpServletRequest,
         allRequestParams: Map<String, String>,
-    ): List<Pair<String, String>> {
-        val ret = ArrayList<Pair<String, String>>()
+    ): Sort {
+        val ret = ArrayList<Sort.Order>()
 
         val sortStr = allRequestParams["sort"] ?: ""
         val sortArr = sortStr.split(",")
@@ -183,38 +188,46 @@ open class ControllerAspect {
                     throw SortInvalidException()
                 }
 
-                ret.add(col to order)
+                if (order == "ASC") {
+                    ret.add(Sort.Order.asc(col))
+                } else {
+                    ret.add(Sort.Order.desc(col))
+                }
             }
         }
 
-        request.setExtractedSort(ret)
-        return ret
+        val sort = Sort.by(ret)
+        request.setExtractedSort(sort)
+        return sort
     }
 
     /**
      * 从请求中解析分页设置
      */
-    private fun extractPage(request: HttpServletRequest, allRequestParams: Map<String, String>): Pagination {
-        val ret = Pagination()
-
-        val limit = allRequestParams["page[limit]"] ?: allRequestParams["page[size]"] ?: "20"
-        ret.limit = limit.toInt()
-
-        ret.number = 1
-
-        val pageNumberStr = allRequestParams["page[number]"]
-        if (pageNumberStr != null) {
-            ret.number = pageNumberStr.toInt()
+    private fun extractPage(
+        request: HttpServletRequest,
+        allRequestParams: Map<String, String>,
+        sort: Sort
+    ): Pageable {
+        val limitStr = allRequestParams["page[limit]"] ?: allRequestParams["page[size]"] ?: "20"
+        val limit = limitStr.toIntOrNull() ?: 20
+        if (limit !in 1..200) {
+            throw PageSizeInvalidException()
         }
 
-//        val pageOffsetStr = allRequestParams["page[offset]"];
-//        if (pageOffsetStr != null) {
-//            ret.number = pageOffsetStr.toInt();
-//        }
+        // 基于页码的分页
+        val pageNumberStr = allRequestParams["page[number]"]
+        if (pageNumberStr != null) {
+            val number = pageNumberStr.toIntOrNull() ?: throw PageNumberInvalidException()
+            val ret = PageRequest.of(number, limit, sort)
+            request.setExtractedPagination(ret)
+            return ret
+        }
 
-        if (ret.limit !in 1..500) ret.limit = 200
-        if (ret.number <= 0) throw PageNumberInvalidException()
-
+        // 基于起始位置的分页
+        val offsetNumberStr = allRequestParams["page[offset]"] ?: "0"
+        val offset = offsetNumberStr.toIntOrNull() ?: throw PageOffsetInvalidException()
+        val ret = OffsetBasedPagination(offset, limit, sort)
         request.setExtractedPagination(ret)
         return ret
     }
