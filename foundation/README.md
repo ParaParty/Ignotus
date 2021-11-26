@@ -21,3 +21,18 @@ public class UserController {
     }
 }
 ```
+
+### 验证用户提交
+完整例子见：[e5f4739](https://github.com/ParaParty/Ignotus/blob/e5f4739e53251b9e255cce70990a54cc4f64ae5e/spring-boot-demo/src/main/java/moe/bit/ignotusdemo/controller/UserController.java)
+```java
+import com.tairitsu.ignotus.support.util.ServletRequestExtension;
+
+@RestController
+public class UserController {
+    @PostMapping("api/register")
+    @JsonApiController()
+    public UserVo register(@Valid @RequestBody RegisterRequest user) {
+        // TODO 自己看着办
+    }
+}
+```
