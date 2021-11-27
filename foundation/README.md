@@ -36,3 +36,15 @@ public class UserController {
     }
 }
 ```
+
+## 设置
+```properties
+ignotus.foundation.pagination.page-based.enabled=true
+ignotus.foundation.pagination.page-based.start-at=1
+
+ignotus.foundation.pagination.offset-based.enabled=true
+
+ignotus.foundation.pagination.min-limit=1
+ignotus.foundation.pagination.default-limit=20
+ignotus.foundation.pagination.max-limit=200
+```

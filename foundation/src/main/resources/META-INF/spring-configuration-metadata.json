@@ -1,0 +1,62 @@
+{
+    "groups": [
+        {
+            "name": "ignotus.foundation",
+            "type": "com.tairitsu.ignotus.foundation.FoundationConfig",
+            "sourceType": "com.tairitsu.ignotus.foundation.FoundationConfig",
+            "description": "Ignotus Foundation 配置。"
+        },
+        {
+            "name": "ignotus.foundation.pagination",
+            "type": "com.tairitsu.ignotus.foundation.FoundationPaginationConfig",
+            "sourceType": "com.tairitsu.ignotus.foundation.FoundationPaginationConfig",
+            "description": "页码序列化默认设置。"
+        },
+        {
+            "name": "ignotus.foundation.pagination.page-based",
+            "type": "com.tairitsu.ignotus.foundation.FoundationPaginationPageBasedConfig",
+            "sourceType": "com.tairitsu.ignotus.foundation.FoundationPaginationPageBasedConfig",
+            "description": "基于页码的分页参数默认序列化设置。"
+        },
+        {
+            "name": "ignotus.foundation.pagination.offset-based",
+            "type": "com.tairitsu.ignotus.foundation.FoundationPaginationOffsetBasedConfig",
+            "sourceType": "com.tairitsu.ignotus.foundation.FoundationPaginationOffsetBasedConfig",
+            "description": "基于偏移的分页参数默认序列化设置。"
+        }
+    ],
+    "properties": [
+        {
+            "name": "ignotus.foundation.pagination.page-based.enabled",
+            "type": "java.lang.Boolean",
+            "description": "是否允许用户提交基于页码的分页参数。"
+        },
+        {
+            "name": "ignotus.foundation.pagination.page-based.start-at",
+            "type": "java.lang.Integer",
+            "description": "页码默认起始页号。"
+        },
+        {
+            "name": "ignotus.foundation.pagination.offset-based.enabled",
+            "type": "java.lang.Boolean",
+            "description": "是否允许用户提交基于偏移的分页参数。"
+        },
+        {
+            "name": "ignotus.foundation.pagination.default-limit",
+            "type": "java.lang.Integer",
+            "description": "默认页面大小。"
+        },
+        {
+            "name": "ignotus.foundation.pagination.min-limit",
+            "type": "java.lang.Integer",
+            "description": "最小页面大小。"
+        },
+        {
+            "name": "ignotus.foundation.pagination.max-limit",
+            "type": "java.lang.Integer",
+            "description": "最大页面大小。"
+        }
+    ],
+    "hints": [
+    ]
+}

@@ -1,5 +1,6 @@
 package com.tairitsu.ignotus.foundation
 
+import com.tairitsu.ignotus.exception.business.PageInvalidException
 import com.tairitsu.ignotus.exception.business.PageNumberInvalidException
 import com.tairitsu.ignotus.exception.business.PageOffsetInvalidException
 import com.tairitsu.ignotus.exception.business.PageSizeInvalidException
@@ -31,6 +32,9 @@ import javax.servlet.http.HttpServletRequest
 @Aspect
 @Component
 open class ControllerAspect {
+
+    @Autowired
+    private lateinit var foundationConfig: FoundationConfig
 
     @Autowired
     private lateinit var validator: Validator
@@ -209,28 +213,36 @@ open class ControllerAspect {
         allRequestParams: Map<String, String>,
         sort: Sort
     ): Pageable {
-        val limitStr = allRequestParams["page[limit]"] ?: allRequestParams["page[size]"] ?: "20"
-        val limit = limitStr.toIntOrNull() ?: 20
-        if (limit !in 1..200) {
+        val limitStr = allRequestParams["page[limit]"] ?: allRequestParams["page[size]"]
+        val limit = limitStr?.toIntOrNull() ?: foundationConfig.pagination.defaultLimit
+        if (limit < foundationConfig.pagination.minLimit || limit > foundationConfig.pagination.maxLimit) {
             throw PageSizeInvalidException()
         }
 
         // 基于页码的分页
-        val pageNumberStr = allRequestParams["page[number]"]
-        if (pageNumberStr != null) {
-            val number = pageNumberStr.toIntOrNull() ?: throw PageNumberInvalidException()
-            val ret = PageRequest.of(number, limit, sort)
+        if (foundationConfig.pagination.pageBased.enabled) {
+            val pageNumberStr = allRequestParams["page[number]"]
+            if (pageNumberStr != null) {
+                val number = pageNumberStr.toIntOrNull() ?: throw PageNumberInvalidException()
+                val ret = when (foundationConfig.pagination.pageBased.startAt) {
+                    0 -> PageRequest.of(number, limit, sort)
+                    1 -> if (number >= 1) PageRequest.of(number - 1, limit, sort) else throw PageNumberInvalidException()
+                    else -> throw PageNumberInvalidException()
+                }
+                request.setExtractedPagination(ret)
+                return ret
+            }
+        }
+
+        // 基于起始位置的分页
+        if (foundationConfig.pagination.offsetBased.enabled) {
+            val offsetNumberStr = allRequestParams["page[offset]"] ?: "0"
+            val offset = offsetNumberStr.toIntOrNull() ?: throw PageOffsetInvalidException()
+            val ret = OffsetBasedPagination(offset, limit, sort)
             request.setExtractedPagination(ret)
             return ret
         }
 
-        // 基于起始位置的分页
-        val offsetNumberStr = allRequestParams["page[offset]"] ?: "0"
-        val offset = offsetNumberStr.toIntOrNull() ?: throw PageOffsetInvalidException()
-        val ret = OffsetBasedPagination(offset, limit, sort)
-        request.setExtractedPagination(ret)
-        return ret
+        throw PageInvalidException()
     }
 }
-
-

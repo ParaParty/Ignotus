@@ -22,6 +22,16 @@ application:
 ignotus:
     exception:
         debug: false
+    foundation:
+        pagination:
+            page-based:
+                enabled: true
+                start-at: 1
+            offset-based:
+                enabled: true
+            min-limit: 1
+            default-limit: 20
+            max-limit: 200
 
 server:
     port: 12300
