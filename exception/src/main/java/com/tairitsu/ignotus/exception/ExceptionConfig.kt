@@ -1,17 +1,21 @@
 package com.tairitsu.ignotus.exception
 
-import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
 @Component("IgnotusExceptionConfig")
-class ExceptionConfig {
-    @Value("\${ignotus.exception.debug:false}")
-    private var debug: Boolean = false
-        set(s) {
-            IS_DEBUG = s
-            field = s
-        }
-        get() = IS_DEBUG
+@ConfigurationProperties(prefix = "ignotus.exception")
+open class ExceptionConfig {
+    @JvmField var debug: Boolean = false
+
+    open fun isDebug(): Boolean {
+        return debug
+    }
+
+    open fun setDebug(debug: Boolean) {
+        IS_DEBUG = debug
+        this.debug = debug
+    }
 
     companion object {
         var IS_DEBUG = false

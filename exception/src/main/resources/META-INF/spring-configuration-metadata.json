@@ -1,0 +1,19 @@
+{
+    "groups": [
+        {
+            "name": "ignotus.exception",
+            "type": "com.tairitsu.ignotus.exception.ExceptionConfig",
+            "sourceType": "com.tairitsu.ignotus.exception.ExceptionConfig",
+            "description": "Ignotus Exception 配置。"
+        }
+    ],
+    "properties": [
+        {
+            "name": "ignotus.exception.debug",
+            "type": "java.lang.Boolean",
+            "description": "调试模式，当调试模式开启时，会输出 UnexpectedException 的堆栈信息。"
+        }
+    ],
+    "hints": [
+    ]
+}

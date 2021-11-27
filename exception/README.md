@@ -77,3 +77,9 @@ public class MyDemoException extends SingleApiException {
 ```
 
 如果需要输出更多的信息，可以参考 `UnexpectedException` 的实现，重写 `SingleApiException` 的 `toJSONObject` 方法。
+
+## 设置
+```properties
+# 调试模式，当调试模式开启时，会输出更多 UnexpectedException 的堆栈信息。
+ignotus.exception.debug = true
+```
