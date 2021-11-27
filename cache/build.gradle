@@ -16,9 +16,19 @@ dependencies {
     compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
 
     // Spring Boot
-    compileOnly 'org.springframework.data:spring-data-redis:2.6.0'
-    compileOnly 'org.springframework.data:spring-data-mongodb:3.3.0'
     compileOnly 'org.springframework.boot:spring-boot-autoconfigure:2.5.6'
+
+    // Redis
+    compileOnly 'org.springframework.data:spring-data-redis:2.6.0'
+
+    // Mongo
+    compileOnly 'org.springframework.data:spring-data-mongodb:3.3.0'
+
+    // Ignite
+    compileOnly 'org.apache.ignite:ignite-core:2.11.0'
+    compileOnly 'org.apache.ignite:ignite-indexing:2.11.0'
+    compileOnly 'org.apache.ignite:ignite-spring:2.11.0'
+    compileOnly 'org.apache.ignite:ignite-spring-data_2.2:2.9.1'
 
     api project(path: ':support')
 }
