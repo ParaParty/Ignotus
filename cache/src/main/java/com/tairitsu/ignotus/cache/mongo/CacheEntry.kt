@@ -9,6 +9,9 @@ class CacheEntry {
     @Id
     var id: String = ""
 
+    @Field("id_friendly")
+    var idFriendly: String = ""
+
     @Field("valid_until")
     var validUntilMillis: Long = 0
 

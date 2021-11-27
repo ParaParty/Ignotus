@@ -29,7 +29,8 @@ class MongoCacheService(private val mongoTemplate: MongoTemplate) : CacheService
     }
 
     private fun setLock(key: String, token: String, retry: Boolean = true): String? {
-        val lockKey = (LOCK_PREFIX + key).base64Encode()
+        val lockKeyFriendly = LOCK_PREFIX + key
+        val lockKey = lockKeyFriendly.base64Encode()
         val now = System.currentTimeMillis()
         val validUntil = now + LOCK_CAPACITY
         val validUntilDate = Date(validUntil).toString()
@@ -37,6 +38,7 @@ class MongoCacheService(private val mongoTemplate: MongoTemplate) : CacheService
         val query = Query.query(Criteria.where("_id").`is`(lockKey))
         val update: Update = Update()
             .setOnInsert("_id", lockKey)
+            .setOnInsert("id_friendly", lockKeyFriendly)
             .setOnInsert("valid_until", validUntil)
             .setOnInsert("valid_until_friendly", validUntilDate)
             .setOnInsert("token", token)
@@ -124,6 +126,7 @@ class MongoCacheService(private val mongoTemplate: MongoTemplate) : CacheService
     override fun <T> put(key: String, value: T): Boolean {
         val entry = CacheEntry()
         entry.id = key.base64Encode()
+        entry.idFriendly = key
         entry.value = value?.toJson() ?: "null"
 
         mongoTemplate.save(entry)
@@ -145,6 +148,7 @@ class MongoCacheService(private val mongoTemplate: MongoTemplate) : CacheService
 
         val entry = CacheEntry()
         entry.id = key.base64Encode()
+        entry.idFriendly = key
         entry.value = value?.toJson() ?: "null"
         entry.validUntilMillis = validUntil
         entry.validUntil = validUntilDate
