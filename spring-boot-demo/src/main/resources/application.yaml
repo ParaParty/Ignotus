@@ -8,6 +8,13 @@ spring:
         username: root
         password: ""
         url: jdbc:mysql://localhost:3306/forestsay?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    jpa:
+        database-platform:
+            org.hibernate.dialect.MySQL5InnoDBDialect
+        hibernate.ddl-auto:
+            update
+        show-sql:
+            true
     redis:
         host: localhost
         port: 6379
