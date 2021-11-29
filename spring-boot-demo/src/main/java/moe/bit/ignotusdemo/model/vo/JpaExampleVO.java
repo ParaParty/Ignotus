@@ -1,6 +1,7 @@
 package moe.bit.ignotusdemo.model.vo;
 
 import com.tairitsu.ignotus.serializer.vo.BaseResponse;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,6 +18,7 @@ import java.util.Date;
  */
 
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
 @Builder
 @Data
 public class JpaExampleVO extends BaseResponse {
