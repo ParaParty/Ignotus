@@ -12,6 +12,9 @@ repositories {
 }
 
 dependencies {
+    implementation 'au.com.dius.pact.provider:spring:4.3.0'
+    implementation 'org.projectlombok:lombok:1.18.22'
+
     // Kotlin Support
     compileOnly 'org.jetbrains.kotlin:kotlin-reflect:1.6.0'
     compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
