@@ -15,11 +15,11 @@ import java.util.ArrayList;
 
 @Component
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final CacheService cache;
+    private final CacheService cache = null;
 
-    public AuthenticationServiceImpl(CacheService cache) {
-        this.cache = cache;
-    }
+//    public AuthenticationServiceImpl(CacheService cache) {
+//        this.cache = cache;
+//    }
 
     @Override
     @Nullable
