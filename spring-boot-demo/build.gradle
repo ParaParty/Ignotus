@@ -29,6 +29,10 @@ dependencies {
     }
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     api 'org.springframework.boot:spring-boot-starter-web:2.6.0'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
     api 'org.springframework.boot:spring-boot-starter-data-redis:2.6.0'
     implementation 'org.projectlombok:lombok:1.18.22'
 }

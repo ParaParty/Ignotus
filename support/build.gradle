@@ -12,7 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'au.com.dius.pact.provider:spring:4.3.0'
     implementation 'org.projectlombok:lombok:1.18.22'
 
     // Kotlin Support
