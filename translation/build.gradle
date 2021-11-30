@@ -14,35 +14,20 @@ repositories {
 }
 
 dependencies {
-    api 'org.apache.commons:commons-lang3:3.12.0'
-
-    // Kotlin Support
-    api 'org.jetbrains.kotlin:kotlin-reflect:1.6.0'
-    api 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
-
     // Spring Boot
-    api 'org.springframework.boot:spring-boot-starter-web:2.5.6'
-    api 'org.springframework.boot:spring-boot-starter-aop:2.5.6'
-    api 'org.springframework.boot:spring-boot-starter-jdbc:2.5.6'
-    api 'org.springframework.boot:spring-boot-starter-data-redis:2.5.6'
-    api 'org.springframework.security:spring-security-crypto:5.5.3'
-    testApi 'org.springframework.boot:spring-boot-starter-test:2.5.6'
+    compileOnly 'org.springframework.boot:spring-boot:2.6.0'
+    compileOnly 'org.springframework.boot:spring-boot-autoconfigure:2.5.6'
 
-    // JetBrains Exposed
-    api 'org.jetbrains.exposed:exposed-spring-boot-starter:0.36.2'
-//    api 'org.jetbrains.exposed:exposed-kotlin-datetime:0.36.2'
-    api 'org.jetbrains.exposed:exposed-java-time:0.36.2'
+    // SLF4J
+    compileOnly 'org.slf4j:slf4j-api:1.7.32'
 
     // Jackson
-    api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0'
-    api 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0'
+    compileOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0'
+    compileOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.13.0'
 
+    api 'org.antlr:ST4:4.3.1'
 
-    // MySQL
-    api 'mysql:mysql-connector-java:8.0.27'
-
-    // Redis
-    api 'io.lettuce:lettuce-core:6.1.5.RELEASE'
+    api project(path: ':support')
 }
 
 test {
