@@ -19,5 +19,5 @@ public interface JpaExampleDao extends JpaRepository<JpaExampleEntity, Long> {
 
     List<JpaExampleEntity> findAllByTheDayBetween(Date begin, Date end);
 
-    List<JpaExampleEntity> findAllByNumberIsGreaterThanEqual(Long number);
+    List<JpaExampleEntity> findAllByNumberGreaterThan(Long number);
 }

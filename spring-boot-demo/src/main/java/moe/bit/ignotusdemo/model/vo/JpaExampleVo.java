@@ -21,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Data
-public class JpaExampleVO extends BaseResponse {
+public class JpaExampleVo extends BaseResponse {
 
     public String name;
 
@@ -29,7 +29,7 @@ public class JpaExampleVO extends BaseResponse {
 
     public Date theDay;
 
-    public JpaExampleVO(JpaExampleEntity jpaExampleEntity) {
+    public JpaExampleVo(JpaExampleEntity jpaExampleEntity) {
         this.setName(jpaExampleEntity.getName());
         this.setNumber(jpaExampleEntity.getNumber());
         this.setTheDay(jpaExampleEntity.getTheDay());
