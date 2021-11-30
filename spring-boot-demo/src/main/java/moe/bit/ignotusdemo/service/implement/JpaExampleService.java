@@ -3,14 +3,19 @@ package moe.bit.ignotusdemo.service.implement;
 import moe.bit.ignotusdemo.dao.JpaExampleDao;
 import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author 13090
@@ -67,6 +72,40 @@ public class JpaExampleService {
             .stream()
             .filter(entity -> entity.getTheDay() != null)
             .collect(Collectors.groupingBy(entity -> simpleDateFormat.format(entity.getTheDay()), Collectors.counting()));
+    }
+
+
+    /**
+     * generate entities for test
+     *
+     * @param numbers
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public boolean generateEntity(Long numbers) {
+        final long MAX_GENERATE_SIZE = 10000L;
+        assert numbers != 0 && numbers >= 0 && numbers <= MAX_GENERATE_SIZE;
+
+        final int availableProcessors = Runtime.getRuntime().availableProcessors();
+        AtomicLong count = new AtomicLong(0L);
+        CountDownLatch countDownLatch = new CountDownLatch(availableProcessors);
+        IntStream.range(0, availableProcessors).forEach(i -> {
+            new Thread(() -> {
+                ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
+                while (count.incrementAndGet() < numbers) {
+                    JpaExampleEntity jpaExampleEntity = new JpaExampleEntity();
+                    jpaExampleEntity.setName("name" + threadLocalRandom.nextLong(MAX_GENERATE_SIZE));
+                    jpaExampleEntity.setTheDay(new Date());
+                    jpaExampleEntity.setNumber(MAX_GENERATE_SIZE << 2);
+                    jpaExampleDao.save(jpaExampleEntity);
+                }
+                countDownLatch.countDown();
+            }, this.getClass().getSimpleName() + " thread:" + i).start();
+        });
+
+        countDownLatch.countDown();
+
+        return true;
     }
 
 }

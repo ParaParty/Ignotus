@@ -50,4 +50,8 @@ public class JpaExampleController {
         return jpaExampleService.getAvgNumberByDateBetween(inputDate, oneYearAfter);
     }
 
+    @PutMapping("")
+    boolean generateEntity(@RequestParam("number") Long number) {
+        return jpaExampleService.generateEntity(number);
+    }
 }
