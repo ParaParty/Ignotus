@@ -65,4 +65,8 @@ class TranslationService {
         }
         return st.render(locale)
     }
+
+    fun builder(): TranslationBuilder {
+        return TranslationBuilder(this)
+    }
 }

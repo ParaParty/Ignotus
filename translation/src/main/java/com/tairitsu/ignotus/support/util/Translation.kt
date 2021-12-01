@@ -1,5 +1,6 @@
 package com.tairitsu.ignotus.support.util
 
+import com.tairitsu.ignotus.translation.TranslationBuilder
 import com.tairitsu.ignotus.translation.TranslationService
 import org.springframework.context.i18n.LocaleContextHolder
 import java.util.*
@@ -28,5 +29,10 @@ object Translation {
     @JvmStatic
     fun lang(key: String, args: Map<String, Any>, locale: Locale): String {
         return service.getMessage(key = key, args = args, locale = locale, default = "")
+    }
+
+    @JvmStatic
+    fun builder(): TranslationBuilder {
+        return service.builder()
     }
 }
