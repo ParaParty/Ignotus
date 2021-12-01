@@ -1,5 +1,6 @@
 package com.tairitsu.ignotus.validation.validator
 
+import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.springframework.stereotype.Component
 
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Component
 class ValidatorString : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail("$attribute is not a string")
+            fail(lang("validation.string", mapOf("attribute" to attribute)))
             return
         }
     }
@@ -17,7 +18,7 @@ class ValidatorString : AttributeValidatorInterface {
 class ValidatorInt : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is Int) {
-            fail("$attribute is not a number")
+            fail(lang("validation.integer", mapOf("attribute" to attribute)))
             return
         }
     }
@@ -27,7 +28,7 @@ class ValidatorInt : AttributeValidatorInterface {
 open class ValidatorNumber : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is Number) {
-            fail("$attribute is not a number")
+            fail(lang("validation.numeric", mapOf("attribute" to attribute)))
             return
         }
     }
@@ -40,7 +41,7 @@ open class ValidatorDouble : ValidatorNumber()
 open class ValidatorBoolean : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is Boolean) {
-            fail("$attribute is not a Boolean")
+            fail(lang("validation.boolean", mapOf("attribute" to attribute)))
             return
         }
     }
@@ -50,7 +51,7 @@ open class ValidatorBoolean : AttributeValidatorInterface {
 open class ValidatorArray : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is Collection<*>) {
-            fail("$attribute is not an array")
+            fail(lang("validation.array", mapOf("attribute" to attribute)))
             return
         }
     }
@@ -60,7 +61,7 @@ open class ValidatorArray : AttributeValidatorInterface {
 open class ValidatorObject : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is Map<*, *>) {
-            fail("$attribute is not an object")
+            fail(lang("validation.object", mapOf("attribute" to attribute)))
             return
         }
     }

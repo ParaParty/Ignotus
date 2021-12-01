@@ -1,5 +1,6 @@
 package com.tairitsu.ignotus.validation.validator
 
+import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.springframework.stereotype.Component
 
@@ -10,11 +11,12 @@ class ValidatorUuid : AttributeValidatorInterface {
 
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail("$attribute is not a string");
-            return;
+            fail(lang("validation.string", mapOf("attribute" to attribute)))
+            return
         }
 
-        if (!value.matches(regex)) fail("$attribute is not an uuid.");
+        if (!value.matches(regex)) fail(lang("validation.uuid", mapOf("attribute" to attribute)))
+
     }
 }
 
@@ -25,11 +27,11 @@ class ValidatorUuidWithoutDash : AttributeValidatorInterface {
 
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail("$attribute is not a string");
-            return;
+            fail(lang("validation.string", mapOf("attribute" to attribute)))
+            return
         }
 
-        if (!value.matches(regex)) fail("$attribute is not a uuid without dash.");
+        if (!value.matches(regex)) fail(lang("validation.uuid_without_dash", mapOf("attribute" to attribute)))
     }
 }
 

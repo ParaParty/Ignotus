@@ -1,5 +1,7 @@
 package com.tairitsu.ignotus.validation.validator
 
+import com.tairitsu.ignotus.support.util.Translation
+import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.springframework.stereotype.Component
 
@@ -7,12 +9,12 @@ import org.springframework.stereotype.Component
 class ValidatorRegex : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail("$attribute is not a string");
+            fail(lang("validation.string", mapOf("attribute" to attribute)))
             return
         }
 
-        val check = arg.toRegex(fail) ?: return
-        if (!value.matches((check))) fail("$attribute is an instance of ${check.pattern}");
+        val check = arg.toRegex(this.javaClass.name, fail) ?: return
+        if (!value.matches((check))) fail(lang("validation.regex", mapOf("attribute" to attribute)));
     }
 }
 
@@ -20,16 +22,16 @@ class ValidatorRegex : AttributeValidatorInterface {
 class ValidatorNotRegex : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail("$attribute is not a string");
+            fail(lang("validation.string", mapOf("attribute" to attribute)))
             return
         }
 
-        val check = arg.toRegex(fail) ?: return
-        if (value.matches((check))) fail("$attribute is an instance of ${check.pattern}");
+        val check = arg.toRegex(this.javaClass.name, fail) ?: return
+        if (value.matches((check))) fail(lang("validation.not_regex", mapOf("attribute" to attribute)));
     }
 }
 
-private fun Any?.toRegex(fail: (String) -> Unit): Regex? =
+private fun Any?.toRegex(validatorName: String, fail: (String) -> Unit): Regex? =
     when (this) {
         is String -> {
             Regex(this)
@@ -38,7 +40,8 @@ private fun Any?.toRegex(fail: (String) -> Unit): Regex? =
             this
         }
         else -> {
-            fail("arg is not a regex");
+            fail(lang("validation.validator_error.unexpected_argument.not_regex",
+                mapOf("validator" to validatorName)))
             null
         }
     }

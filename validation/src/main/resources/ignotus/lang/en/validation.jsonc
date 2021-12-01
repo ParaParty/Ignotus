@@ -1,6 +1,26 @@
 {
-    "_": "参考自 Laravel",
-    
+    /*
+    |--------------------------------------------------------------------------
+    | Laravel Validation Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines contain the default error messages used by
+    | the validator class. Some of these rules have multiple versions such
+    | as the size rules. Feel free to tweak each of these messages here.
+    |
+    */
+
+    "validator_error": {
+        "unexpected_argument": {
+            "general": "Validator <validator> received an unexpected argument",
+            "null": "Validator <validator> received an unexpected null argument",
+            "not_collection": "Validator <validator> received an unexpected argument that is not a collection",
+            "not_regex": "Validator <validator> received an unexpected argument that is not a regex"
+        }
+    },
+    "object": "The <attribute> must be an object.",
+    "uuid_without_dash": "The <attribute> must be a valid UUID with dash.",
+
     "accepted": "The <attribute> must be accepted.",
     "accepted_if": "The <attribute> must be accepted when <other> is <value>.",
     "active_url": "The <attribute> is not a valid URL.",

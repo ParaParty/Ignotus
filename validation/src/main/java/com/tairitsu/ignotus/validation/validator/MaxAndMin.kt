@@ -13,7 +13,7 @@ class ValidatorMax : AttributeValidatorInterface {
 
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (arg == null) {
-            val s = "Validator ${this::javaClass.name} received a null argument."
+            val s = lang("validation.validator_error.unexpected_argument.null", mapOf("validator" to this::javaClass.name))
             log.warn(s)
             fail(s)
             return
@@ -32,7 +32,7 @@ class ValidatorMax : AttributeValidatorInterface {
         }
 
         if (value == null) {
-            fail("$attribute is null.")
+            fail(lang("validation.required", mapOf("attribute" to attribute)))
             return
         }
 
@@ -57,7 +57,7 @@ class ValidatorMin : AttributeValidatorInterface {
 
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (arg == null) {
-            val s = "Validator ${this::javaClass.name} received a null argument."
+            val s = lang("validation.validator_error.unexpected_argument.null", mapOf("validator" to this::javaClass.name))
             log.warn(s)
             fail(s)
             return
@@ -76,16 +76,16 @@ class ValidatorMin : AttributeValidatorInterface {
         }
 
         if (value == null) {
-            fail("$attribute is null.")
+            fail(lang("validation.required", mapOf("attribute" to attribute)))
             return
         }
 
         when (value) {
             is Number -> if (value.toDouble() < minValue) fail(lang("validation.min.numeric",
                 mapOf("attribute" to attribute, "max" to minValue)))
-            is String -> if (value.length < minValue) fail(lang("validation.string.numeric",
+            is String -> if (value.length < minValue) fail(lang("validation.min.string",
                 mapOf("attribute" to attribute, "max" to minValue)))
-            is Iterable<*> -> if (value.count() < minValue) fail(lang("validation.array.numeric",
+            is Iterable<*> -> if (value.count() < minValue) fail(lang("validation.min.array",
                 mapOf("attribute" to attribute, "max" to minValue)))
             else -> log.warn("Validator ${this::javaClass.name} can not parse value of ${value::javaClass.name} type.")
         }

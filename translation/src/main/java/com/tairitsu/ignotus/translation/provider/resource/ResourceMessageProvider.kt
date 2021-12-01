@@ -1,5 +1,8 @@
 package com.tairitsu.ignotus.translation.provider.resource
 
+import com.fasterxml.jackson.core.JsonFactory
+import com.fasterxml.jackson.core.JsonFactoryBuilder
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper
@@ -38,7 +41,7 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
         val fileName = resource.filename ?: return
         val type = if (fileName.endsWith(".yaml", ignoreCase = true) || fileName.endsWith(".yml", ignoreCase = true)) {
             "yaml"
-        } else if (fileName.endsWith(".json", ignoreCase = true)) {
+        } else if (fileName.endsWith(".json", ignoreCase = true) || fileName.endsWith(".jsonc", ignoreCase = true)) {
             "json"
         } else if (fileName.endsWith(".properties", ignoreCase = true)) {
             "properties"
@@ -81,6 +84,7 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
 
     private fun readResourceJson(resource: Resource, node: ResourceMessageNode) {
         val mapper = ObjectMapper()
+        mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true)
         val map = mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
         readResource(map, node)
     }
