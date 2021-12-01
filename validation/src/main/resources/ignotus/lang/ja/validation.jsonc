@@ -1,0 +1,124 @@
+{
+    /*
+    | https://github.com/blue32a/laravel-language-ja/blob/fecddf56e9f60a3f437416848352f3020e00c307/resources/lang/ja/validation.php
+    |--------------------------------------------------------------------------
+    | バリデーションの言語行
+    |--------------------------------------------------------------------------
+    |
+    | 次の言語行には、バリデータクラスで使用されるデフォルトの
+    | エラーメッセージが含まれています。これらのルールの一部には、
+    | サイズルールなどの複数のバージョンがあります。
+    | ここでこれらの各メッセージを自由に調整してください。
+    |
+    */
+
+    "accepted": "<attribute>を承認してください。",
+    "active_url": "<attribute>には有効なURLを指定してください。",
+    "after": "<attribute>には<date>以降の日付を指定してください。",
+    "after_or_equal": "<attribute>には<date>かそれ以降の日付を指定してください。",
+    "alpha": "<attribute>には英字のみからなる文字列を指定してください。",
+    "alpha_dash": "<attribute>には英数字・ハイフン・アンダースコアのみからなる文字列を指定してください。",
+    "alpha_num": "<attribute>には英数字のみからなる文字列を指定してください。",
+    "array": "<attribute>には配列を指定してください。",
+    "before": "<attribute>には<date>以前の日付を指定してください。",
+    "before_or_equal": "<attribute>には<date>かそれ以前の日付を指定してください。",
+    "between": {
+        "numeric": "<attribute>には<min>〜<max>までの数値を指定してください。",
+        "file": "<attribute>には<min>〜<max> KBのファイルを指定してください。",
+        "string": "<attribute>には<min>〜<max>文字の文字列を指定してください。",
+        "array": "<attribute>には<min>〜<max>個の要素を持つ配列を指定してください。"
+    },
+    "boolean": "<attribute>には真偽値を指定してください。",
+    "confirmed": "<attribute>が確認用の値と一致しません。",
+    "current_password": "パスワードが正しくありません。",
+    "date": "<attribute>は有効な日付ではありません。",
+    "date_equals": "<attribute>は<date>と同じ日付でなければなりません。",
+    "date_format": "<attribute>は<format>形式と一致しません。",
+    "different": "<attribute>には<other>とは異なる値を指定してください。",
+    "digits": "<attribute>は<digits>桁の数字でなければなりません。",
+    "digits_between": "<attribute>は<min>〜<max>桁の数字である必要があります。",
+    "dimensions": "<attribute>の画像サイズが無効です。",
+    "distinct": "<attribute>に指定された値は重複しています。",
+    "email": "<attribute>は有効なメールアドレスでなければなりません。",
+    "ends_with": "<attribute>は、<values>のいずれかで終了する必要があります。",
+    "exists": "選択された<attribute>は無効です。",
+    "file": "<attribute>はファイルでなければなりません。",
+    "filled": "<attribute>には値が必要です。",
+    "gt": {
+        "numeric": "<attribute>は<value>より大きくなければなりません。",
+        "file": "<attribute>は<value>キロバイトより大きくなければなりません。",
+        "string": "<attribute>は<value>文字より大きくなければなりません。",
+        "array": "<attribute>には<value>より多くのアイテムが必要です。"
+    },
+    "gte": {
+        "numeric": "<attribute>は<value>以上でなければなりません。",
+        "file": "<attribute>は<value>キロバイト以上でなければなりません。",
+        "string": "<attribute>は<value>文字以上でなければなりません。",
+        "array": "<attribute>には<value>以上のアイテムが必要です。"
+    },
+    "image": "<attribute>は画像でなければなりません。",
+    "in": "選択された<attribute>は無効です。",
+    "in_array": "<attribute>は<other>に存在しません。",
+    "integer": "<attribute>は整数でなければなりません。",
+    "ip": "<attribute>は有効なIPアドレスでなければなりません。",
+    "ipv4": "<attribute>は有効なIPv4アドレスでなければなりません。",
+    "ipv6": "<attribute>は有効なIPv6アドレスでなければなりません。",
+    "json": "<attribute>は有効なJSON文字列でなければなりません。",
+    "lt": {
+        "numeric": "<attribute>は<value>より小さくなければなりません。",
+        "file": "<attribute>は<value>キロバイトより小さくなければなりません。",
+        "string": "<attribute>は<value>文字より小さくなければなりません。",
+        "array": "<attribute>には<value>より少ないアイテムが必要です。"
+    },
+    "lte": {
+        "numeric": "<attribute>は<value>以下でなければなりません。",
+        "file": "<attribute>は<value>キロバイト以下でなければなりません。",
+        "string": "<attribute>は<value>文字以下でなければなりません。",
+        "array": "<attribute>には<value>以下のアイテムが必要です。"
+    },
+    "max": {
+        "numeric": "<attribute>は<max>より大きくてはいけません。",
+        "file": "<attribute>は<max>キロバイトを超えてはいけません。",
+        "string": "<attribute>は<max>文字を超えてはいけません。",
+        "array": "<attribute>には<max>個を超えるアイテムを含めることはできません。"
+    },
+    "mimes": "<attribute>は<values>タイプのファイルでなければなりません。",
+    "mimetypes": "<attribute>は<values>タイプのファイルでなければなりません。",
+    "min": {
+        "numeric": "<attribute>は<max>より小さくてはいけません。",
+        "file": "<attribute>は<max>キロバイトより小さくてはいけません。",
+        "string": "<attribute>は<max>文字より小さくてはいけません。",
+        "array": "<attribute>には少なくとも<min>個のアイテムが必要です。"
+    },
+    "multiple_of": "<attribute>は<value>の倍数である必要があります。",
+    "not_in": "選択された<attribute>は無効です。",
+    "not_regex": "<attribute>は無効な形式です。",
+    "numeric": "<attribute>は数値でなければなりません。",
+    "password": "パスワードが間違っています。",
+    "present": "<attribute>が存在する必要があります。",
+    "regex": "<attribute>は無効な形式です。",
+    "required": "<attribute>は必須です。",
+    "required_if": "<other>が<value>の場合、<attribute>は必須です。",
+    "required_unless": "<other>が<value>ではない場合、<attribute>は必須です。",
+    "required_with": "<values>のうち一つでも存在する場合、<attribute>は必須です。",
+    "required_with_all": "<values>のうち全て存在する場合、<attribute>は必須です。",
+    "required_without": "<values>のうちどれか一つでも存在していない場合、<attribute>は必須です。",
+    "required_without_all": "<values>のうち全て存在していない場合、<attribute>は必須です。",
+    "prohibited": "<attribute>は禁止されています。",
+    "prohibited_if": "<other>が<value>の場合、<attribute>は禁止されています。",
+    "prohibited_unless": "<other>が<values>にない限り、<attribute>は禁止されています。",
+    "same": "<attribute>と<other>は一致する必要があります。",
+    "size": {
+        "numeric": "<attribute>は<size>でなければなりません。",
+        "file": "<attribute>は<size>キロバイトでなければなりません。",
+        "string": "<attribute>は<size>文字でなければなりません。",
+        "array": "<attribute>には<size>が含まれている必要があります。"
+    },
+    "starts_with": "<attribute>は<values>のいずれかで始まる必要があります。",
+    "string": "<attribute>は文字列でなければなりません。",
+    "timezone": "<attribute>は有効なタイムゾーンでなければなりません。",
+    "unique": "<attribute>はすでに使用されています。",
+    "uploaded": "<attribute>のアップロードに失敗しました。",
+    "url": "<attribute>は有効なURLでなければなりません。",
+    "uuid": "<attribute>は有効なUUIDでなければなりません。"
+}
