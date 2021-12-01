@@ -27,14 +27,21 @@ dependencies {
     for (item in requiresModules) {
         api project(path: ":$item")
     }
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.5'
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.12.5'
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     api 'org.springframework.boot:spring-boot-starter-web:2.6.0'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
-    api 'org.springframework.boot:spring-boot-starter-data-redis:2.6.0'
     implementation 'org.projectlombok:lombok:1.18.22'
+    api 'org.springframework.boot:spring-boot-starter-data-redis:2.6.0'
+    api 'org.springframework.security:spring-security-crypto:5.6.0'
+    api 'org.springframework.boot:spring-boot-starter-aop:2.5.6'
+    api 'org.springframework.boot:spring-boot-starter-data-redis:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.6.1'
+    api 'mysql:mysql-connector-java:8.0.27'
 }
 
 test {

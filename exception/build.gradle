@@ -21,7 +21,6 @@ dependencies {
     // Spring Boot
     compileOnly 'org.springframework:spring-webmvc:5.3.13'
     compileOnly 'org.springframework.boot:spring-boot:2.6.0'
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     // Tomcat
     // noinspection GradlePackageUpdate
