@@ -1,5 +1,6 @@
 package moe.bit.ignotusdemo.model.entity;
 
+import com.tairitsu.ignotus.database.model.entity.JpaBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
