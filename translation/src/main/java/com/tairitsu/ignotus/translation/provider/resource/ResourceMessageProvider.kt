@@ -34,7 +34,7 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
 
     private fun loadTemplate(resource: Resource?) {
         resource ?: return
-        if (!resource.isFile || !resource.isReadable) {
+        if (!resource.isReadable) {
             return
         }
 
@@ -175,11 +175,12 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
         }
 
         if (uri.scheme.equals("jar", ignoreCase = true)) {
-            val entryName = (URL(uri.path).openConnection() as (JarURLConnection)).entryName
+            val entryName = (uri.toURL().openConnection() as (JarURLConnection)).entryName
             val path = entryName.split(splitRegex)
+            // 0       1    2    3
             // ignotus lang LANG XXXX XXXX.XX
             if (path.size >= 4 && path[0] == "ignotus" && path[1] == "lang") {
-                return path[3] to path.subList(4, path.size - 1).joinToString(".")
+                return path[2] to path.subList(3, path.size - 1).joinToString(".")
             }
             return null
         }
