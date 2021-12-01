@@ -1,6 +1,9 @@
 package com.tairitsu.ignotus.translation.provider.resource
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.tairitsu.ignotus.translation.provider.MessageProvider
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -51,14 +54,16 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
 //        locale.country
 //        locale.variant
 
-        val localeStr = locale.toString()
-        val node = if (data[localeStr] == null) {
+        val localeStr = locale.toString().lowercase()
+        val localeNode = if (data[localeStr] == null) {
             val t = ResourceMessageNode()
             data[localeStr] = t
             t
         } else {
             data[localeStr]!!
         }
+
+        val node = localeNode.walkOrCreate(prefix)
 
         when (type) {
             "yaml" -> readResourceYaml(resource, node)
@@ -69,15 +74,40 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
     }
 
     private fun readResourceYaml(resource: Resource, node: ResourceMessageNode) {
-        mapper = YamlObjectMapper()
+        val mapper = YAMLMapper()
+        val map = mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        readResource(map, node)
     }
 
     private fun readResourceJson(resource: Resource, node: ResourceMessageNode) {
-
+        val mapper = ObjectMapper()
+        val map = mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        readResource(map, node)
     }
 
     private fun readResourceProperties(resource: Resource, node: ResourceMessageNode) {
+        val mapper = JavaPropsMapper()
+        val map = mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        readResource(map, node)
+    }
 
+    private fun readResource(map: Map<String, Any>?, node: ResourceMessageNode) {
+        if (map == null) {
+            return
+        }
+
+        map.forEach { (key, value) ->
+            if (value is Map<*, *>) {
+                val t = ResourceMessageNode()
+                node[key] = t
+                @Suppress("UNCHECKED_CAST")
+                readResource(value as Map<String, Any>, t)
+            } else {
+                val t = ResourceMessageNode()
+                t.value = value.toString()
+                node[key] = t
+            }
+        }
     }
 
     private fun parseLocale(s: String): Locale? {
@@ -151,5 +181,11 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
         }
 
         return null
+    }
+
+    override fun getTemplate(locale: String, key: String): Pair<Boolean, String> {
+        val localeNode = data[locale] ?: return false to ""
+        val node = localeNode.walkOrNull(key) ?: return false to ""
+        return true to node.value!!
     }
 }

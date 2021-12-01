@@ -22,8 +22,8 @@ dependencies {
     compileOnly 'org.slf4j:slf4j-api:1.7.32'
 
     // Jackson
-    compileOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0'
-    compileOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.13.0'
+    compileOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.5'
+    compileOnly 'com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.12.5'
 
     api 'org.antlr:ST4:4.3.1'
 
