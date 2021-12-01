@@ -1,5 +1,6 @@
 package com.tairitsu.ignotus.validation.validator
 
+import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -36,9 +37,12 @@ class ValidatorMax : AttributeValidatorInterface {
         }
 
         when (value) {
-            is Number -> if (value.toDouble() > maxValue) fail("$value is bigger than $maxValue.")
-            is String -> if (value.length > maxValue) fail("$attribute is longer than $maxValue.")
-            is Iterable<*> -> if (value.count() > maxValue) fail("$attribute is shorter than $maxValue.")
+            is Number -> if (value.toDouble() > maxValue) fail(lang("validation.max.numeric",
+                mapOf("attribute" to attribute, "max" to maxValue)))
+            is String -> if (value.length > maxValue) fail(lang("validation.max.string",
+                mapOf("attribute" to attribute, "max" to maxValue)))
+            is Iterable<*> -> if (value.count() > maxValue) fail(lang("validation.max.array",
+                mapOf("attribute" to attribute, "max" to maxValue)))
             else -> log.warn("Validator ${this::javaClass.name} can not parse value of ${value::javaClass.name} type.")
         }
 
@@ -77,9 +81,12 @@ class ValidatorMin : AttributeValidatorInterface {
         }
 
         when (value) {
-            is Number -> if (value.toDouble() < minValue) fail("$value is smaller than $minValue.")
-            is String -> if (value.length < minValue) fail("$attribute is shorter than $minValue.")
-            is Iterable<*> -> if (value.count() < minValue) fail("$attribute is shorter than $minValue.")
+            is Number -> if (value.toDouble() < minValue) fail(lang("validation.min.numeric",
+                mapOf("attribute" to attribute, "max" to minValue)))
+            is String -> if (value.length < minValue) fail(lang("validation.string.numeric",
+                mapOf("attribute" to attribute, "max" to minValue)))
+            is Iterable<*> -> if (value.count() < minValue) fail(lang("validation.array.numeric",
+                mapOf("attribute" to attribute, "max" to minValue)))
             else -> log.warn("Validator ${this::javaClass.name} can not parse value of ${value::javaClass.name} type.")
         }
 

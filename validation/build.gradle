@@ -23,6 +23,7 @@ dependencies {
 
     api project(path: ':support')
     api project(path: ':exception')
+    api project(path: ':translation')
 }
 
 

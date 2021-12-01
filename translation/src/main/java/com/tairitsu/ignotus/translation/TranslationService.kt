@@ -38,7 +38,8 @@ class TranslationService {
     private fun getTemplate(locale: Locale, key: String): Pair<Boolean, String> {
         for (t in listOf(locale.toString().lowercase(),
             (locale.language + "_" + locale.country).lowercase(),
-            locale.language.lowercase())) {
+            locale.language.lowercase(),
+            "en")) {
             val template = getTemplate(t, key)
             if (template.first) {
                 return template
@@ -53,7 +54,10 @@ class TranslationService {
             return ""
         }
 
-        val message = template.second
+        val message = if (template.first) template.second else default
+        if (args.isEmpty()) {
+            return message
+        }
 
         val st = ST(message)
         for ((k, v) in args) {
