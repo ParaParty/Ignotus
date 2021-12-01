@@ -12,6 +12,17 @@
     |
     */
 
+    "validator_error": {
+        "unexpected_argument": {
+            "general": "バリデータ<validator>が入力パラメーターを認識できません。",
+            "null": "バリデータ<validator>の入力パラメーターが空です。",
+            "not_collection": "バリデータ<validator>の入力パラメーターがコレクションとして解析できません。",
+            "not_regex": "バリデータ<validator>の入力パラメーターが正規表現として解析できません。"
+        }
+    },
+    "object": "アトリビュート<attribute>はオブジェクトでなければなりません。 ",
+    "uuid_without_dash": "アトリビュート<attribute>は有効なハイフン抜きのUUIDでなければなりません。 ",
+
     "accepted": "<attribute>を承認してください。",
     "active_url": "<attribute>には有効なURLを指定してください。",
     "after": "<attribute>には<date>以降の日付を指定してください。",
