@@ -12,8 +12,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.projectlombok:lombok:1.18.22'
-
     // Kotlin Support
     compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
 
