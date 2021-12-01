@@ -1,4 +1,4 @@
-package moe.bit.ignotusdemo.model.entity;
+package com.tairitsu.ignotus.database.model.entity;
 
 import com.tairitsu.ignotus.support.util.JSON;
 

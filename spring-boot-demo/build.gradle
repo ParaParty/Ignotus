@@ -15,6 +15,7 @@ repositories {
 def requiresModules = [
     'cache',
     'database-exposed',
+    'database-jpa',
     'exception',
     'foundation',
     'serializer',

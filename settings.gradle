@@ -10,6 +10,7 @@ rootProject.name = 'ParaParty-Ignotus'
 def modules = [
     'cache',
     'database-exposed',
+    'database-jpa',
     'exception',
     'foundation',
     'serializer',

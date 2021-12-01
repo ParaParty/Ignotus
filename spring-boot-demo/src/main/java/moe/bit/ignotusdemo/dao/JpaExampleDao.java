@@ -13,8 +13,6 @@ import java.util.List;
  */
 @Repository
 public interface JpaExampleDao extends JpaRepository<JpaExampleEntity, Long> {
-
-
     List<JpaExampleEntity> findAllByName(String name);
 
     List<JpaExampleEntity> findAllByTheDayBetween(Date begin, Date end);

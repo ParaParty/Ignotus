@@ -42,6 +42,7 @@ afterEvaluate {
         def modules = [
             'cache',
             'database-exposed',
+            'database-jpa',
             'exception',
             'foundation',
             'serializer',

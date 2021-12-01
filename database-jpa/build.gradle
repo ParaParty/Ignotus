@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+    id 'java'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.6'
+
+    api project(path: ':support')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+project.ext.setProperty('POM_NAME', "ParaParty Spring-Boot Common Library : ${project.name}")
+project.ext.setProperty('POM_DESCRIPTION', "JPA extension.")
+apply from: "$rootDir/gradle/publish-helper.gradle"
