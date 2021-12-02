@@ -96,9 +96,9 @@
     "mimes": "<attribute>は<values>タイプのファイルでなければなりません。",
     "mimetypes": "<attribute>は<values>タイプのファイルでなければなりません。",
     "min": {
-        "numeric": "<attribute>は<max>より小さくてはいけません。",
-        "file": "<attribute>は<max>キロバイトより小さくてはいけません。",
-        "string": "<attribute>は<max>文字より小さくてはいけません。",
+        "numeric": "<attribute>は<min>より小さくてはいけません。",
+        "file": "<attribute>は<min>キロバイトより小さくてはいけません。",
+        "string": "<attribute>は<min>文字より小さくてはいけません。",
         "array": "<attribute>には少なくとも<min>個のアイテムが必要です。"
     },
     "multiple_of": "<attribute>は<value>の倍数である必要があります。",
