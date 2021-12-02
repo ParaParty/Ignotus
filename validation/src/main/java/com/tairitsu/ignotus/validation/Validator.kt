@@ -8,6 +8,7 @@ import com.tairitsu.ignotus.exception.SingleApiException
 import com.tairitsu.ignotus.exception.business.ValidateException
 import com.tairitsu.ignotus.exception.business.ValidationInvalidException
 import com.tairitsu.ignotus.support.util.Translation.lang
+import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
 import com.tairitsu.ignotus.validation.annotation.Required
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
@@ -82,7 +83,7 @@ class Validator {
 
             if (annotation is Required) {
                 if (value == null) {
-                    exception.add(ValidateException(lang("validation.required", mapOf("attribute" to step)), newKey))
+                    exception.add(ValidateException(lang("validation.required", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(step))), newKey))
                 }
             } else if (value != null) {
                 val name = annotationType.simpleName

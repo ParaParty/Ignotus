@@ -1,6 +1,7 @@
 package com.tairitsu.ignotus.validation.validator
 
 import com.tairitsu.ignotus.support.util.Translation.lang
+import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.springframework.stereotype.Component
 
@@ -19,17 +20,17 @@ class ValidatorEmail : AttributeValidatorInterface {
      */
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail(lang("validation.string", mapOf("attribute" to attribute)))
+            fail(lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
             return
         }
 
         /* The maximum length of an e-mail address is 320 octets, per RFC 2821. */
         if (value.length > 320) {
-            fail(lang("validation.string.numeric", mapOf("attribute" to attribute, "max" to 320)))
+            fail(lang("validation.string.numeric", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "max" to 320)))
         }
 
         val check = if (arg is String && arg == "filter_unicode") RegexpWithoutUnicode else RegexpWithUnicode
 
-        if (!value.matches((check))) fail(lang("validation.max.email", mapOf("attribute" to attribute)))
+        if (!value.matches((check))) fail(lang("validation.max.email", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
     }
 }

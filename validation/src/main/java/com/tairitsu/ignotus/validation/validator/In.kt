@@ -1,6 +1,7 @@
 package com.tairitsu.ignotus.validation.validator
 
 import com.tairitsu.ignotus.support.util.Translation.lang
+import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -21,7 +22,7 @@ class ValidatorIn : AttributeValidatorInterface {
         if (arg is Collection<*>) {
             if (!arg.contains(value)) {
                 fail(lang("validation.in_array",
-                    mapOf("attribute" to attribute, "other" to arg.joinToString(",", "[", "]"))))
+                    mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "other" to arg.joinToString(",", "[", "]"))))
             }
             return
         }
@@ -29,7 +30,7 @@ class ValidatorIn : AttributeValidatorInterface {
         if (arg is String && value is String) {
             arg.split(",").also { collect ->
                 if (!collect.contains(value)) {
-                    fail(lang("validation.in_array", mapOf("attribute" to attribute, "other" to collect.joinToString(",", "[", "]"))))
+                    fail(lang("validation.in_array", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "other" to collect.joinToString(",", "[", "]"))))
                 }
             }
             return
@@ -38,7 +39,7 @@ class ValidatorIn : AttributeValidatorInterface {
         if (arg is String && (value is Byte || value is Short || value is Int || value is Long)) {
             arg.split(",").map { s -> s.toLong() }.also { collect ->
                 if (!collect.contains(value)) {
-                    fail(lang("validation.in_array", mapOf("attribute" to attribute, "other" to collect.joinToString(",", "[", "]"))))
+                    fail(lang("validation.in_array", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "other" to collect.joinToString(",", "[", "]"))))
                 }
             }
             return
@@ -47,7 +48,7 @@ class ValidatorIn : AttributeValidatorInterface {
         if (arg is String && (value is Float || value is Double)) {
             arg.split(",").map { s -> s.toDouble() }.also { collect ->
                 if (!collect.contains(value)) {
-                    fail(lang("validation.in_array", mapOf("attribute" to attribute, "other" to collect.joinToString(",", "[", "]"))))
+                    fail(lang("validation.in_array", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "other" to collect.joinToString(",", "[", "]"))))
                 }
             }
             return

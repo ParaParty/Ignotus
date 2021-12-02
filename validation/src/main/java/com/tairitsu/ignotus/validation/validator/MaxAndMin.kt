@@ -1,6 +1,7 @@
 package com.tairitsu.ignotus.validation.validator
 
 import com.tairitsu.ignotus.support.util.Translation.lang
+import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -32,17 +33,17 @@ class ValidatorMax : AttributeValidatorInterface {
         }
 
         if (value == null) {
-            fail(lang("validation.required", mapOf("attribute" to attribute)))
+            fail(lang("validation.required", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
             return
         }
 
         when (value) {
             is Number -> if (value.toDouble() > maxValue) fail(lang("validation.max.numeric",
-                mapOf("attribute" to attribute, "max" to maxValue)))
+                mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "max" to maxValue)))
             is String -> if (value.length > maxValue) fail(lang("validation.max.string",
-                mapOf("attribute" to attribute, "max" to maxValue)))
+                mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "max" to maxValue)))
             is Iterable<*> -> if (value.count() > maxValue) fail(lang("validation.max.array",
-                mapOf("attribute" to attribute, "max" to maxValue)))
+                mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "max" to maxValue)))
             else -> log.warn("Validator ${this::javaClass.name} can not parse value of ${value::javaClass.name} type.")
         }
 
@@ -76,17 +77,17 @@ class ValidatorMin : AttributeValidatorInterface {
         }
 
         if (value == null) {
-            fail(lang("validation.required", mapOf("attribute" to attribute)))
+            fail(lang("validation.required", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
             return
         }
 
         when (value) {
             is Number -> if (value.toDouble() < minValue) fail(lang("validation.min.numeric",
-                mapOf("attribute" to attribute, "max" to minValue)))
+                mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "min" to minValue)))
             is String -> if (value.length < minValue) fail(lang("validation.min.string",
-                mapOf("attribute" to attribute, "max" to minValue)))
+                mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "min" to minValue)))
             is Iterable<*> -> if (value.count() < minValue) fail(lang("validation.min.array",
-                mapOf("attribute" to attribute, "max" to minValue)))
+                mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute), "min" to minValue)))
             else -> log.warn("Validator ${this::javaClass.name} can not parse value of ${value::javaClass.name} type.")
         }
 

@@ -78,20 +78,37 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
 
     private fun readResourceYaml(resource: Resource, node: ResourceMessageNode) {
         val mapper = YAMLMapper()
-        val map = mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        val map = try {
+            mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        } catch (e:Exception) {
+            log.error("Failed to read resource: ${resource.uri}", e)
+            return
+        }
         readResource(map, node)
     }
 
     private fun readResourceJson(resource: Resource, node: ResourceMessageNode) {
         val mapper = ObjectMapper()
         mapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true)
-        val map = mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        @Suppress("DEPRECATION")
+        mapper.configure(JsonParser.Feature.ALLOW_TRAILING_COMMA, true)
+        val map = try {
+            mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        } catch (e:Exception) {
+            log.error("Failed to read resource: ${resource.uri}", e)
+            return
+        }
         readResource(map, node)
     }
 
     private fun readResourceProperties(resource: Resource, node: ResourceMessageNode) {
         val mapper = JavaPropsMapper()
-        val map = mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        val map = try {
+            mapper.readValue(resource.inputStream, object: TypeReference<Map<String, Any>>() {})
+        } catch (e:Exception) {
+            log.error("Failed to read resource: ${resource.uri}", e)
+            return
+        }
         readResource(map, node)
     }
 
