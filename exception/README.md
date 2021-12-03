@@ -29,7 +29,7 @@ public class Test {
 }
 ```
 
-### 抛出一堆错误错误
+### 抛出一堆错误
 
 代码：
 ```java
@@ -71,7 +71,7 @@ import com.tairitsu.ignotus.exception.SingleApiException;
 
 public class MyDemoException extends SingleApiException {
     public MyDemoException() {
-        super(418, "my_demo_error", "好像什么错误都没发生，但是我就是想报个错。");
+        super(418, "i_am_a_teapot", "我是茶壶肥又矮呀，我是茶壶肥又矮。");
     }
 }
 ```
