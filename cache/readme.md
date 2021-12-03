@@ -2,7 +2,7 @@
 
 ## 说明
 
-本键值对数据库操作封装主要模仿了 [Laravel Cache](https://laravel.com/docs/8.x/cache) 使用方式。
+本键值对数据库操作封装主要模仿了 [Laravel Cache](https://laravel.com/docs/8.x/cache) 的使用方式。
 
 ## 安装
 
