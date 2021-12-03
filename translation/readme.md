@@ -176,3 +176,7 @@ languageSet {
     "hello-world" by { _, _, _ -> if (random.nextBoolean()) "你好，世界。" else "你好，世界！" }
 }
 ```
+
+## 参考资料
+
+[GitHub/s1monw1/KtsRunner](https://github.com/s1monw1/KtsRunner) ：在程序中运行 Kts 的参考代码。
