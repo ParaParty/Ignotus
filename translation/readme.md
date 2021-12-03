@@ -93,7 +93,7 @@ public class Test {
 }
 ```
 
-### 建造者风格
+#### 建造者风格
 
 ```java
 import com.tairitsu.ignotus.support.util.Translation;
