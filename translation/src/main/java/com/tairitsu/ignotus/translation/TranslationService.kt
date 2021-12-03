@@ -25,9 +25,9 @@ class TranslationService {
         com.tairitsu.ignotus.support.util.Translation.service = this
     }
 
-    fun getTemplate(locale: String, key: String): Pair<Boolean, String> {
+    fun getTemplate(localeStr: String, key: String, args: Map<String, Any?>, locale: Locale): Pair<Boolean, String> {
         for (provider in providers.values) {
-            val template = provider.getTemplate(locale, key)
+            val template = provider.getTemplate(localeStr, key, args, locale)
             if (template.first) {
                 return template
             }
@@ -35,12 +35,12 @@ class TranslationService {
         return false to ""
     }
 
-    private fun getTemplate(locale: Locale, key: String): Pair<Boolean, String> {
+    private fun getTemplate(locale: Locale, key: String, args: Map<String, Any?>): Pair<Boolean, String> {
         for (t in listOf(locale.toString().lowercase(),
             (locale.language + "_" + locale.country).lowercase(),
             locale.language.lowercase(),
             "en")) {
-            val template = getTemplate(t, key)
+            val template = getTemplate(t, key, args, locale)
             if (template.first) {
                 return template
             }
@@ -49,7 +49,7 @@ class TranslationService {
     }
 
     fun getMessage(key: String, args: Map<String, Any?>, locale: Locale, default: String): String {
-        val template = getTemplate(locale, key)
+        val template = getTemplate(locale, key, args)
         if (!template.first && default.isBlank()) {
             return ""
         }

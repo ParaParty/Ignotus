@@ -130,7 +130,7 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
                 readResource(value as Map<String, Any>, t)
             } else {
                 val t = ResourceMessageNode()
-                t.value = value.toString()
+                t.value = StringResourceMessageLine(value.toString())
                 node[key] = t
             }
         }
@@ -221,9 +221,9 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
         return null
     }
 
-    override fun getTemplate(locale: String, key: String): Pair<Boolean, String> {
-        val localeNode = data[locale] ?: return false to ""
+    override fun getTemplate(localeStr: String, key: String, args: Map<String, Any?>, locale: Locale): Pair<Boolean, String> {
+        val localeNode = data[localeStr] ?: return false to ""
         val node = localeNode.walkOrNull(key) ?: return false to ""
-        return true to node.value!!
+        return true to node.value!!.get(key, args, locale)
     }
 }

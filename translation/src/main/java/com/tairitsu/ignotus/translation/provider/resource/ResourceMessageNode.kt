@@ -1,9 +1,12 @@
 package com.tairitsu.ignotus.translation.provider.resource
 
+import java.util.*
+import kotlin.collections.HashMap
+
 class ResourceMessageNode {
     private val children = HashMap<String, ResourceMessageNode>()
 
-    var value: String? = null
+    var value: ResourceMessageLine? = null
 
     operator fun get(key: String): ResourceMessageNode? {
         return children[key]
@@ -47,4 +50,12 @@ class ResourceMessageNode {
 
         return node.walkOrCreate(prefix.subList(1, prefix.size))
     }
+}
+
+interface ResourceMessageLine {
+    fun get(key: String, args: Map<String, Any?>, locale: Locale): String
+}
+
+class StringResourceMessageLine(private val value: String): ResourceMessageLine {
+    override fun get(key: String, args: Map<String, Any?>, locale: Locale) = value
 }

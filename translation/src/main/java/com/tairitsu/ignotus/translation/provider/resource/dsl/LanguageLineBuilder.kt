@@ -1,12 +1,17 @@
 package com.tairitsu.ignotus.translation.provider.resource.dsl
 
+import com.tairitsu.ignotus.translation.provider.resource.ResourceMessageLine
 import com.tairitsu.ignotus.translation.provider.resource.ResourceMessageNode
+import com.tairitsu.ignotus.translation.provider.resource.StringResourceMessageLine
+import java.util.*
 
 interface LanguageLineBuilder {
-    var value: String?
+    var value: ResourceMessageLine?
     val children: HashMap<String, LanguageLineBuilder>
 
     infix fun String.by(value: String)
+
+    infix fun String.by(value: (String, Map<String, Any?>, Locale) -> String)
 
     infix fun String.by(value: LanguageLineBuilder)
 
@@ -27,11 +32,23 @@ interface LanguageLineBuilder {
 }
 
 class LanguageSetBuilder : LanguageLineBuilder {
-    override var value: String? = null
+    override var value: ResourceMessageLine? = null
     override val children: HashMap<String, LanguageLineBuilder> = HashMap()
 
     override infix fun String.by(value: LanguageLineBuilder) {
         children[this] = value
+    }
+
+    override fun String.by(value: (String, Map<String, Any?>, Locale) -> String) {
+        var child = children[this]
+        if (child == null) {
+            child = LanguageSetBuilder()
+            children[this] = child
+        }
+        child.value = object : ResourceMessageLine {
+            override fun get(key: String, args: Map<String, Any?>, locale: Locale) = value(key, args, locale)
+        }
+
     }
 
     override infix fun String.by(value: String) {
@@ -40,7 +57,7 @@ class LanguageSetBuilder : LanguageLineBuilder {
             child = LanguageSetBuilder()
             children[this] = child
         }
-        child.value = value
+        child.value = StringResourceMessageLine(value)
     }
 }
 
