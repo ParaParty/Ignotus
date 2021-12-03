@@ -28,7 +28,7 @@ interface LanguageLineBuilder {
     /**
      * 添加一个函数形式的文本字段
      */
-    infix fun String.by(value: (String, Map<String, Any?>, Locale) -> String)
+    infix fun String.by(value: (FunctionMessageLineArgs) -> String)
 
     /**
      * 添加子结点
@@ -59,7 +59,7 @@ class LanguageSetBuilder : LanguageLineBuilder {
         children[this] = value
     }
 
-    override fun String.by(value: (String, Map<String, Any?>, Locale) -> String) {
+    override fun String.by(value: (FunctionMessageLineArgs) -> String) {
         var child = children[this]
         if (child == null) {
             child = LanguageSetBuilder()

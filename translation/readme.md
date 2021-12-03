@@ -173,7 +173,7 @@ languageSet {
     
     // 但是在 DSL 的方式里，我们还提供了回调函数的形式，文本字段可以为一个函数，并且可以融入你的逻辑。
     // 这个函数在每次获取这个文本字段时都会被调用一次。
-    "hello-world" by { _, _, _ -> if (random.nextBoolean()) "你好，世界。" else "你好，世界！" }
+    "hello-world" by { _ -> if (random.nextBoolean()) "你好，世界。" else "你好，世界！" }
 }
 ```
 
