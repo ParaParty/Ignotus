@@ -16,7 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate
 @AutoConfigureAfter(RedisAutoConfiguration::class)
 open class RedisCacheAutoConfiguration() {
     @Bean
-    open fun redisCache(redisTemplate: RedisTemplate<String, Any>): RedisCacheService {
+    open fun redisCache(redisTemplate: RedisTemplate<String, String>): RedisCacheService {
         return RedisCacheService(redisTemplate)
     }
 }

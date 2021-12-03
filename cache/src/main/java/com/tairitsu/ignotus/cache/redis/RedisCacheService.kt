@@ -1,6 +1,8 @@
 package com.tairitsu.ignotus.cache.redis
 
 import com.tairitsu.ignotus.cache.CacheService
+import com.tairitsu.ignotus.support.util.JSON.jsonToObject
+import com.tairitsu.ignotus.support.util.JSON.toJson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.RedisTemplate
@@ -12,7 +14,7 @@ import java.util.function.Supplier
 
 
 @Suppress("UNCHECKED_CAST")
-class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) : CacheService {
+class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>) : CacheService {
 
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
@@ -25,14 +27,15 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
         val lockKey = LOCK_PREFIX + key
 
         val now: Long = Date().time
-        if (redisTemplate.opsForValue().setIfAbsent(lockKey, now) == true) {
+        val nowStr = now.toString()
+        if (redisTemplate.opsForValue().setIfAbsent(lockKey, nowStr) == true) {
             return true
         }
 
-        val lastLock = redisTemplate.opsForValue().get(lockKey) as Long
+        val lastLock = redisTemplate.opsForValue().get(lockKey)?.toLong() ?: return false
 
         if (lastLock + LOCK_CAPACITY < now) {
-            redisTemplate.opsForValue().set(lockKey, now)
+            redisTemplate.opsForValue().set(lockKey, nowStr)
             return true
         }
 
@@ -42,7 +45,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
     private fun releaseLock(key: String): Boolean {
         val lockKey = LOCK_PREFIX + key
         try {
-            redisTemplate.opsForValue().get(lockKey) as Long? ?: return false
+            redisTemplate.opsForValue().get(lockKey)?.toLong() ?: return false
             redisTemplate.opsForValue().operations.delete(lockKey)
             return true
         } catch (e: Exception) {
@@ -74,9 +77,9 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
 
         lock(key) {
             val value = redisTemplate.opsForValue().get(key)
-            if (type.isAssignableFrom(value::class.java)) {
+            if (value != null) {
                 redisTemplate.opsForValue().operations.delete(key)
-                ret = value as T?
+                ret = value.jsonToObject(type)
             }
         }
         return ret
@@ -90,7 +93,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
      * @return bool
      */
     override fun <T> put(key: String, value: T): Boolean {
-        redisTemplate.opsForValue().set(key, value as Any)
+        redisTemplate.opsForValue().set(key, value?.toJson() ?: "null")
         return true
     }
 
@@ -103,7 +106,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
      * @return bool
      */
     override fun <T> put(key: String, value: T, ttl: Long): Boolean {
-        redisTemplate.opsForValue().set(key, value as Any, ttl, TimeUnit.SECONDS)
+        redisTemplate.opsForValue().set(key, value?.toJson() ?: "null", ttl, TimeUnit.SECONDS)
         return true
     }
 
@@ -116,7 +119,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
      * @return bool
      */
     override fun <T> put(key: String, value: T, ttl: Duration): Boolean {
-        redisTemplate.opsForValue().set(key, value as Any, ttl)
+        redisTemplate.opsForValue().set(key, value?.toJson() ?: "null", ttl)
         return true
     }
 
@@ -130,7 +133,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
      */
     override fun <T> put(key: String, value: T, expiresAt: LocalDateTime): Boolean {
         val duration = Duration.between(LocalDateTime.now(), expiresAt)
-        redisTemplate.opsForValue().set(key, value as Any, duration)
+        redisTemplate.opsForValue().set(key, value?.toJson() ?: "null", duration)
         return true
     }
 
@@ -145,7 +148,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
     override fun <T> add(key: String, value: T, ttl: Long): Boolean {
         var ret = false
         lock(key) {
-            if (redisTemplate.opsForValue().setIfAbsent(key, value as Any, ttl, TimeUnit.SECONDS) == true) {
+            if (redisTemplate.opsForValue().setIfAbsent(key, value?.toJson() ?: "null", ttl, TimeUnit.SECONDS) == true) {
                 ret = true
             }
         }
@@ -163,7 +166,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
     override fun <T> add(key: String, value: T, ttl: Duration): Boolean {
         var ret = false
         lock(key) {
-            if (redisTemplate.opsForValue().setIfAbsent(key, value as Any, ttl) == true) {
+            if (redisTemplate.opsForValue().setIfAbsent(key, value?.toJson() ?: "null", ttl) == true) {
                 ret = true
             }
         }
@@ -182,7 +185,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
         val duration = Duration.between(LocalDateTime.now(), expiresAt)
         var ret = false
         lock(key) {
-            if (redisTemplate.opsForValue().setIfAbsent(key, value as Any, duration) == true) {
+            if (redisTemplate.opsForValue().setIfAbsent(key, value?.toJson() ?: "null", duration) == true) {
                 ret = true
             }
         }
@@ -219,7 +222,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
      * @return bool
      */
     override fun <T> forever(key: String, value: T): Boolean {
-        redisTemplate.opsForValue().set(key, value as Any)
+        redisTemplate.opsForValue().set(key, value?.toJson() ?: "null")
         return true
     }
 
@@ -257,7 +260,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
 
             if (ret == null) {
                 val value = callback.get()
-                redisTemplate.opsForValue().set(key, value as Any, ttl)
+                redisTemplate.opsForValue().set(key, value?.toJson() ?: "null", ttl)
                 ret = value
             }
         }
@@ -296,7 +299,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, Any>) :
                 }
             } else {
                 val value = callback.get()
-                redisTemplate.opsForValue().set(key, value as Any)
+                redisTemplate.opsForValue().set(key, value?.toJson() ?: "null")
                 ret = value
             }
         }
