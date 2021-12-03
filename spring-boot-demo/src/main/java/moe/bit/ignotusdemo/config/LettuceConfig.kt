@@ -8,6 +8,9 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
+import moe.bit.ignotusdemo.model.entity.UserEntity
+import moe.bit.ignotusdemo.model.table.UserTable.username
+import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties
 import org.springframework.context.annotation.Bean

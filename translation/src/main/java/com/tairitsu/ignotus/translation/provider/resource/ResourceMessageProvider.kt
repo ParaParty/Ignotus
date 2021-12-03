@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.tairitsu.ignotus.translation.provider.MessageProvider
+import com.tairitsu.ignotus.translation.provider.resource.dsl.LanguageLineBuilder
+import com.tairitsu.ignotus.translation.provider.resource.kts.KtsRunner
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
@@ -45,6 +47,8 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
             "json"
         } else if (fileName.endsWith(".properties", ignoreCase = true)) {
             "properties"
+        } else if (fileName.endsWith(".kts", ignoreCase = true)) {
+            "kts"
         } else {
             return
         }
@@ -72,6 +76,7 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
             "yaml" -> readResourceYaml(resource, node)
             "json" -> readResourceJson(resource, node)
             "properties" -> readResourceProperties(resource, node)
+            "kts" -> readResourceKts(resource, node)
             else -> return
         }
     }
@@ -128,6 +133,17 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
                 t.value = value.toString()
                 node[key] = t
             }
+        }
+    }
+
+    private fun readResourceKts(resource: Resource, node: ResourceMessageNode) {
+        try {
+            val runner = KtsRunner()
+            val languageLineBuilder = runner.run<LanguageLineBuilder>(resource.inputStream)
+            languageLineBuilder.build(node)
+        } catch (e:Exception) {
+            log.error("Failed to read resource: ${resource.uri}", e)
+            return
         }
     }
 
