@@ -2,6 +2,7 @@ package com.tairitsu.ignotus.cache.mongo
 
 import com.mongodb.client.result.DeleteResult
 import com.tairitsu.ignotus.cache.CacheService
+import com.tairitsu.ignotus.support.util.Base64Utils
 import com.tairitsu.ignotus.support.util.Base64Utils.base64Encode
 import com.tairitsu.ignotus.support.util.JSON.jsonToObject
 import com.tairitsu.ignotus.support.util.JSON.toJson

@@ -13,7 +13,9 @@ object Base64Utils {
 
     fun String.base64DecodeToString() = base64Decoder.decode(this).toString(Charsets.UTF_8)
 
-
     @JvmStatic
     fun encode(s: String) = base64Encoder.encodeToString(s.toByteArray())
+
+    @JvmStatic
+    fun decodeToString(s: String) = base64Decoder.decode(s).toString(Charsets.UTF_8)
 }
