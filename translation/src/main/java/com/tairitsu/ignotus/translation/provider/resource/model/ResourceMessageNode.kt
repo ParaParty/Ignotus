@@ -1,8 +1,8 @@
-package com.tairitsu.ignotus.translation.provider.resource
+package com.tairitsu.ignotus.translation.provider.resource.model
 
-import java.util.*
-import kotlin.collections.HashMap
-
+/**
+ * 文本字段节点
+ */
 class ResourceMessageNode {
     private val children = HashMap<String, ResourceMessageNode>()
 
@@ -52,10 +52,3 @@ class ResourceMessageNode {
     }
 }
 
-interface ResourceMessageLine {
-    fun get(key: String, args: Map<String, Any?>, locale: Locale): String
-}
-
-class StringResourceMessageLine(private val value: String): ResourceMessageLine {
-    override fun get(key: String, args: Map<String, Any?>, locale: Locale) = value
-}

@@ -1,18 +1,38 @@
 package com.tairitsu.ignotus.translation.provider.resource.dsl
 
-import com.tairitsu.ignotus.translation.provider.resource.ResourceMessageLine
-import com.tairitsu.ignotus.translation.provider.resource.ResourceMessageNode
-import com.tairitsu.ignotus.translation.provider.resource.StringResourceMessageLine
+import com.tairitsu.ignotus.translation.provider.resource.model.FunctionResourceMessageLine
+import com.tairitsu.ignotus.translation.provider.resource.model.ResourceMessageLine
+import com.tairitsu.ignotus.translation.provider.resource.model.ResourceMessageNode
+import com.tairitsu.ignotus.translation.provider.resource.model.StringResourceMessageLine
 import java.util.*
 
+/**
+ * 文本字段构造器
+ */
 interface LanguageLineBuilder {
+    /**
+     * 文本字段值
+     */
     var value: ResourceMessageLine?
+
+    /**
+     * 子结点列表
+     */
     val children: HashMap<String, LanguageLineBuilder>
 
+    /**
+     * 添加一个字符串形式的文本字段
+     */
     infix fun String.by(value: String)
 
+    /**
+     * 添加一个函数形式的文本字段
+     */
     infix fun String.by(value: (String, Map<String, Any?>, Locale) -> String)
 
+    /**
+     * 添加子结点
+     */
     infix fun String.by(value: LanguageLineBuilder)
 
     fun build(): ResourceMessageNode {
@@ -45,9 +65,7 @@ class LanguageSetBuilder : LanguageLineBuilder {
             child = LanguageSetBuilder()
             children[this] = child
         }
-        child.value = object : ResourceMessageLine {
-            override fun get(key: String, args: Map<String, Any?>, locale: Locale) = value(key, args, locale)
-        }
+        child.value = FunctionResourceMessageLine(value)
 
     }
 

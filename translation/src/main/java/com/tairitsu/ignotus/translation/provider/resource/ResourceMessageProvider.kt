@@ -8,6 +8,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.tairitsu.ignotus.translation.provider.MessageProvider
 import com.tairitsu.ignotus.translation.provider.resource.dsl.LanguageLineBuilder
 import com.tairitsu.ignotus.translation.provider.resource.kts.KtsRunner
+import com.tairitsu.ignotus.translation.provider.resource.model.ResourceMessageNode
+import com.tairitsu.ignotus.translation.provider.resource.model.StringResourceMessageLine
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.io.Resource
