@@ -7,6 +7,7 @@ import com.tairitsu.ignotus.exception.ApiExceptionBag
 import com.tairitsu.ignotus.exception.SingleApiException
 import com.tairitsu.ignotus.exception.business.ValidateException
 import com.tairitsu.ignotus.exception.business.ValidationInvalidException
+import com.tairitsu.ignotus.support.service.JSONMapperRegister
 import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
 import com.tairitsu.ignotus.validation.annotation.Required
@@ -129,7 +130,7 @@ class Validator {
         if (content == null) {
             throw ValidationInvalidException("Null content")
         }
-        val mapper = ObjectMapper()
+        val mapper = JSONMapperRegister.objectMapperProvider.objectMapper
         val typeRef = object : TypeReference<HashMap<String, Any?>>() {}
         val tree = mapper.readValue(content, typeRef)
         this.validate(tree, validation, basePath)
@@ -143,7 +144,7 @@ class Validator {
         if (content == null) {
             throw ValidationInvalidException("Null content")
         }
-        val mapper = ObjectMapper()
+        val mapper = JSONMapperRegister.objectMapperProvider.objectMapper
         val typeRef = object : TypeReference<HashMap<String, Any?>>() {}
         val tree = mapper.readValue(content, typeRef)
         this.validate(tree, validation, basePath)

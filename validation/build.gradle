@@ -14,12 +14,16 @@ repositories {
 dependencies {
     // Kotlin Support
     compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
+    compileOnly 'org.jetbrains.kotlin:kotlin-reflect:1.6.0'
 
     // Spring Boot
     compileOnly 'org.springframework.boot:spring-boot:2.5.6'
 
     // SLF4J
     compileOnly 'org.slf4j:slf4j-api:1.7.32'
+
+    // Jackson
+    compileOnly 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 
     api project(path: ':support')
     api project(path: ':exception')
