@@ -129,7 +129,7 @@ greeting:
     night: 晚上好
 ```
 
-### YAML
+### PROPERTIES
 
 本功能需要添加 Jackson Dataformat Properties `com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.12.5` 依赖。
 
