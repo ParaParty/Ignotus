@@ -1,12 +1,11 @@
 package com.tairitsu.ignotus.validation
 
 import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.tairitsu.ignotus.support.config.JacksonNamingStrategyConfig
 import com.tairitsu.ignotus.exception.ApiExceptionBag
 import com.tairitsu.ignotus.exception.SingleApiException
 import com.tairitsu.ignotus.exception.business.ValidateException
 import com.tairitsu.ignotus.exception.business.ValidationInvalidException
+import com.tairitsu.ignotus.support.config.JacksonNamingStrategyConfig
 import com.tairitsu.ignotus.support.service.JSONMapperRegister
 import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
@@ -87,7 +86,15 @@ class Validator {
                     exception.add(ValidateException(lang("validation.required", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(step))), newKey))
                 }
             } else if (value != null) {
-                val name = annotationType.simpleName
+                val name = run {
+                    val s = annotationType.simpleName
+
+                    if (s.length == 1) {
+                        s.lowercase()
+                    } else {
+                        s[0].lowercase() + s.substring(1)
+                    }
+                }
                 val validator =
                     validatorPool[name] ?: throw ValidationInvalidException("Validation rule \"$name\" is invalid.")
 
@@ -197,10 +204,18 @@ class Validator {
             applicationContext.getBeansOfType(AttributeValidatorInterface::class.java)
 
         beans.forEach { (k, v) ->
-            val name = if (k.startsWith("validator") || k.startsWith("Validator")) {
-                k.substring("validator".length)
-            } else {
-                k
+            val name = run {
+                val s = if (k.startsWith("validator") || k.startsWith("Validator")) {
+                    k.substring("validator".length)
+                } else {
+                    k
+                }
+
+                if (s.length == 1) {
+                    s.lowercase()
+                } else {
+                    s[0].lowercase() + s.substring(1)
+                }
             }
 
             if (validatorPool[name] != null) {
