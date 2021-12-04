@@ -243,6 +243,8 @@ open class ControllerAspect {
             return ret
         }
 
-        throw PageInvalidException()
+        val ret = OffsetBasedPagination(0, foundationConfig.pagination.defaultLimit)
+        request.setExtractedPagination(ret)
+        return ret
     }
 }
