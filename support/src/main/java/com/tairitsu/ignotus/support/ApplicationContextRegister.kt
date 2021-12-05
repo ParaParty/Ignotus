@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 /**
  * 全局 Spring Application 获取器
  */
-@Component
+@Component("IgnotusApplicationContextRegister")
 class ApplicationContextRegister : ApplicationContextAware {
 
     @Throws(BeansException::class)

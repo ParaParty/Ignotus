@@ -12,9 +12,11 @@ class JSONMapperRegister {
 
     @PostConstruct
     fun init() {
-        if (objectMapperProvider != null) {
-            JSONMapperRegister.objectMapperProvider = objectMapperProvider!!
+        if (objectMapperProvider == null) {
+            objectMapperProvider = DefaultJSONMapperProvider()
         }
+
+        JSONMapperRegister.objectMapperProvider = objectMapperProvider!!
     }
 
     companion object {
