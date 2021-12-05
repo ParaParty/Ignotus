@@ -14,19 +14,20 @@
 
 ```
 /resources
-    /lang
-        /zh_cn
-            messages.json
-            /other
+    /ignotus
+        /lang
+            /zh_cn
                 messages.json
-        /zh_hk
-            messages.json
-            /other
+                /other
+                    messages.json
+            /zh_hk
                 messages.json
-        /zh_tw
-            messages.json
-            /other
+                /other
+                    messages.json
+            /zh_tw
                 messages.json
+                /other
+                    messages.json
 ```
 
 其中 `zh_cn`、`zh_hk`、`zh_tw` 等为显示语言区域名字。
