@@ -24,6 +24,10 @@ def requiresModules = [
     'validation',
 ]
 
+configurations.all {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
 dependencies {
     for (item in requiresModules) {
         api project(path: ":$item")
@@ -35,11 +39,12 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
     implementation 'org.projectlombok:lombok:1.18.22'
 
-    api 'org.springframework.boot:spring-boot-starter-web:2.6.0'
+    api 'org.springframework.boot:spring-boot-starter-web:2.6.1'
+    api 'org.springframework.boot:spring-boot-starter-log4j2:2.6.1'
     api 'org.springframework.security:spring-security-crypto:5.6.0'
-    api 'org.springframework.boot:spring-boot-starter-aop:2.5.6'
+    api 'org.springframework.boot:spring-boot-starter-aop:2.6.1'
 
-    api 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.6'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.1'
 
     // Cache redis 支持
     api 'org.springframework.boot:spring-boot-starter-data-redis:2.6.1'
