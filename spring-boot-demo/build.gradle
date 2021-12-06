@@ -3,6 +3,8 @@ plugins {
     id 'io.spring.dependency-management'
     id 'java'
     id 'org.jetbrains.kotlin.jvm'
+    id 'idea' // optional (to generate IntelliJ IDEA project files)
+    id 'jacoco'
 }
 
 sourceCompatibility = '1.8'
@@ -70,7 +72,19 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        // includeEngines 'junit-jupiter', 'junit-vintage'
+        // excludeEngines 'custom-engine'
+
+        // includeTags 'fast'
+        excludeTags 'slow'
+    }
+
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+
+    finalizedBy(jacocoTestReport)
 }
 
 compileKotlin {
