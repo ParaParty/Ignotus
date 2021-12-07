@@ -18,6 +18,7 @@ def modules = [
     'translation',
     'validation',
     'spring-boot-demo',
+    'spring-boot-jpa-demo',
 ]
 
 for (item in modules) {

@@ -1,0 +1,40 @@
+spring:
+    main:
+        allow-bean-definition-overriding: false
+    application:
+        name: jpa-demo
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: root
+        password: ""
+        url: jdbc:mysql://localhost:3306/forestsay?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    jpa:
+        database-platform:
+            org.hibernate.dialect.MySQL5InnoDBDialect
+        hibernate.ddl-auto:
+            update
+        show-sql:
+            true
+    redis:
+        host: localhost
+        port: 6379
+        database: 0
+    jackson:
+        property-naming-strategy: com.fasterxml.jackson.databind.PropertyNamingStrategy.SnakeCaseStrategy
+
+ignotus:
+    exception:
+        debug: false
+    foundation:
+        pagination:
+            page-based:
+                enabled: true
+                start-at: 1
+            offset-based:
+                enabled: true
+            min-limit: 1
+            default-limit: 20
+            max-limit: 200
+
+server:
+    port: 12301

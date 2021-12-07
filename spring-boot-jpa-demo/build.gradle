@@ -15,8 +15,7 @@ repositories {
 }
 
 def requiresModules = [
-    'cache',
-    'database-exposed',
+    'database-jpa',
     'exception',
     'foundation',
     'serializer',
@@ -34,34 +33,23 @@ dependencies {
         api project(path: ":$item")
     }
 
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation 'org.projectlombok:lombok:1.18.22'
+
     api 'org.springframework.boot:spring-boot-starter-web:2.6.1'
     api 'org.springframework.boot:spring-boot-starter-log4j2:2.6.1'
-    api 'org.springframework.security:spring-security-crypto:5.6.0'
     api 'org.springframework.boot:spring-boot-starter-aop:2.6.1'
     testApi 'org.springframework.boot:spring-boot-starter-test:2.6.1'
-
-    // Cache redis 支持
-    api 'org.springframework.boot:spring-boot-starter-data-redis:2.6.1'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.1'
 
     // Jackson 扩展
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0'
     api 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0'
 
     api 'mysql:mysql-connector-java:8.0.27'
-
-    // Translation yaml 文件支持
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.5'
-
-    // Translation properties 文件支持
-    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-properties:2.12.5'
-
-    // Translation kts 文件支持
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0'
-    runtimeOnly 'org.jetbrains.kotlin:kotlin-reflect:1.6.0'
-    implementation 'org.jetbrains.kotlin:kotlin-script-runtime:1.6.0'
-    implementation 'org.jetbrains.kotlin:kotlin-script-util:1.6.0'
-    runtimeOnly 'org.jetbrains.kotlin:kotlin-compiler-embeddable:1.6.0'
-    runtimeOnly 'org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.6.0'
 }
 
 test {
@@ -78,15 +66,4 @@ test {
     }
 
     finalizedBy(jacocoTestReport)
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }

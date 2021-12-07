@@ -49,6 +49,8 @@ afterEvaluate {
             'support',
             'translation',
             'validation',
+            'spring-boot-demo',
+            'spring-boot-jpa-demo',
         ]
 
         it.doLast {
