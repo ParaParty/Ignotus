@@ -1,9 +1,8 @@
-package moe.bit.ignotusdemo.controller;
+package moe.bit.ignotusjpademo.controller;
 
-import moe.bit.ignotusdemo.model.dto.JpaExampleDto;
-import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
-import moe.bit.ignotusdemo.model.vo.JpaExampleVo;
-import moe.bit.ignotusdemo.service.implement.JpaExampleService;
+import moe.bit.ignotusjpademo.model.dto.JpaExampleDto;
+import moe.bit.ignotusjpademo.model.vo.JpaExampleVo;
+import moe.bit.ignotusjpademo.service.implement.JpaExampleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

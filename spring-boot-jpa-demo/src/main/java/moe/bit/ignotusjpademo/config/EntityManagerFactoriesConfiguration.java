@@ -1,4 +1,4 @@
-package moe.bit.ignotusdemo.config;
+package moe.bit.ignotusjpademo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ public class EntityManagerFactoriesConfiguration {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(dataSource);
         emf.setPackagesToScan(
-            "moe.bit.ignotusdemo.model.entity");
+            "moe.bit.ignotusjpademo.model.entity");
         emf.setJpaVendorAdapter(
             new HibernateJpaVendorAdapter());
         return emf;

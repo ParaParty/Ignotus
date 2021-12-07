@@ -1,4 +1,4 @@
-package moe.bit.ignotusdemo.config;
+package moe.bit.ignotusjpademo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

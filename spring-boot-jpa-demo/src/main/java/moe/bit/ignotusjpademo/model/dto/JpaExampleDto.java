@@ -1,4 +1,4 @@
-package moe.bit.ignotusdemo.model.dto;
+package moe.bit.ignotusjpademo.model.dto;
 
 import lombok.Data;
 

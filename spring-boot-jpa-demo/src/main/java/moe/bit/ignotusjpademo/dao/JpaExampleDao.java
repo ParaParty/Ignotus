@@ -1,6 +1,6 @@
-package moe.bit.ignotusdemo.dao;
+package moe.bit.ignotusjpademo.dao;
 
-import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
+import moe.bit.ignotusjpademo.model.entity.JpaExampleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

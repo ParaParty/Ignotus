@@ -1,11 +1,11 @@
-package moe.bit.ignotusdemo.model.vo;
+package moe.bit.ignotusjpademo.model.vo;
 
 import com.tairitsu.ignotus.serializer.vo.BaseResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
+import moe.bit.ignotusjpademo.model.entity.JpaExampleEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;

@@ -1,4 +1,4 @@
-package moe.bit.ignotusdemo;
+package moe.bit.ignotusjpademo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,8 +1,8 @@
-package moe.bit.ignotusdemo;
+package moe.bit.ignotusjpademo;
 
-import moe.bit.ignotusdemo.dao.JpaExampleDao;
-import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
-import moe.bit.ignotusdemo.service.implement.JpaExampleService;
+import moe.bit.ignotusjpademo.dao.JpaExampleDao;
+import moe.bit.ignotusjpademo.model.entity.JpaExampleEntity;
+import moe.bit.ignotusjpademo.service.implement.JpaExampleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

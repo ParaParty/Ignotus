@@ -1,7 +1,7 @@
-package moe.bit.ignotusdemo.service.implement;
+package moe.bit.ignotusjpademo.service.implement;
 
-import moe.bit.ignotusdemo.dao.JpaExampleDao;
-import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
+import moe.bit.ignotusjpademo.dao.JpaExampleDao;
+import moe.bit.ignotusjpademo.model.entity.JpaExampleEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -10,12 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -85,7 +83,7 @@ public class JpaExampleService {
      * @param numbers
      * @return
      */
-    @Transactional(transactionManager = "springTransactionManager")
+    @Transactional()
     public boolean generateEntity(Long numbers) {
         final long MAX_GENERATE_SIZE = 10000L;
         assert numbers != 0 && numbers >= 0 && numbers <= MAX_GENERATE_SIZE;
