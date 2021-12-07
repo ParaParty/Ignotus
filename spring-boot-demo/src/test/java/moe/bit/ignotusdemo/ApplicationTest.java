@@ -1,5 +1,7 @@
 package moe.bit.ignotusdemo;
 
+import moe.bit.ignotusdemo.dao.JpaExampleDao;
+import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
 import moe.bit.ignotusdemo.service.implement.JpaExampleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,14 @@ public class ApplicationTest {
     public void f() {
         System.out.println(jpaExampleService);
         System.out.println("EricNB");
+    }
+
+    @Resource
+    JpaExampleDao jpaExampleDao;
+
+    @Test
+    public void testSave() {
+        jpaExampleDao.save(new JpaExampleEntity());
     }
 
 }

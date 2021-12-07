@@ -4,7 +4,9 @@ import com.tairitsu.ignotus.database.model.entity.JpaBaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -15,13 +17,17 @@ import java.util.Date;
  */
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@Table(name = "jpa_example_entity")
 @Data
 public class JpaExampleEntity extends JpaBaseEntity {
 
+    @Column(name = "name")
     String name;
 
+    @Column(name = "number")
     Long number;
 
+    @Column(name = "the_day")
     Date theDay;
 
 }

@@ -81,7 +81,7 @@ public class JpaExampleService {
      * @param numbers
      * @return
      */
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public boolean generateEntity(Long numbers) {
         final long MAX_GENERATE_SIZE = 10000L;
         assert numbers != 0 && numbers >= 0 && numbers <= MAX_GENERATE_SIZE;
