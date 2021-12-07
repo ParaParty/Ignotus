@@ -7,6 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.IntStream;
 
 /**
  * @author 13090
@@ -23,6 +30,12 @@ public class ApplicationTest {
     public void f() {
         System.out.println(jpaExampleService);
         System.out.println("EricNB");
+    }
+
+
+    @Test
+    public void generateEntityTest() {
+        jpaExampleService.generateEntity(10000L);
     }
 
     @Resource
