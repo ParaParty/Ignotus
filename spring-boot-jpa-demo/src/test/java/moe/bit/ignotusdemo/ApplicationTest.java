@@ -8,16 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 
-/**
- * @author 13090
- * @version 1.0
- * @description: TODO
- * @date 2021/12/6 10:17
- */
 @SpringBootTest
 public class ApplicationTest {
+
     @Resource
     JpaExampleService jpaExampleService;
+
+    @Resource
+    JpaExampleDao jpaExampleDao;
 
     @Test
     public void f() {
@@ -25,8 +23,10 @@ public class ApplicationTest {
         System.out.println("EricNB");
     }
 
-    @Resource
-    JpaExampleDao jpaExampleDao;
+    @Test
+    public void generateEntityTest() {
+        jpaExampleService.generateEntity(10000L);
+    }
 
     @Test
     public void testSave() {

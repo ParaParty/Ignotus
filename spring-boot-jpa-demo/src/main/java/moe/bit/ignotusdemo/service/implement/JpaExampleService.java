@@ -2,6 +2,8 @@ package moe.bit.ignotusdemo.service.implement;
 
 import moe.bit.ignotusdemo.dao.JpaExampleDao;
 import moe.bit.ignotusdemo.model.entity.JpaExampleEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,8 @@ public class JpaExampleService {
 
     @Resource
     JpaExampleDao jpaExampleDao;
+
+    Logger logger = LoggerFactory.getLogger(JpaExampleService.class);
 
     /**
      * get map by entity name without null
@@ -81,7 +85,7 @@ public class JpaExampleService {
      * @param numbers
      * @return
      */
-    @Transactional
+    @Transactional(transactionManager = "springTransactionManager")
     public boolean generateEntity(Long numbers) {
         final long MAX_GENERATE_SIZE = 10000L;
         assert numbers != 0 && numbers >= 0 && numbers <= MAX_GENERATE_SIZE;
@@ -93,6 +97,7 @@ public class JpaExampleService {
             new Thread(() -> {
                 ThreadLocalRandom threadLocalRandom = ThreadLocalRandom.current();
                 while (count.incrementAndGet() < numbers) {
+                    logger.info(String.valueOf(count.get()));
                     JpaExampleEntity jpaExampleEntity = new JpaExampleEntity();
                     jpaExampleEntity.setName("name" + threadLocalRandom.nextLong(MAX_GENERATE_SIZE));
                     jpaExampleEntity.setTheDay(new Date());
@@ -103,8 +108,11 @@ public class JpaExampleService {
             }, this.getClass().getSimpleName() + " thread:" + i).start();
         });
 
-        countDownLatch.countDown();
-
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
