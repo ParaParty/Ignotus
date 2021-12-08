@@ -1,5 +1,6 @@
 package moe.bit.ignotusdemo.controller;
 
+import com.tairitsu.ignotus.foundation.model.dto.JsonApiObjectBody;
 import moe.bit.ignotusdemo.model.dto.UserLoginDto;
 import moe.bit.ignotusdemo.model.dto.UserRegisterDto;
 import moe.bit.ignotusdemo.model.vo.UserVo;
@@ -18,8 +19,9 @@ public class UserController {
 
     @PostMapping("api/register")
     @JsonApiController()
-    public UserVo register(@RequestBody @Valid UserRegisterDto body) {
-        return userService.register(body);
+    public UserVo register(@RequestBody @Valid JsonApiObjectBody<UserRegisterDto> body) {
+        //noinspection ConstantConditions
+        return userService.register(body.getData().getAttributes());
     }
 
     @PostMapping("api/login")
