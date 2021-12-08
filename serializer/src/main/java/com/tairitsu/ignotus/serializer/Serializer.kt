@@ -1,9 +1,12 @@
 package com.tairitsu.ignotus.serializer
 
-import com.tairitsu.ignotus.support.config.JacksonNamingStrategyConfig
 import com.tairitsu.ignotus.exception.serialize.SerializerException
 import com.tairitsu.ignotus.serializer.vo.BaseResponse
+import com.tairitsu.ignotus.support.config.JacksonNamingStrategyConfig
 import com.tairitsu.ignotus.support.util.toGetterFunction
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.lang.reflect.InvocationTargetException
 import javax.servlet.http.HttpServletRequest
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.javaGetter
@@ -13,6 +16,7 @@ import kotlin.reflect.jvm.javaGetter
  * 实体类的序列化类基本定义
  */
 open class Serializer<T : BaseResponse> {
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
     /**
      * 关联请求
@@ -35,18 +39,38 @@ open class Serializer<T : BaseResponse> {
             if (preservedFields.contains(name)) continue
             val outputName = JacksonNamingStrategyConfig.namingStrategy?.nameForField(null, null, name) ?: name
 
+            var done = false
+            try {
+                val value = field.getter.call(model)
+                ret[outputName] = value
+                done = true
+            } catch (_: InvocationTargetException) {
+
+            } catch (e: Exception){
+                log.error(e.message, e)
+            }
+
+            if (done) {
+                continue
+            }
+
             try {
                 val getMethod = field.javaGetter ?: type.java.getMethod(name.toGetterFunction())
                 val value = getMethod.invoke(model)
                 ret[outputName] = value
-            } catch (ignore: UninitializedPropertyAccessException) {
+                done = true
+            } catch (_: InvocationTargetException) {
 
-            } catch (ignore: NoSuchMethodException) {
+            } catch (_: UninitializedPropertyAccessException) {
 
-            } catch (ignore: SecurityException) {
+            } catch (_: NoSuchMethodException) {
 
-            } catch (ignore: SecurityException) {
+            } catch (_: SecurityException) {
 
+            } catch (_: SecurityException) {
+
+            } catch (e: Exception) {
+                log.error(e.message, e)
             }
         }
 
