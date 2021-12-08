@@ -1,6 +1,6 @@
 package moe.bit.ignotusdemo.model.table
 
-import com.tairitsu.ignotus.database.model.table.BaseLongIdTable
+import com.tairitsu.ignotus.database.exposed.model.table.BaseLongIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.javatime.datetime
 import java.time.LocalDateTime

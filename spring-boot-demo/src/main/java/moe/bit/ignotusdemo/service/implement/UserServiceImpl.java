@@ -1,6 +1,6 @@
 package moe.bit.ignotusdemo.service.implement;
 
-import com.tairitsu.ignotus.database.annotation.Transaction;
+import com.tairitsu.ignotus.database.exposed.annotation.Transaction;
 import kotlin.Pair;
 import kotlin.collections.CollectionsKt;
 import moe.bit.ignotusdemo.exception.UserNotFoundException;

@@ -1,8 +1,8 @@
 package moe.bit.ignotusdemo.model.entity
 
 import moe.bit.ignotusdemo.model.table.UserTable
-import com.tairitsu.ignotus.database.model.entity.BaseLongIdEntity
-import com.tairitsu.ignotus.database.model.entity.BaseLongIdEntityClass
+import com.tairitsu.ignotus.database.exposed.model.entity.BaseLongIdEntity
+import com.tairitsu.ignotus.database.exposed.model.entity.BaseLongIdEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.function.Consumer
 

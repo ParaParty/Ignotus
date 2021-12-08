@@ -1,4 +1,4 @@
-package com.tairitsu.ignotus.database.model.table
+package com.tairitsu.ignotus.database.exposed.model.table
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.javatime.datetime

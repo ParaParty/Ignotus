@@ -1,4 +1,4 @@
-package com.tairitsu.ignotus.database
+package com.tairitsu.ignotus.database.exposed
 
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Aspect
 @Component
 open class TransactionAspect {
-    @Around("@annotation(com.tairitsu.ignotus.database.annotation.Transaction)")
+    @Around("@annotation(com.tairitsu.ignotus.database.exposed.annotation.Transaction)")
     fun transactionHandler(joinPoint: ProceedingJoinPoint): Any? {
         var result: Any? = null
         transaction {

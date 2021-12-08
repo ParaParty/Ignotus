@@ -1,4 +1,4 @@
-package com.tairitsu.ignotus.database
+package com.tairitsu.ignotus.database.exposed
 
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration

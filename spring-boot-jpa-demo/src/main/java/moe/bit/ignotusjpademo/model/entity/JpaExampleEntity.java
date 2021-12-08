@@ -1,6 +1,6 @@
 package moe.bit.ignotusjpademo.model.entity;
 
-import com.tairitsu.ignotus.database.model.entity.JpaBaseEntity;
+import com.tairitsu.ignotus.database.jpa.model.entity.BaseLongIdEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +19,7 @@ import java.util.Date;
 @Entity
 @Table(name = "jpa_example_entity")
 @Data
-public class JpaExampleEntity extends JpaBaseEntity {
+public class JpaExampleEntity extends BaseLongIdEntity {
 
     @Column(name = "name")
     String name;

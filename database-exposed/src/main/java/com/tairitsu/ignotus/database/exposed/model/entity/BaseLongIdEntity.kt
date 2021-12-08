@@ -1,6 +1,6 @@
-package com.tairitsu.ignotus.database.model.entity
+package com.tairitsu.ignotus.database.exposed.model.entity
 
-import com.tairitsu.ignotus.database.model.table.BaseLongIdTable
+import com.tairitsu.ignotus.database.exposed.model.table.BaseLongIdTable
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 import java.time.LocalDateTime

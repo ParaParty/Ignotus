@@ -1,4 +1,4 @@
-package com.tairitsu.ignotus.database.annotation
+package com.tairitsu.ignotus.database.exposed.annotation
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

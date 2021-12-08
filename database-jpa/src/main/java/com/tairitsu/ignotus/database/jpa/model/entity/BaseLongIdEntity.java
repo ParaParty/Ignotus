@@ -1,4 +1,4 @@
-package com.tairitsu.ignotus.database.model.entity;
+package com.tairitsu.ignotus.database.jpa.model.entity;
 
 import com.tairitsu.ignotus.support.util.JSON;
 
@@ -6,14 +6,14 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
+ * base model for jpa
+ *
  * @author A-Salty-Fish
  * @version 1.0
- * @description: base model for jpa
- * @date 2021/11/29 11:14
  */
 
 @MappedSuperclass
-public class JpaBaseEntity {
+public class BaseLongIdEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
