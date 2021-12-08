@@ -1,14 +1,12 @@
 package com.tairitsu.ignotus.database.exposed.model.table
 
+import com.tairitsu.ignotus.support.util.UUIDUtils
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.javatime.datetime
 import java.time.LocalDateTime
 
-/**
- * Reference: https://github.com/paulkagiri/ExposedDatesAutoFill
- */
-abstract class BaseLongIdTable(name: String) : LongIdTable(name) {
+abstract class BaseLongIdWithUUIDTable(name: String) : LongIdTable(name) {
+    val uuid = varchar("uuid", 36).clientDefault { UUIDUtils.createNoLeadingDigitId() }.uniqueIndex()
     val createdAt = datetime("created_at").clientDefault { LocalDateTime.now() }
     val updatedAt = datetime("updated_at").nullable()
 }
-

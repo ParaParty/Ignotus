@@ -1,13 +1,13 @@
 package moe.bit.ignotusdemo.model.entity
 
+import com.tairitsu.ignotus.database.exposed.model.entity.BaseLongIdWithUUIDEntity
+import com.tairitsu.ignotus.database.exposed.model.entity.BaseLongIdWithUUIDEntityClass
 import moe.bit.ignotusdemo.model.table.UserTable
-import com.tairitsu.ignotus.database.exposed.model.entity.BaseLongIdEntity
-import com.tairitsu.ignotus.database.exposed.model.entity.BaseLongIdEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import java.util.function.Consumer
 
-class UserEntity(id: EntityID<Long>) : BaseLongIdEntity(id, UserTable) {
-    companion object : BaseLongIdEntityClass<UserEntity>(UserTable) {
+class UserEntity(id: EntityID<Long>) : BaseLongIdWithUUIDEntity(id, UserTable) {
+    companion object : BaseLongIdWithUUIDEntityClass<UserEntity>(UserTable) {
         @JvmStatic
         fun create(init: Consumer<UserEntity>) = new { init.accept(this) }
     }
@@ -16,4 +16,3 @@ class UserEntity(id: EntityID<Long>) : BaseLongIdEntity(id, UserTable) {
     var password by UserTable.password
     var lastLoginAt by UserTable.lastLoginAt
 }
-

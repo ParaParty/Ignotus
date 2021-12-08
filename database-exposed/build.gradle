@@ -22,6 +22,8 @@ dependencies {
     api 'org.jetbrains.exposed:exposed-spring-boot-starter:0.36.2'
     // api 'org.jetbrains.exposed:exposed-kotlin-datetime:0.36.2'
     api 'org.jetbrains.exposed:exposed-java-time:0.36.2'
+
+    api project(path: ':support')
 }
 
 test {

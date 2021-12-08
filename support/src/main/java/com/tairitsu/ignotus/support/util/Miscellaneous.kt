@@ -3,9 +3,15 @@ package com.tairitsu.ignotus.support.util
 import java.util.*
 
 object UUIDUtils {
+    /**
+     * 创建一个去除横杠的 UUID。
+     */
     @JvmStatic
     fun createModelId(): String = UUID.randomUUID().toString().replace("-", "")
 
+    /**
+     * 创建一个起始字符不为数字的去横杠的 UUID。
+     */
     @JvmStatic
     fun createNoLeadingDigitId(): String {
         var ret = createModelId()

@@ -14,7 +14,7 @@ class UserVo : BaseResponse {
     var updatedAt: LocalDateTime? = null
 
     constructor(userEntity: UserEntity) {
-        this.id = userEntity.id.toString()
+        this.id = userEntity.uuid
         this.username = userEntity.username
         this.createdAt = userEntity.createdAt
         this.updatedAt = userEntity.updatedAt
