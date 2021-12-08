@@ -23,6 +23,8 @@ import java.util.Date;
 @Data
 public class JpaExampleVo extends BaseResponse {
 
+    public String id;
+
     public String name;
 
     public Long number;
@@ -30,6 +32,7 @@ public class JpaExampleVo extends BaseResponse {
     public Date theDay;
 
     public JpaExampleVo(JpaExampleEntity jpaExampleEntity) {
+        this.setId(jpaExampleEntity.getUuid());
         this.setName(jpaExampleEntity.getName());
         this.setNumber(jpaExampleEntity.getNumber());
         this.setTheDay(jpaExampleEntity.getTheDay());
@@ -44,6 +47,6 @@ public class JpaExampleVo extends BaseResponse {
     @NotNull
     @Override
     public String getId() {
-        return String.valueOf(this.hashCode());
+        return this.id;
     }
 }

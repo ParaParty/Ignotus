@@ -30,7 +30,8 @@ public class ApplicationTest {
 
     @Test
     public void testSave() {
-        jpaExampleDao.save(new JpaExampleEntity());
+        JpaExampleEntity entity = new JpaExampleEntity();
+        jpaExampleDao.save(entity);
     }
 
 }

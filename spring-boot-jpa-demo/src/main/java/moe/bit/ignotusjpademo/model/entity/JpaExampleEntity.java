@@ -1,8 +1,8 @@
 package moe.bit.ignotusjpademo.model.entity;
 
-import com.tairitsu.ignotus.database.jpa.model.entity.BaseLongIdEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.tairitsu.ignotus.database.jpa.model.entity.BaseLongIdWithUUIDEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,11 +15,11 @@ import java.util.Date;
  * @description: TODO
  * @date 2021/11/29 11:23
  */
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "jpa_example_entity")
-@Data
-public class JpaExampleEntity extends BaseLongIdEntity {
+@Getter
+@Setter
+public class JpaExampleEntity extends BaseLongIdWithUUIDEntity {
 
     @Column(name = "name")
     String name;

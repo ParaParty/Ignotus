@@ -48,11 +48,11 @@ implementation 'com.tairitsu:ignotus-database-exposed:1.0.10'
 
 ## 构建
 ```bash
-./gradlew :cache:build :database-exposed:build :exception:build :foundation:build :serializer:build :support:build :translation:build :validation:build :spring-boot-demo:build :translation:build
+./gradlew :database-exposed:build :database-jpa:build :support:build :cache:build :foundation:build :serializer:build :translation:build :exception:build :validation:build :translation:build :spring-boot-demo:build :spring-boot-jpa-demo:build
 ```
 
 ```
-gradlew :cache:build :database-exposed:build :exception:build :foundation:build :serializer:build :support:build :translation:build :validation:build :spring-boot-demo:build :translation:build
+gradlew :database-exposed:build :database-jpa:build :support:build :cache:build :foundation:build :serializer:build :translation:build :exception:build :validation:build :translation:build :spring-boot-demo:build :spring-boot-jpa-demo:build
 ```
 
 ## 发布

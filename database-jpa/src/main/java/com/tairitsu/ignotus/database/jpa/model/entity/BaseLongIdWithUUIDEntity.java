@@ -1,24 +1,28 @@
 package com.tairitsu.ignotus.database.jpa.model.entity;
 
 import com.tairitsu.ignotus.support.util.JSON;
+import com.tairitsu.ignotus.support.util.UUIDUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * base long id model for jpa
+ * base long id model with uuid for jpa
  *
  * @author A-Salty-Fish
  * @version 1.0
  */
 
 @MappedSuperclass
-public class BaseLongIdEntity {
+public class BaseLongIdWithUUIDEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
+    @Column(name = "uuid", nullable = false)
+    private String uuid = UUIDUtils.createNoLeadingDigitId();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -33,6 +37,10 @@ public class BaseLongIdEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -58,12 +66,12 @@ public class BaseLongIdEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BaseLongIdEntity that = (BaseLongIdEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        BaseLongIdWithUUIDEntity that = (BaseLongIdWithUUIDEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(uuid, that.uuid) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, createdAt, updatedAt);
+        return Objects.hash(id, uuid, createdAt, updatedAt);
     }
 }
