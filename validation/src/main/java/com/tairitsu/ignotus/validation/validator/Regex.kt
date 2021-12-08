@@ -41,7 +41,7 @@ private fun Any?.toRegex(validatorName: String, fail: (String) -> Unit): Regex? 
             this
         }
         else -> {
-            fail(lang("validation.validator_error.unexpected_argument.not_regex",
+            fail(lang("validator_error.unexpected_argument.not_regex",
                 mapOf("validator" to validatorName)))
             null
         }

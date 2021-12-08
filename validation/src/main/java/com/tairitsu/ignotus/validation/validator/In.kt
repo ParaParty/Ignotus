@@ -13,7 +13,7 @@ class ValidatorIn : AttributeValidatorInterface {
 
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (arg == null) {
-            val s = lang("validation.validator_error.unexpected_argument.null", mapOf("validator" to this::javaClass.name))
+            val s = lang("validator_error.unexpected_argument.null", mapOf("validator" to this::javaClass.name))
             log.warn(s)
             fail(s)
             return
@@ -54,7 +54,7 @@ class ValidatorIn : AttributeValidatorInterface {
             return
         }
 
-        val s = lang("validation.validator_error.unexpected_argument.not_collection", mapOf("validator" to this::javaClass.name))
+        val s = lang("validator_error.unexpected_argument.not_collection", mapOf("validator" to this::javaClass.name))
         log.warn(s)
         fail(s)
         return

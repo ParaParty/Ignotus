@@ -1,0 +1,8 @@
+{
+    "unexpected_argument": {
+        "general": "验证器 <validator> 传入了一个无法识别的参数。",
+        "null": "验证器 <validator> 传入了一个空参数。",
+        "not_collection": "验证器 <validator> 传入了一个无法解析为集合的参数。",
+        "not_regex": "验证器 <validator> 传入了一个无法解析为正则表达式的参数。"
+    }
+}

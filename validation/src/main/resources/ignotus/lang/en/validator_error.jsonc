@@ -1,0 +1,8 @@
+{
+    "unexpected_argument": {
+        "general": "Validator <validator> received an unexpected argument",
+        "null": "Validator <validator> received an unexpected null argument",
+        "not_collection": "Validator <validator> received an unexpected argument that is not a collection",
+        "not_regex": "Validator <validator> received an unexpected argument that is not a regex"
+    }
+}

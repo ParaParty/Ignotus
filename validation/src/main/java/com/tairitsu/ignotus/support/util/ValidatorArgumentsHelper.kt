@@ -22,4 +22,32 @@ object ValidatorArgumentsHelper {
             is String -> fromString(arg);
             else -> HashMap<String, String>()
         }
+
+    fun parseToDouble(arg: Any): Double =
+        when (arg) {
+            is String -> arg.toDouble()
+            is Number -> arg.toDouble()
+            else -> 0.0
+        }
+
+    fun parseToFloat(arg: Any): Float =
+        when (arg) {
+            is String -> arg.toFloat()
+            is Number -> arg.toFloat()
+            else -> 0.0f
+        }
+
+    fun parseToInt(arg: Any): Int =
+        when (arg) {
+            is String -> arg.toInt()
+            is Number -> arg.toInt()
+            else -> 0
+        }
+
+    fun parseToLong(arg: Any): Long =
+        when (arg) {
+            is String -> arg.toLong()
+            is Number -> arg.toLong()
+            else -> 0
+        }
 }
