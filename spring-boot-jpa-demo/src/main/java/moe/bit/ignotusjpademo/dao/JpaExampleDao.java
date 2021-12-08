@@ -1,7 +1,7 @@
 package moe.bit.ignotusjpademo.dao;
 
 import moe.bit.ignotusjpademo.model.entity.JpaExampleEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.List;
  * @author 13090
  */
 @Repository
-public interface JpaExampleDao extends JpaRepository<JpaExampleEntity, Long> {
+public interface JpaExampleDao extends CrudRepository<JpaExampleEntity, Long> {
     List<JpaExampleEntity> findAllByName(String name);
 
     List<JpaExampleEntity> findAllByTheDayBetween(Date begin, Date end);
