@@ -9,22 +9,28 @@ import com.tairitsu.ignotus.support.config.JacksonNamingStrategyConfig
 import com.tairitsu.ignotus.support.service.JSONMapperRegister
 import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
+import com.tairitsu.ignotus.support.util.toGetterFunction
 import com.tairitsu.ignotus.validation.annotation.Required
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import java.lang.reflect.Field
+import java.lang.reflect.InvocationTargetException
 import java.time.LocalTime
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.javaField
+import kotlin.reflect.jvm.javaGetter
 
 
 @Component
 @Lazy
 class Validator {
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
     @Autowired
     private lateinit var applicationContext: ApplicationContext
@@ -62,8 +68,46 @@ class Validator {
         for (field in fields) {
             val javaField = field.javaField ?: continue
             javaField.isAccessible = true
-            val value = field.getter.call(content)
-            validateSingleField(javaField, value, basePath, exception)
+
+            var done = false
+            try {
+                val value = field.getter.call(content)
+                validateSingleField(javaField, value, basePath, exception)
+                done = true
+            } catch (_: InvocationTargetException) {
+
+            } catch (e: Exception){
+                log.error(e.message, e)
+            }
+
+            if (done) {
+                continue
+            }
+
+            try {
+                val getMethod = field.javaGetter ?: kType.java.getMethod(field.name.toGetterFunction())
+                val value = getMethod.invoke(content)
+                validateSingleField(javaField, value, basePath, exception)
+                done = true
+            } catch (_: InvocationTargetException) {
+
+            } catch (_: UninitializedPropertyAccessException) {
+
+            } catch (_: NoSuchMethodException) {
+
+            } catch (_: SecurityException) {
+
+            } catch (_: SecurityException) {
+
+            } catch (e: Exception) {
+                log.error(e.message, e)
+            }
+
+            if (done) {
+                continue
+            }
+
+            validateSingleField(javaField, null, basePath, exception)
         }
     }
 
