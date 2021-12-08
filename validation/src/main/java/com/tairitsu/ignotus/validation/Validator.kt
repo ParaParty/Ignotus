@@ -61,7 +61,8 @@ class Validator {
 
         for (field in fields) {
             val javaField = field.javaField ?: continue
-            val value = javaField.get(content)
+            javaField.isAccessible = true
+            val value = field.getter.call(content)
             validateSingleField(javaField, value, basePath, exception)
         }
     }
