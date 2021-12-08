@@ -11,35 +11,38 @@
 <dependency>
   <groupId>com.tairitsu</groupId>
   <artifactId>ignotus-exception</artifactId> <!-- 以全局异常处理模块为例 -->
-  <version>1.0.10</version>
+  <version>1.0.11</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
 // JSON:API 输出格式的全局异常处理模块
-implementation 'com.tairitsu:ignotus-exception:1.0.10'
+implementation 'com.tairitsu:ignotus-exception:1.0.11'
 
 // JSON:API 格式的 Controller 定义助手
-implementation 'com.tairitsu:ignotus-foundation:1.0.10'
+implementation 'com.tairitsu:ignotus-foundation:1.0.11'
 
 // JSON:API 格式的数据序列化工具
-implementation 'com.tairitsu:ignotus-serializer:1.0.10'
+implementation 'com.tairitsu:ignotus-serializer:1.0.11'
 
 // 基本辅助类
-implementation 'com.tairitsu:ignotus-support:1.0.10'
+implementation 'com.tairitsu:ignotus-support:1.0.11'
 
 // Laravel 风格的数据验证器
-implementation 'com.tairitsu:ignotus-validation:1.0.10'
+implementation 'com.tairitsu:ignotus-validation:1.0.11'
 
 // Laravel 风格的键值对数据库封装
-implementation 'com.tairitsu:ignotus-cache:1.0.10'
+implementation 'com.tairitsu:ignotus-cache:1.0.11'
 
 // Laravel 风格的文本模板
-implementation 'com.tairitsu:ignotus-translation:1.0.10'
+implementation 'com.tairitsu:ignotus-translation:1.0.11'
 
 // 参考网友实现的 JetBrains-Exposed 自动时间戳封装
-implementation 'com.tairitsu:ignotus-database-exposed:1.0.10'
+implementation 'com.tairitsu:ignotus-database-exposed:1.0.11'
+
+// JPA 自动时间戳封装
+implementation 'com.tairitsu:ignotus-database-jpa:1.0.11'
 ```
 
 ## 使用介绍
@@ -57,9 +60,9 @@ gradlew :database-exposed:build :database-jpa:build :support:build :cache:build 
 
 ## 发布
 ```bash
-./gradlew :cache:publish :database-exposed:publish :exception:publish :foundation:publish :serializer:publish :support:publish :validation:publish :translation:publish
+./gradlew clean :database-exposed:publish :database-jpa:publish :support:publish :cache:publish :foundation:publish :serializer:publish :translation:publish :exception:publish :validation:publish :translation:publish
 ```
 
 ```
-gradlew :cache:publish :database-exposed:publish :exception:publish :foundation:publish :serializer:publish :support:publish :validation:publish :translation:publish
+gradlew clean :database-exposed:publish :database-jpa:publish :support:publish :cache:publish :foundation:publish :serializer:publish :translation:publish :exception:publish :validation:publish :translation:publish
 ```
