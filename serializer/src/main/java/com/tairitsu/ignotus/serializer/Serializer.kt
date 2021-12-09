@@ -58,7 +58,7 @@ open class Serializer<T : BaseResponse> {
                 val getMethod = field.javaGetter ?: type.java.getMethod(name.toGetterFunction())
                 val value = getMethod.invoke(model)
                 ret[outputName] = value
-                done = true
+//                done = true
             } catch (_: InvocationTargetException) {
 
             } catch (_: UninitializedPropertyAccessException) {
