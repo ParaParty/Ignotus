@@ -40,7 +40,7 @@ class TranslationService {
             (locale.language + "_" + locale.country).lowercase(),
             locale.language.lowercase(),
             "en")) {
-            val template = getTemplate(t, key, args, locale)
+            val template = getTemplate(t, key, args, Locale(t))
             if (template.first) {
                 return template
             }

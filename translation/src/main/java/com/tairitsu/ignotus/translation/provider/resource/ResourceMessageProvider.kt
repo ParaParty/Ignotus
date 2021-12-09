@@ -223,6 +223,7 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
     override fun getTemplate(localeStr: String, key: String, args: Map<String, Any?>, locale: Locale): Pair<Boolean, String> {
         val localeNode = data[localeStr] ?: return false to ""
         val node = localeNode.walkOrNull(key) ?: return false to ""
-        return true to node.value!!.get(key, args, locale)
+        val value = node.value ?: return false to ""
+        return true to value.get(key, args, locale)
     }
 }
