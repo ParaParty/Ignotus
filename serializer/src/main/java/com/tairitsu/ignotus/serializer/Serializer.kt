@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
 import javax.servlet.http.HttpServletRequest
 import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.javaField
 import kotlin.reflect.jvm.javaGetter
 
 
@@ -37,6 +39,11 @@ open class Serializer<T : BaseResponse> {
         for (field in fields) {
             val name = field.name
             if (preservedFields.contains(name)) continue
+
+            val javaField = field.javaField ?: continue
+            field.isAccessible = true
+            javaField.isAccessible = true
+
             val outputName = JacksonNamingStrategyConfig.namingStrategy?.nameForField(null, null, name) ?: name
 
             var done = false
@@ -45,6 +52,8 @@ open class Serializer<T : BaseResponse> {
                 ret[outputName] = value
                 done = true
             } catch (_: InvocationTargetException) {
+
+            } catch (_: IllegalAccessException) {
 
             } catch (e: Exception){
                 log.error(e.message, e)

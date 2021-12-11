@@ -23,6 +23,7 @@ import java.time.LocalTime
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
 import kotlin.reflect.jvm.javaGetter
 
@@ -67,6 +68,7 @@ class Validator {
 
         for (field in fields) {
             val javaField = field.javaField ?: continue
+            field.isAccessible = true
             javaField.isAccessible = true
 
             var done = false
@@ -75,6 +77,8 @@ class Validator {
                 validateSingleField(javaField, value, basePath, exception)
                 done = true
             } catch (_: InvocationTargetException) {
+
+            } catch (_: IllegalAccessException) {
 
             } catch (e: Exception){
                 log.error(e.message, e)
