@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'com.tairitsu'
-version = '1.0.13'
+version = '1.0.14'
 
 subprojects {
     tasks.withType(JavaCompile) {
@@ -19,7 +19,7 @@ subprojects {
 
 allprojects {
     group = 'com.tairitsu'
-    version = '1.0.13'
+    version = '1.0.14'
 }
 
 repositories {
