@@ -8,6 +8,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.reflect.InvocationTargetException
 import javax.servlet.http.HttpServletRequest
+import kotlin.reflect.full.IllegalCallableAccessException
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.javaField
@@ -40,9 +41,9 @@ open class Serializer<T : BaseResponse> {
             val name = field.name
             if (preservedFields.contains(name)) continue
 
-            val javaField = field.javaField ?: continue
-            field.isAccessible = true
-            javaField.isAccessible = true
+//            val javaField = field.javaField ?: continue
+//            field.isAccessible = true
+//            javaField.isAccessible = true
 
             val outputName = JacksonNamingStrategyConfig.namingStrategy?.nameForField(null, null, name) ?: name
 
@@ -54,6 +55,8 @@ open class Serializer<T : BaseResponse> {
             } catch (_: InvocationTargetException) {
 
             } catch (_: IllegalAccessException) {
+
+            } catch (_: IllegalCallableAccessException) {
 
             } catch (e: Exception){
                 log.error(e.message, e)
