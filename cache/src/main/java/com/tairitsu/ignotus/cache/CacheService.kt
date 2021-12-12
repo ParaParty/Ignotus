@@ -15,6 +15,14 @@ interface CacheService {
      */
     fun <T> pull(key: String, type: Class<T>, default: T? = null): T?
 
+    /**
+     * Retrieve an item from the cache and delete it.
+     *
+     * @param [key]
+     * @param [type]
+     * @return
+     */
+    fun <T> pull(key: String, type: Class<T>): T? = pull(key, type, null)
 
     /**
      * Store an item in the cache.
@@ -200,4 +208,13 @@ interface CacheService {
      * @return
      */
     fun <T> get(key: String, type: Class<T>, default: T? = null): T?
+
+    /**
+     * Retrieve an item from the cache.
+     *
+     * @param [key]
+     * @param [type]
+     * @return
+     */
+    fun <T> get(key: String, type: Class<T>): T? = get(key, type, null)
 }

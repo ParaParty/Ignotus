@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.core.RedisOperations
 import org.springframework.data.redis.core.RedisTemplate
 
-@Configuration
+@Configuration("IgnotusRedisCacheAutoConfiguration")
 @ConditionalOnClass(RedisOperations::class, RedisTemplate::class)
 @EnableConfigurationProperties(RedisProperties::class)
 @AutoConfigureAfter(RedisAutoConfiguration::class)
 open class RedisCacheAutoConfiguration() {
-    @Bean
+    @Bean("IgnotusRedisCache")
     open fun redisCache(redisTemplate: RedisTemplate<String, String>): RedisCacheService {
         return RedisCacheService(redisTemplate)
     }

@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.MongoTemplate
 
-@Configuration
+@Configuration("IgnotusMongoCacheAutoConfiguration")
 @ConditionalOnClass(MongoOperations::class, MongoTemplate::class)
 @EnableConfigurationProperties(MongoProperties::class)
 @AutoConfigureAfter(MongoAutoConfiguration::class)
 open class MongoCacheAutoConfiguration() {
-    @Bean
+    @Bean("IgnotusMongoCacheService")
     open fun mongoCache(mongoTemplate: MongoTemplate): CacheService {
         return MongoCacheService(mongoTemplate)
     }
