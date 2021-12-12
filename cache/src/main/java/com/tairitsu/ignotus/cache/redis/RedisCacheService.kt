@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
 
-@Suppress("UNCHECKED_CAST")
 class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>) : CacheService {
 
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
@@ -253,9 +252,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>
         lock(key) {
             if (redisTemplate.hasKey(key)) {
                 val value = redisTemplate.opsForValue().get(key)
-                if (type.isAssignableFrom(value::class.java)) {
-                    ret = value as T?
-                }
+                ret = value?.jsonToObject(type)
             }
 
             if (ret == null) {
@@ -264,7 +261,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>
                 ret = value
             }
         }
-        return ret!!
+        return ret
     }
 
     /**
@@ -294,16 +291,16 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>
         lock(key) {
             if (redisTemplate.hasKey(key)) {
                 val value = redisTemplate.opsForValue().get(key)
-                if (type.isAssignableFrom(value::class.java)) {
-                    ret = value as T?
-                }
-            } else {
+                ret = value?.jsonToObject(type)
+            }
+
+            if (ret == null) {
                 val value = callback.get()
                 redisTemplate.opsForValue().set(key, value?.toJson() ?: "null")
                 ret = value
             }
         }
-        return ret!!
+        return ret
     }
 
     /**
@@ -359,6 +356,7 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>
      * @return
      */
     override fun <T> get(key: String, type: Class<T>, default: T?): T? {
-        return redisTemplate.opsForValue().get(key) as T?
+        val value = redisTemplate.opsForValue().get(key)
+        return value?.jsonToObject(type)
     }
 }
