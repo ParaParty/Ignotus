@@ -3,6 +3,7 @@ package com.tairitsu.ignotus.cache.mongo
 import com.tairitsu.ignotus.cache.CacheService
 import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
 import org.springframework.boot.autoconfigure.mongo.MongoProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -15,8 +16,9 @@ import org.springframework.data.mongodb.core.MongoTemplate
 @ConditionalOnClass(MongoOperations::class, MongoTemplate::class)
 @EnableConfigurationProperties(MongoProperties::class)
 @AutoConfigureAfter(MongoAutoConfiguration::class)
-open class MongoCacheAutoConfiguration() {
+open class MongoCacheAutoConfiguration {
     @Bean("IgnotusMongoCacheService")
+    @ConditionalOnProperty(prefix = "ignotus.cache.auto-configuration", name = ["enabled"], havingValue = "true", matchIfMissing = true)
     open fun mongoCache(mongoTemplate: MongoTemplate): CacheService {
         return MongoCacheService(mongoTemplate)
     }

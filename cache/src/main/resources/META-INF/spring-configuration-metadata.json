@@ -1,0 +1,25 @@
+{
+    "groups": [
+        {
+            "name": "ignotus.cache",
+            "type": "com.tairitsu.ignotus.cache.CacheConfig",
+            "sourceType": "com.tairitsu.ignotus.cache.CacheConfig",
+            "description": "Ignotus Cache 配置。"
+        },
+        {
+            "name": "ignotus.foundation.auto-configuration",
+            "type": "com.tairitsu.ignotus.cache.CacheAutoConfigurationConfig",
+            "sourceType": "com.tairitsu.ignotus.cache.CacheAutoConfigurationConfig",
+            "description": "自动配置设置。"
+        }
+    ],
+    "properties": [
+        {
+            "name": "ignotus.cache.auto-configuration.enabled",
+            "type": "java.lang.Boolean",
+            "description": "是否启用自动配置。"
+        }
+    ],
+    "hints": [
+    ]
+}
