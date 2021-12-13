@@ -18,14 +18,10 @@ class UnexpectedException : SingleApiException {
         if (!ExceptionConfig.IS_DEBUG) {
             this.detail = "internal_server_error"
         }
-    }
 
-    override fun toJSONObject(): HashMap<String, Any> {
-        val e = super.toJSONObject()
         if (exception != null && ExceptionConfig.IS_DEBUG) {
-            e["meta"] = getMate()
+            meta = getMate()
         }
-        return e
     }
 
     private fun getMate(): HashMap<String, Any?> {

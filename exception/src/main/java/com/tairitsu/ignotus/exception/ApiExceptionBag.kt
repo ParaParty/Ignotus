@@ -20,7 +20,7 @@ open class ApiExceptionBag : ApiException() {
         e.exceptions.forEach { s -> exceptions.add(s) };
     }
 
-    override fun toJSONArray(): Iterable<Any> {
+    final override fun toJSONArray(): Iterable<Any> {
         val ret = ArrayList<Any>()
         exceptions.forEach { s -> ret.add(s.toJSONObject()) }
         return ret
