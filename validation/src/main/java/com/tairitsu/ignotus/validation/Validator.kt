@@ -117,7 +117,7 @@ class Validator {
 
     private fun validateSingleField(field: Field, value: Any?, key: String, exception: ArrayList<SingleApiException>) {
         val step = field.name
-        val newKey = if (key == "") step else "$key.$step"
+        val newKey = "$key/$step"
 
         val annotations = field.annotations
         for (annotation in annotations) {
@@ -301,7 +301,7 @@ class Validator {
     ): Collection<SingleApiException> {
         val ret = ArrayList<SingleApiException>()
         val step = JacksonNamingStrategyConfig.namingStrategy?.nameForField(null, null, path[0]) ?: path[0]
-        val newKey = if (key == "") step else "$key.$step"
+        val newKey = "$key/$step"
 
         if (!content.containsKey(step)) {
             rules.forEach { rule ->
