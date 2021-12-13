@@ -9,12 +9,15 @@ import org.apache.commons.lang3.exception.ExceptionUtils
  */
 class UnexpectedException : SingleApiException {
     private var name: String?
-
     private var exception: Throwable?
 
-    constructor(detail: String, exception: Throwable? = null) : super(500, "server_internal_error", detail) {
+    constructor(detail: String, exception: Throwable? = null) : super(500, "internal_server_error", detail) {
         this.exception = exception
         this.name = exception?.javaClass?.name
+
+        if (!ExceptionConfig.IS_DEBUG) {
+            this.detail = "internal_server_error"
+        }
     }
 
     override fun toJSONObject(): HashMap<String, Any> {

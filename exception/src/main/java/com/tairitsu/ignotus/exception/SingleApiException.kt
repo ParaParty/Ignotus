@@ -1,14 +1,14 @@
 package com.tairitsu.ignotus.exception
 
-import kotlin.properties.Delegates
+import java.util.*
 
 /**
  * 单条错误消息同时返回给前端时用的异常类
  */
 open class SingleApiException : ApiException {
-    var status by Delegates.notNull<Int>()
-    private var code: String
-    private var detail: String
+    var status: Int protected set
+    var code: String protected set
+    var detail: String protected set
 
     constructor(status: Int, code: String, detail: String) : super(detail) {
         this.status = status
@@ -16,6 +16,9 @@ open class SingleApiException : ApiException {
         this.detail = detail
     }
 
+    /**
+     * 序列化为错误信息
+     */
     open fun toJSONObject(): HashMap<String, Any> {
         val e = HashMap<String, Any>()
         e["status"] = status.toString()
@@ -24,9 +27,7 @@ open class SingleApiException : ApiException {
         return e
     }
 
-    override fun toJSONArray(): ArrayList<Any> {
-        val e = ArrayList<Any>()
-        e.add(toJSONObject())
-        return e
+    override fun toJSONArray(): Iterable<Any> {
+        return Collections.singletonList(toJSONObject())
     }
 }

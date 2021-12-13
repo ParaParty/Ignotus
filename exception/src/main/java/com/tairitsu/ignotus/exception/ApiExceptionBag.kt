@@ -6,20 +6,23 @@ package com.tairitsu.ignotus.exception
 open class ApiExceptionBag : ApiException() {
     var exceptions: MutableList<SingleApiException> = mutableListOf();
 
-    fun add(e: ApiException) {
-        if (e is SingleApiException) {
-            exceptions.add(e)
-        }
-
-        if (e is ApiExceptionBag) {
-            e.exceptions.forEach { s -> exceptions.add(s) };
-        }
+    /**
+     * 添加单条错误消息
+     */
+    fun add(e: SingleApiException) {
+        exceptions.add(e)
     }
 
-    override fun toJSONArray(): ArrayList<Any> {
+    /**
+     * 添加多条错误消息
+     */
+    fun add(e: ApiExceptionBag) {
+        e.exceptions.forEach { s -> exceptions.add(s) };
+    }
+
+    override fun toJSONArray(): Iterable<Any> {
         val ret = ArrayList<Any>()
         exceptions.forEach { s -> ret.add(s.toJSONObject()) }
-        return ret;
+        return ret
     }
-
 }

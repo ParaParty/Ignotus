@@ -22,7 +22,7 @@ public class Test {
   "errors": [
     {
       "status": "500",
-      "code": "server_internal_error",
+      "code": "internal_server_error",
       "detail": "测试异常"
     }
   ]
@@ -52,12 +52,12 @@ public class Test {
   "errors": [
     {
       "status": "500",
-      "code": "server_internal_error",
+      "code": "internal_server_error",
       "detail": "测试异常1"
     },
     {
       "status": "500",
-      "code": "server_internal_error",
+      "code": "internal_server_error",
       "detail": "测试异常1"
     }
   ]

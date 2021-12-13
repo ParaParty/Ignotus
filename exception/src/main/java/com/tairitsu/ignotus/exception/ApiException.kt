@@ -6,8 +6,14 @@ package com.tairitsu.ignotus.exception
 abstract class ApiException : RuntimeException {
     constructor() : super()
 
+    /**
+     * @param message 错误信息
+     */
     constructor(message: String) : super(message)
 
-    abstract fun toJSONArray(): ArrayList<Any>
+    /**
+     * 序列化为错误信息数组
+     */
+    abstract fun toJSONArray(): Iterable<Any>
 }
 
