@@ -19,6 +19,7 @@ class JsonApiObject<T> {
  */
 class JsonApiObjectBody<T> {
     @Required
+    @field:JvmSynthetic
     lateinit var data: JsonApiObject<T>
 }
 
@@ -27,5 +28,6 @@ class JsonApiObjectBody<T> {
  */
 class JsonApiListBody<T> {
     @Required
+    @field:JvmSynthetic
     lateinit var data: List<JsonApiObject<T>>
 }
