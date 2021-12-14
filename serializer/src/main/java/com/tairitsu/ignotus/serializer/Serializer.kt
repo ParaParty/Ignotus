@@ -10,8 +10,6 @@ import java.lang.reflect.InvocationTargetException
 import javax.servlet.http.HttpServletRequest
 import kotlin.reflect.full.IllegalCallableAccessException
 import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.javaField
 import kotlin.reflect.jvm.javaGetter
 
 
@@ -32,7 +30,7 @@ open class Serializer<T : BaseResponse> {
      * JSON:API 规范中的 `attributes` 字段的序列化方法。
      */
     open fun defaultAttributeSerialize(model: T): Map<String, Any?> {
-        val ret = mutableMapOf<String, Any?>()
+        val ret = LinkedHashMap<String, Any?>()
 
         val type = model::class
         val fields = type.declaredMemberProperties
@@ -120,7 +118,7 @@ open class Serializer<T : BaseResponse> {
             }
 
             // 处理后的关联信息
-            val includedPool = mutableMapOf<String, BaseResponse>()
+            val includedPool = LinkedHashMap<String, BaseResponse>()
 
             // 待处理的关联信息
             val pendingModels = ArrayList<BaseResponse>()
@@ -154,7 +152,7 @@ open class Serializer<T : BaseResponse> {
             val data = serializeSingleEntity(model, request)
 
             // 处理后的关联信息
-            val includedPool = mutableMapOf<String, BaseResponse>()
+            val includedPool = LinkedHashMap<String, BaseResponse>()
 
             // 待处理的关联信息
             val pendingModels = ArrayList<BaseResponse>()
