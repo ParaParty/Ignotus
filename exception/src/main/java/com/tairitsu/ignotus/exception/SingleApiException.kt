@@ -1,13 +1,22 @@
 package com.tairitsu.ignotus.exception
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import java.util.*
 
 /**
  * 单条错误消息同时返回给前端时用的异常类
  *
+ * 一般业务异常从这里继承就行
+ *
  * [见 JSON:API 文档](https://jsonapi.org/format/#error-objects)
  */
 open class SingleApiException : ApiException {
+    companion object {
+        @JvmStatic
+        val log: Logger = LoggerFactory.getLogger(SingleApiException::class.java)
+    }
 
     /**
      * a unique identifier for this particular occurrence of the problem.
@@ -26,7 +35,7 @@ open class SingleApiException : ApiException {
     /**
      * the HTTP status code applicable to this problem, expressed as a string value.
      */
-    var status: Int protected set
+    var status: HttpStatus protected set
 
     /**
      * an application-specific error code, expressed as a string value.
@@ -59,8 +68,25 @@ open class SingleApiException : ApiException {
     var meta: Map<String, Any?>? = null
         protected set
 
-
     constructor(status: Int, code: String, detail: String) : super(detail) {
+        this.status = HttpStatus.valueOf(status)
+        this.code = code
+        this.detail = detail
+    }
+
+    constructor(status: HttpStatus, code: String, detail: String) : super(detail) {
+        this.status = status
+        this.code = code
+        this.detail = detail
+    }
+
+    constructor(status: Int, code: String, detail: String, cause: Throwable?) : super(detail, cause) {
+        this.status = HttpStatus.valueOf(status)
+        this.code = code
+        this.detail = detail
+    }
+
+    constructor(status: HttpStatus, code: String, detail: String, cause: Throwable?) : super(detail, cause) {
         this.status = status
         this.code = code
         this.detail = detail
@@ -69,8 +95,8 @@ open class SingleApiException : ApiException {
     /**
      * 序列化为错误信息
      */
-    fun toJSONObject(): HashMap<String, Any> {
-        val e = HashMap<String, Any>()
+    fun toJSONObject(): Map<String, Any> {
+        val e = LinkedHashMap<String, Any>()
 
         id.let {
             if (it != null) {
@@ -84,8 +110,7 @@ open class SingleApiException : ApiException {
             }
         }
 
-
-        e["status"] = status.toString()
+        e["status"] = status.value().toString()
 
         e["code"] = code
 
@@ -114,5 +139,12 @@ open class SingleApiException : ApiException {
 
     final override fun toJSONArray(): Iterable<Any> {
         return Collections.singletonList(toJSONObject())
+    }
+
+    final override fun getHttpStatus(): HttpStatus {
+        if (this is LoggableException) {
+            log.error(this.message ?: this.toString(), this)
+        }
+        return status
     }
 }

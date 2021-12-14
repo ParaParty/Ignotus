@@ -24,7 +24,7 @@ spring:
 
 ignotus:
     exception:
-        debug: false
+        debug: true
     foundation:
         pagination:
             page-based:
