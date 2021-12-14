@@ -28,6 +28,8 @@ dependencies {
 
     // SLF4J
     compileOnly 'org.slf4j:slf4j-api:1.7.32'
+
+    api project(path: ':translation')
 }
 
 test {
