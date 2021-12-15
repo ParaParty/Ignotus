@@ -1,0 +1,81 @@
+{
+    "business": {
+        "authenticate_failed": {
+            "title": "认证失败",
+            "detail": "您无权进行本操作，权限不足。"
+        },
+        "unauthorized": {
+            "title": "未认证",
+            "detail": "您无权进行本操作，请登陆后重试。"
+        },
+        "model_not_found": {
+            "title": "资源未找到",
+            "detail": "您请求的资源不存在。"
+        },
+        "page_invalid": {
+            "title": "分页设置错误",
+            // "detail": "Pagination arguments invalid. This is a server error."
+            "detail_start_at_error": "配置 ignotus.foundation.pagination.page-based.start-at 必须为 0 或 1。这是一个服务端错误。",
+        },
+        "page_number_invalid": {
+            "title": "页码参数错误",
+            // "detail": "Page Number Invalid"
+            "detail_out_of_range": "页数从 <min> 开始。",
+            "detail_fail_to_parse": "您提交的页数无法被解析为整数。",
+        },
+        "page_offset_invalid": {
+            "title": "页偏移量参数错误",
+            // "detail": "Page Offset Invalid"
+            "detail_out_of_range": "页偏移量必须大于等于 0。",
+            "detail_fail_to_parse": "您提交的页偏移量无法被解析为整数。",
+        },
+        "page_size_invalid": {
+            "title": "页面大小参数错误",
+            "detail": "页面大小参数不合法",
+            "detail_out_of_range": "页面大小必须为 <min> 到 <max> （两边取闭）之中的一个整数。",
+            "detail_fail_to_parse": "您提交的页面大小无法被解析为整数。",
+        },
+        "request_body_is_not_json": {
+            "title": "请求体不为 JSON 格式",
+            "detail": "请求体不为 JSON 格式。",
+        },
+        "validation_error": {
+            "title": "验证错误",
+            "detail": "验证错误。",
+        },
+        "validation_invalid_exception": {
+            "title": "验证器错误",
+            "detail": "验证器错误。",
+            "detail_null_content": "服务器尝试对一个空指针进行验证。",
+            "detail_invalid_validation_rule": "属性 '<attribute>' 的验证规则不合法。合法的验证规则为一个字符串、一个二元组、一个验证器实例或由上面三种元素组成的一个集合。",
+            "validator_duplicated": "验证器 '<validator>' 重复，请检查服务端的验证器定义。",
+            "validator_validator_not_found": "找不到名字为 '<validator>' 的验证器，请检查服务端的验证器定义。",
+        }
+    },
+    "relation": {
+        "include_invalid": {
+            "title": "关联信息参数错误",
+            "detail": "提交的关联信息参数不在允许的范围内。"
+        },
+        "sort_invalid": {
+            "title": "排序信息参数错误",
+            "detail": "提交的排序信息参数不在允许的范围内。"
+        },
+        "relationship_invalid": {
+            "title": "关系信息错误",
+            "detail": "关系信息错误。这是一个服务端错误。",
+            "detail_invalid_related_collection": "关系信息是一个集合，但是集合的内容不为 BaseResponse 类型。类型：<type>，关系：<relation>。",
+            "detail_invalid_related_object": "关系信息必须是一个 BaseResponse 实例或 BaseResponse 实例的集合。类型：<type>，关系：<relation>。",
+            "detail_empty_relationship_name": "关系信息名字为空。类型：<type>。",
+            "detail_relationship_method_not_found": "无法自动载入关系信息，请确认 <class>::<method> 存在。类型：<type>，关系：<relation>。."
+        }
+    },
+    "serialize": {
+        "serializer_exception": {
+            "title": "序列化异常",
+            "detail": "序列化异常",
+            "detail_api_result_unacceptable_type": "API 返回内容不为 BaseResponse 实例或 BaseResponse 实例的集合。",
+            "detail_related_object_unacceptable_type": "关系信息不为 BaseResponse 实例或 BaseResponse 实例的集合。"
+        }
+    }
+}

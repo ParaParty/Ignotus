@@ -2,7 +2,7 @@
     "business": {
         "authenticate_failed": {
             "title": "Authentication Failed",
-            "detail": "The username or password you entered is incorrect."
+            "detail": "You don't have permission to perform this action."
         },
         "unauthorized": {
             "title": "Unauthorized",
@@ -13,7 +13,7 @@
             "detail": "The requested resource was not found."
         },
         "page_invalid": {
-            "title": "Page Invalid",
+            "title": "Pagination Configuration Error",
             // "detail": "Pagination arguments invalid. This is a server error."
             "detail_start_at_error": "Configuration ignotus.foundation.pagination.page-based.start-at must be 0 or 1. This might be an unexpected error.",
         },
@@ -21,19 +21,19 @@
             "title": "Page Number Invalid",
             // "detail": "Page Number Invalid"
             "detail_out_of_range": "Page number must be greater than or equal to <min>.",
-            "detail_can_not_parse": "Page number can not parse to integer."
+            "detail_fail_to_parse": "Page number can not parse to integer."
         },
         "page_offset_invalid": {
             "title": "Page Offset Invalid",
             // "detail": "Page Offset Invalid"
             "detail_out_of_range": "Page offset must be greater than or equal to 0.",
-            "detail_can_not_parse": "Page offset can not parse to integer."
+            "detail_fail_to_parse": "Page offset can not parse to integer."
         },
         "page_size_invalid": {
             "title": "Page Size Invalid",
             "detail": "Page Size Invalid",
             "detail_out_of_range": "Page size must be greater than or equal to <min> and less than or equal to <max>.",
-            "detail_can_not_parse": "Page size can not parse to integer."
+            "detail_fail_to_parse": "Page size can not parse to integer."
         },
         "request_body_is_not_json": {
             "title": "Request body is not JSON",
