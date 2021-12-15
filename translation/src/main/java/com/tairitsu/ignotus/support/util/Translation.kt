@@ -94,7 +94,9 @@ class Translation private constructor(baseKey: String = "") {
     val baseKey: String
 
     init {
-        this.baseKey = if (baseKey.endsWith(".")) {
+        this.baseKey = if (baseKey.isBlank()) {
+            ""
+        } else if (baseKey.endsWith(".")) {
             baseKey
         } else {
             "$baseKey."
@@ -114,7 +116,7 @@ class Translation private constructor(baseKey: String = "") {
         key: String,
         @Suppress("UNCHECKED_CAST") args: Map<String, Any?> = Collections.EMPTY_MAP as Map<String, Any>,
         locale: Locale = LocaleContextHolder.getLocale(),
-        default: String = "{$baseKey$key}",
+        default: String = "$baseKey$key",
     ): String {
         return service.getMessage(key = baseKey + key, args = args, locale = locale, default = default)
     }

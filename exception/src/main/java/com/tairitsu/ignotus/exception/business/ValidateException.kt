@@ -5,15 +5,16 @@ import com.tairitsu.ignotus.exception.SingleApiException
 /**
  * 业务异常：验证失败
  */
-class ValidateException : SingleApiException {
+class ValidateException(detail: String, pointer: String) : SingleApiException(422, CODE, detail) {
     companion object {
         const val CODE = "validation_error"
     }
 
-    constructor(detail: String, pointer: String) : super(422, CODE, detail) {
-        val t = HashMap<String, String>();
-        t["pointer"] = pointer
+    init {
+        this.title = translateTitle(CODE)
 
+        val t = HashMap<String, String>()
+        t["pointer"] = pointer
         source = t
     }
 }

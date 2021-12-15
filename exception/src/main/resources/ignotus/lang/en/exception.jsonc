@@ -39,6 +39,10 @@
             "title": "Request body is not JSON",
             "detail": "Request body is not JSON"
         },
+        "validation_error": {
+            "title": "Validation Error",
+            "detail": "Validation error."
+        },
         "validation_invalid_exception": {
             "title": "Validation Failed",
             "detail": "Validation failed",
