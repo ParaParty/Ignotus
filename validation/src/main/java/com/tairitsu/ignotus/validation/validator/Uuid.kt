@@ -1,6 +1,6 @@
 package com.tairitsu.ignotus.validation.validator
 
-import com.tairitsu.ignotus.support.util.Translation.lang
+import com.tairitsu.ignotus.support.util.Translation
 import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.springframework.stereotype.Component
@@ -12,11 +12,11 @@ class ValidatorUuid : AttributeValidatorInterface {
 
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail(lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
+            fail(Translation.lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
             return
         }
 
-        if (!value.matches(regex)) fail(lang("validation.uuid", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
+        if (!value.matches(regex)) fail(Translation.lang("validation.uuid", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
 
     }
 }
@@ -28,11 +28,11 @@ class ValidatorUuidWithoutDash : AttributeValidatorInterface {
 
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail(lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
+            fail(Translation.lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
             return
         }
 
-        if (!value.matches(regex)) fail(lang("validation.uuid_without_dash", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
+        if (!value.matches(regex)) fail(Translation.lang("validation.uuid_without_dash", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
     }
 }
 

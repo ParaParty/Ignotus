@@ -97,7 +97,7 @@ open class Serializer<T : BaseResponse> {
             return when (data) {
                 is BaseResponse -> serializeEntity(data, request)
                 is Collection<*> -> serializeEntities(data, request.getAttribute("json-api_links"), request)
-                else -> throw SerializerException("Api result is not a BaseResponse or a set of BaseResponses.")
+                else -> throw SerializerException(SerializerException.Reason.API_RESULT_UNACCEPTABLE_TYPE)
             }
         }
 
@@ -105,6 +105,7 @@ open class Serializer<T : BaseResponse> {
          * 序列化列表类 REST API 的结果
          * 列表记录
          */
+        @Suppress("DuplicatedCode")
         private fun serializeEntities(
             models: Collection<*>,
             links: Any?,
@@ -133,10 +134,10 @@ open class Serializer<T : BaseResponse> {
             includedPool.forEach { (_, v) -> included.add(serializeSingleEntity(v, request)) }
 
             // 拼接最终的结果
-            val ret = HashMap<String, Any>()
-            ret.put("data", data)
-            if (included.size > 0) ret.put("included", included)
-            if (links is Map<*, *>) ret.put("links", links) else ret.put("links", mapOf<String, String>())
+            val ret = LinkedHashMap<String, Any>()
+            ret["data"] = data
+            if (included.size > 0) ret["included"] = included
+            if (links is Map<*, *>) ret["links"] = links else ret["links"] = mapOf<String, String>()
             return ret
         }
 
@@ -144,6 +145,7 @@ open class Serializer<T : BaseResponse> {
          * 序列化资源类 REST API 的结果
          * 单条记录
          */
+        @Suppress("DuplicatedCode")
         private fun serializeEntity(
             model: BaseResponse,
             request: HttpServletRequest,
@@ -160,13 +162,13 @@ open class Serializer<T : BaseResponse> {
 
             // 处理关联信息
             processIncludedRelationship(pendingModels, includedPool)
-            val included = ArrayList<Any>()
+            @Suppress("MemberVisibilityCanBePrivate", "MemberVisibilityCanBePrivate") val included = ArrayList<Any>()
             includedPool.forEach { (_, v) -> included.add(serializeSingleEntity(v, request)) }
 
             // 拼接最终的结果
-            val ret = HashMap<String, Any>()
-            ret.put("data", data)
-            if (included.size > 0) ret.put("included", included)
+            val ret = LinkedHashMap<String, Any>()
+            ret["data"] = data
+            if (included.size > 0) ret["included"] = included
             return ret
         }
 
@@ -208,6 +210,7 @@ open class Serializer<T : BaseResponse> {
             pendingModels: ArrayList<BaseResponse>,
         ) {
             model.relationships.forEach(fun(_, v) {
+                @Suppress("ControlFlowWithEmptyBody", "CascadeIf")
                 if (v is BaseResponse) {
                     pendingModels.add(v)
                 } else if (v is Collection<*>) {
@@ -218,12 +221,13 @@ open class Serializer<T : BaseResponse> {
                 } else if (v == null) {
 
                 } else {
-                    throw SerializerException("The related object is not a BaseResponse or a set of BaseResponses.")
+                    throw SerializerException(SerializerException.Reason.API_RESULT_UNACCEPTABLE_TYPE)
                 }
             })
         }
 
-        val defaultSerializer = Serializer<BaseResponse>();
+        @Suppress("MemberVisibilityCanBePrivate")
+        val defaultSerializer = Serializer<BaseResponse>()
 
         /**
          * 序列化一个对象
@@ -231,8 +235,8 @@ open class Serializer<T : BaseResponse> {
         private fun serializeSingleEntity(
             model: BaseResponse,
             request: HttpServletRequest,
-        ): HashMap<String, Any> {
-            val data = HashMap<String, Any>()
+        ): Map<String, Any> {
+            val data = LinkedHashMap<String, Any>()
 
             val serializerType = model.modelSerializer
 
@@ -245,48 +249,48 @@ open class Serializer<T : BaseResponse> {
             serializerInstance.request = request
 
             val dataResult = serializerInstance.defaultAttributeSerialize(model)
-            data.put("type", model.modelType)
-            data.put("id", model.id)
-            data.put("attributes", dataResult)
+            data["type"] = model.modelType
+            data["id"] = model.id
+            data["attributes"] = dataResult
 
             if (model.relationships.isNotEmpty()) {
-                val relationships = HashMap<String, Any>()
+                val relationships = LinkedHashMap<String, Any>()
                 model.relationships.forEach { (k, v) ->
+                    @Suppress("CascadeIf")
                     if (v is BaseResponse) {
-                        val tData = HashMap<String, Any>()
-                        tData.put("type", v.modelType)
-                        tData.put("id", v.id)
+                        val tData = LinkedHashMap<String, Any>()
+                        tData["type"] = v.modelType
+                        tData["id"] = v.id
 
-                        val tRelation = HashMap<String, Any>()
-                        tRelation.put("data", tData)
+                        val tRelation = LinkedHashMap<String, Any>()
+                        tRelation["data"] = tData
 
-                        relationships.put(k, tRelation)
+                        relationships[k] = tRelation
                     } else if (v is Collection<*>) {
                         val aData = ArrayList<Any>()
 
                         v.forEach(fun(c) {
                             val s = c as BaseResponse
-                            val tData = HashMap<String, Any>()
-                            tData.put("type", s.modelType)
-                            tData.put("id", s.id)
+                            val tData = LinkedHashMap<String, Any>()
+                            tData["type"] = s.modelType
+                            tData["id"] = s.id
 
                             aData.add(tData)
                         })
 
-                        val tRelation = HashMap<String, Any>()
-                        tRelation.put("data", aData)
-
-                        relationships.put(k, aData)
+                        val tRelation = LinkedHashMap<String, Any>()
+                        tRelation["data"] = aData
+                        relationships[k] = aData
                     } else if (v == null) {
-                        val tRelation = HashMap<String, Any?>()
-                        tRelation.put("data", null)
+                        val tRelation = LinkedHashMap<String, Any?>()
+                        tRelation["data"] = null
 
-                        relationships.put(k, tRelation)
+                        relationships[k] = tRelation
                     } else {
-                        throw SerializerException("The related object is not a BaseResponse or a set of BaseResponses.")
+                        throw SerializerException(SerializerException.Reason.API_RESULT_UNACCEPTABLE_TYPE)
                     }
                 }
-                data.put("relationships", relationships)
+                data["relationships"] = relationships
             }
 
             return data

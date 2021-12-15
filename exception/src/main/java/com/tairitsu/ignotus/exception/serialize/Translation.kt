@@ -1,8 +1,8 @@
-package com.tairitsu.ignotus.exception.business
+package com.tairitsu.ignotus.exception.serialize
 
 import com.tairitsu.ignotus.support.util.Translation
 
-val translation = Translation.getTranslationService("exception.business")
+val translation = Translation.getTranslationService("exception.serialize")
 
 fun translateDetail(code: String) = translation.getMessage("$code.detail")
 

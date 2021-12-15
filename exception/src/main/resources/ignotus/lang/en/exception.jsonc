@@ -31,13 +31,47 @@
         },
         "page_size_invalid": {
             "title": "Page Size Invalid",
-            // "detail": "Page Size Invalid"
+            "detail": "Page Size Invalid",
             "detail_out_of_range": "Page size must be greater than or equal to <min> and less than or equal to <max>.",
             "detail_can_not_parse": "Page size can not parse to integer."
         },
         "request_body_is_not_json": {
             "title": "Request body is not JSON",
             "detail": "Request body is not JSON"
+        },
+        "validation_invalid_exception": {
+            "title": "Validation Failed",
+            "detail": "Validation failed",
+            "detail_null_content": "Server tried to validate null content.",
+            "detail_invalid_validation_rule": "Invalid validation rule for attribute '<attribute>' found. Validations rules must be a string, a 2-tuple, an instance of validator, or a collection containing a serial element of the type mentioned above.",
+            "validator_duplicated": "Validator '<validator>' duplicated. Please check your validator configuration.",
+            "validator_validator_not_found": "Validator '<validator>' not found. Please check your validator configuration.",
+        }
+    },
+    "relation": {
+        "include_invalid": {
+            "title": "Include Invalid",
+            "detail": "Include provided in request invalid."
+        },
+        "sort_invalid": {
+            "title": "Sort Invalid",
+            "detail": "Sort provided in request invalid."
+        },
+        "relationship_invalid": {
+            "title": "Relationship Invalid",
+            "detail": "Relationship invalid. This is a server error.",
+            "detail_invalid_related_collection": "The related object is a collection, but it doesn't contain BaseResponse. Type: <type>, Relation: <relation>.",
+            "detail_invalid_related_object": "The related object is not a BaseResponse or a set of BaseResponses. Type: <type>, Relation: <relation>.",
+            "detail_empty_relationship_name": "The relationship name is empty. Type: <type>",
+            "detail_relationship_method_not_found": "Relationship not found, Please ensure <class>::<method> exists. Type: <type>, Relation: <relation>."
+        }
+    },
+    "serialize": {
+        "serializer_exception": {
+            "title": "Serializer Exception",
+            "detail": "Serializer Exception.",
+            "detail_api_result_unacceptable_type": "Api result is not a BaseResponse or a set of BaseResponses.",
+            "detail_related_object_unacceptable_type": "The related object is not a BaseResponse or a set of BaseResponses."
         }
     }
 }

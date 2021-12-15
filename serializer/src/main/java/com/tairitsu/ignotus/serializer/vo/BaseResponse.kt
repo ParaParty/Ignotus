@@ -67,13 +67,19 @@ abstract class BaseResponse {
                 if (t is BaseResponse) {
                     this.relationships[key] = value
                 } else {
-                    throw RelationshipInvalidException("The related object is a set, but it doesn't contain BaseResponse. Type: ${this.modelType}, Relation: $key")
+                    throw RelationshipInvalidException(RelationshipInvalidException.Reason.INVALID_RELATED_COLLECTION, mapOf(
+                        "type" to this.modelType,
+                        "key" to key,
+                    ))
                 }
             }
         } else if (value == null) {
             this.relationships[key] = null
         } else {
-            throw RelationshipInvalidException("The related object is not a BaseResponse or a set of BaseResponses. Type: ${this.modelType}, Relation: $key")
+            throw RelationshipInvalidException(RelationshipInvalidException.Reason.INVALID_RELATED_OBJECT, mapOf(
+                "type" to this.modelType,
+                "key" to key,
+            ))
         }
     }
 
@@ -100,7 +106,7 @@ abstract class BaseResponse {
         val path = relation.split('.')
 
         if (path.isEmpty()) {
-            throw RelationshipInvalidException("Relationship nme must not be empty")
+            throw RelationshipInvalidException(RelationshipInvalidException.Reason.EMPTY_RELATIONSHIP_NAME, mapOf("type" to this.modelType))
         }
 
         val aRelation = path[0]
@@ -118,11 +124,20 @@ abstract class BaseResponse {
                 val value = aMethod.invoke(this)
                 this.setRelationship(aRelation, value)
             } catch (e: NoSuchMethodException) {
-                throw RelationshipInvalidException("Relationship not found, Please ensure ${type.name}::$functionName exists. Type: ${this.modelType}, Relation: $aRelation")
+                throw RelationshipInvalidException(RelationshipInvalidException.Reason.RELATIONSHIP_METHOD_NOT_FOUND, mapOf(
+                    "class" to type.name,
+                    "method" to functionName,
+                    "type" to modelType,
+                    "relation" to relation
+                ))
             } catch (e: SecurityException) {
-                throw RelationshipInvalidException("Relationship not found, Please ensure ${type.name}::$functionName exists. Type: ${this.modelType}, Relation: $aRelation")
+                throw RelationshipInvalidException(RelationshipInvalidException.Reason.RELATIONSHIP_METHOD_NOT_FOUND, mapOf(
+                    "class" to type.name,
+                    "method" to functionName,
+                    "type" to modelType,
+                    "relation" to relation
+                ))
             }
-
         }
 
         if (path.size > 1) {

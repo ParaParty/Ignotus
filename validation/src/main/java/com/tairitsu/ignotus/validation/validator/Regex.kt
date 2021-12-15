@@ -1,7 +1,6 @@
 package com.tairitsu.ignotus.validation.validator
 
 import com.tairitsu.ignotus.support.util.Translation
-import com.tairitsu.ignotus.support.util.Translation.lang
 import com.tairitsu.ignotus.support.util.ValidatorAttributesHelper
 import com.tairitsu.ignotus.validation.AttributeValidatorInterface
 import org.springframework.stereotype.Component
@@ -10,12 +9,12 @@ import org.springframework.stereotype.Component
 class ValidatorRegex : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail(lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
+            fail(Translation.lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
             return
         }
 
         val check = arg.toRegex(this.javaClass.name, fail) ?: return
-        if (!value.matches((check))) fail(lang("validation.regex", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))));
+        if (!value.matches((check))) fail(Translation.lang("validation.regex", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))));
     }
 }
 
@@ -23,12 +22,12 @@ class ValidatorRegex : AttributeValidatorInterface {
 class ValidatorNotRegex : AttributeValidatorInterface {
     override fun invoke(attribute: String, arg: Any?, value: Any?, fail: (String) -> Unit) {
         if (value !is String) {
-            fail(lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
+            fail(Translation.lang("validation.string", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
             return
         }
 
         val check = arg.toRegex(this.javaClass.name, fail) ?: return
-        if (value.matches((check))) fail(lang("validation.not_regex", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))));
+        if (value.matches((check))) fail(Translation.lang("validation.not_regex", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))));
     }
 }
 
@@ -41,7 +40,7 @@ private fun Any?.toRegex(validatorName: String, fail: (String) -> Unit): Regex? 
             this
         }
         else -> {
-            fail(lang("validator_error.unexpected_argument.not_regex",
+            fail(Translation.lang("validator_error.unexpected_argument.not_regex",
                 mapOf("validator" to validatorName)))
             null
         }

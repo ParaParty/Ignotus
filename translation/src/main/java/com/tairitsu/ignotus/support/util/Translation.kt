@@ -25,12 +25,13 @@ class Translation private constructor(baseKey: String = "") {
          *
          * @param key 文本字段名
          */
+        @JvmStatic
         fun lang(key: String): String {
             @Suppress("UNCHECKED_CAST")
-            return instance.lang(key = key,
+            return instance.getMessage(key = key,
                 args = Collections.EMPTY_MAP as Map<String, Any>,
                 locale = LocaleContextHolder.getLocale(),
-                default = "")
+            )
         }
 
         /**
@@ -43,10 +44,10 @@ class Translation private constructor(baseKey: String = "") {
         @JvmStatic
         fun lang(key: String, locale: Locale): String {
             @Suppress("UNCHECKED_CAST")
-            return instance.lang(key = key,
+            return instance.getMessage(key = key,
                 args = Collections.EMPTY_MAP as Map<String, Any>,
                 locale = locale,
-                default = "")
+            )
         }
 
         /**
@@ -59,7 +60,7 @@ class Translation private constructor(baseKey: String = "") {
          */
         @JvmStatic
         fun lang(key: String, args: Map<String, Any>): String {
-            return instance.lang(key = key, args = args, locale = LocaleContextHolder.getLocale(), default = "")
+            return instance.getMessage(key = key, args = args, locale = LocaleContextHolder.getLocale())
         }
 
         /**
@@ -72,7 +73,7 @@ class Translation private constructor(baseKey: String = "") {
          */
         @JvmStatic
         fun lang(key: String, args: Map<String, Any>, locale: Locale): String {
-            return instance.lang(key = key, args = args, locale = locale, default = "")
+            return instance.getMessage(key = key, args = args, locale = locale)
         }
 
         /**
@@ -109,7 +110,7 @@ class Translation private constructor(baseKey: String = "") {
      * @param args 文本参数
      * @param default 默认值
      */
-    fun lang(
+    fun getMessage(
         key: String,
         @Suppress("UNCHECKED_CAST") args: Map<String, Any?> = Collections.EMPTY_MAP as Map<String, Any>,
         locale: Locale = LocaleContextHolder.getLocale(),
