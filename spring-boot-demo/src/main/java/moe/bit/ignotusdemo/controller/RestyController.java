@@ -26,7 +26,7 @@ public class RestyController {
         .addModule(new ParameterNamesModule())
         .addModule(new Jdk8Module())
         .addModule(new JavaTimeModule())
-        .addModule(new KotlinModule())
+        .addModule(new KotlinModule.Builder().build())
         .build();
 
     @ResponseBody()

@@ -41,7 +41,7 @@ open class LettuceConfig {
             .addModule(ParameterNamesModule())
             .addModule(Jdk8Module())
             .addModule(JavaTimeModule())
-            .addModule(KotlinModule())
+            .addModule(KotlinModule.Builder().build())
             .build()
 
         mapper.activateDefaultTyping(

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 
 @Component
-class AutoMigration(springTransactionManager: SpringTransactionManager) {
+class AutoMigration(@Suppress("UNUSED_PARAMETER") springTransactionManager: SpringTransactionManager) {
     @PostConstruct
     fun init() {
         transaction {
