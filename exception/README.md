@@ -76,7 +76,7 @@ public class MyDemoException extends SingleApiException {
 }
 ```
 
-如果需要输出更多的信息，可以参考 `UnexpectedException` 的实现，重写 `SingleApiException` 的 `toJSONObject` 方法。
+如果需要输出更多的信息，可以在构造函数里给 `meta` 或其他属性进行赋值。
 
 ## 设置
 ```properties
