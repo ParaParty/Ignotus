@@ -17,16 +17,16 @@ class TranslationService {
     @Autowired
     lateinit var application: ApplicationContext
 
-    lateinit var providers: MutableMap<String, MessageProvider>
+    lateinit var providers: List<MessageProvider>
 
     @PostConstruct
     fun init() {
-        providers = application.getBeansOfType(MessageProvider::class.java)
+        providers = application.getBeansOfType(MessageProvider::class.java).map { it.value }.sortedByDescending { s -> s.priority }
         com.tairitsu.ignotus.support.util.Translation.service = this
     }
 
-    fun getTemplate(localeStr: String, key: String, args: Map<String, Any?>, locale: Locale): Pair<Boolean, String> {
-        for (provider in providers.values) {
+    private fun getTemplate(localeStr: String, key: String, args: Map<String, Any?>, locale: Locale): Pair<Boolean, String> {
+        for (provider in providers) {
             val template = provider.getTemplate(localeStr, key, args, locale)
             if (template.first) {
                 return template

@@ -27,6 +27,8 @@ class ResourceMessageProvider(private val resourceLoader: ResourceLoader): Messa
 
     private val data = ResourceMessageNode()
 
+    override val priority = Int.MIN_VALUE;
+
     @PostConstruct
     fun init() {
         val t = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources("classpath*:/ignotus/lang/**")
