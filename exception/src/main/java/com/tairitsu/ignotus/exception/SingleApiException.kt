@@ -57,6 +57,7 @@ open class SingleApiException : ApiException {
      * source: an object containing references to the source of the error, optionally including any of the following members:
      *
      * [source].pointer: a JSON Pointer [RFC6901](https://tools.ietf.org/html/rfc6901) to the associated entity in the request document (e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute).
+     *
      * [source].parameter: a string indicating which URI query parameter caused the error.
      */
     var source: Map<String, String>? = null
