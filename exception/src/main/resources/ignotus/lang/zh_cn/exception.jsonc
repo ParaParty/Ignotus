@@ -1,5 +1,9 @@
 {
     "business": {
+        "internal_server_error": {
+            "title": "服务器内部错误",
+            "detail": "服务器内部错误，请稍后再试。"
+        },
         "authenticate_failed": {
             "title": "认证失败",
             "detail": "您无权进行本操作，权限不足。"

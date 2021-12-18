@@ -15,30 +15,20 @@ import org.apache.commons.lang3.exception.ExceptionUtils
  */
 class UnexpectedException : SingleApiException {
     companion object {
-        const val exceptionCode = "internal_server_error"
+        const val CODE = "internal_server_error"
     }
 
     private var name: String? = null
     private var exception: Throwable? = null
 
-    constructor(detail: String) : super(500, exceptionCode, detail)
+    constructor(detail: String) : super(500, CODE, detail)
 
-    constructor(detail: String, exception: Throwable?) : super(500, exceptionCode, detail, exception) {
-        if (exception != null) {
-            this.exception = exception
-            initExceptionInformation()
-
-            if (!ExceptionConfig.IS_DEBUG) {
-                this.detail = "Internal server error"
-            }
-
-            if (ExceptionConfig.IS_DEBUG) {
-                meta = getMate()
-            }
-        }
+    constructor(detail: String, exception: Throwable?) : super(500, CODE, detail, exception) {
+        this.exception = exception
+        initExceptionInformation()
     }
 
-    constructor(exception: Throwable) : super(500, exceptionCode, exception.message ?: "", exception) {
+    constructor(exception: Throwable) : super(500, CODE, exception.message ?: "", exception) {
         this.exception = exception
         initExceptionInformation()
     }
@@ -46,8 +36,10 @@ class UnexpectedException : SingleApiException {
     private fun initExceptionInformation() {
         this.name = exception!!.javaClass.name
 
+        this.title = translateTitle(CODE)
+
         if (!ExceptionConfig.IS_DEBUG) {
-            this.detail = "Internal server error"
+            this.detail = translateDetail(CODE)
         }
 
         if (ExceptionConfig.IS_DEBUG) {

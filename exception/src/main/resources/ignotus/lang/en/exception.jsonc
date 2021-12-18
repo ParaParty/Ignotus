@@ -1,5 +1,9 @@
 {
     "business": {
+        "internal_server_error": {
+            "title": "Internal server error",
+            "detail": "Unexpected error occurred. Please try again later."
+        },
         "authenticate_failed": {
             "title": "Authentication Failed",
             "detail": "You don't have permission to perform this action."

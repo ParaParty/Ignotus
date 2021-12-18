@@ -22,7 +22,6 @@ open class SingleApiException : ApiException {
      * a unique identifier for this particular occurrence of the problem.
      */
     var id: String? = null
-        protected set
 
     /**
      * a links object containing the following members:
@@ -30,28 +29,26 @@ open class SingleApiException : ApiException {
      * [links].about: a link that leads to further details about this particular occurrence of the problem.
      */
     var links: Map<String, String>? = null
-        protected set
 
     /**
      * the HTTP status code applicable to this problem, expressed as a string value.
      */
-    var status: HttpStatus protected set
+    var status: HttpStatus
 
     /**
      * an application-specific error code, expressed as a string value.
      */
-    var code: String protected set
+    var code: String
 
     /**
      * a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.
      */
     var title: String? = null
-        protected set
 
     /**
      * a human-readable explanation specific to this occurrence of the problem. Like [title], this field’s value can be localized.
      */
-    var detail: String protected set
+    var detail: String
 
     /**
      * source: an object containing references to the source of the error, optionally including any of the following members:
@@ -61,13 +58,11 @@ open class SingleApiException : ApiException {
      * [source].parameter: a string indicating which URI query parameter caused the error.
      */
     var source: Map<String, String>? = null
-        protected set
 
     /**
      * a [meta object](https://jsonapi.org/format/#document-meta) containing non-standard meta-information about the error.
      */
     var meta: Map<String, Any?>? = null
-        protected set
 
     constructor(status: Int, code: String, detail: String) : super(detail) {
         this.status = HttpStatus.valueOf(status)

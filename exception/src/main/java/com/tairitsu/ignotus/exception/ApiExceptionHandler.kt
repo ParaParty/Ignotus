@@ -3,6 +3,7 @@ package com.tairitsu.ignotus.exception
 import com.tairitsu.ignotus.exception.business.UnexpectedException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
@@ -16,6 +17,9 @@ import javax.servlet.http.HttpServletResponse
 open class ApiExceptionHandler {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
+    @Autowired(required = false)
+    var reporter: ApiExceptionReporter? = null
+
     @ExceptionHandler(value = [ApiException::class])
     @ResponseBody
     open fun apiExceptionHandler(
@@ -23,6 +27,8 @@ open class ApiExceptionHandler {
         response: HttpServletResponse,
         e: ApiException,
     ): Map<String, Any> {
+        reporter?.report(e)
+
         val obj = HashMap<String, Any>()
         obj["errors"] = e.toJSONArray()
         response.status = e.getHttpStatus().value()

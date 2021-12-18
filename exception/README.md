@@ -78,6 +78,10 @@ public class MyDemoException extends SingleApiException {
 
 如果需要输出更多的信息，可以在构造函数里给 `meta` 或其他属性进行赋值。
 
+## 错误收集器
+
+实现一个 `ApiExceptionReporter` 并加入 Spring 容器。
+
 ## 设置
 ```properties
 # 调试模式，当调试模式开启时，会输出更多 UnexpectedException 的堆栈信息。
