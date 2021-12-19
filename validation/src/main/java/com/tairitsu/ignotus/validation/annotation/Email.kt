@@ -5,4 +5,4 @@ import com.tairitsu.ignotus.validation.ValidatorAnnotation
 @ValidatorAnnotation
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Email(val value: String)
+annotation class Email
