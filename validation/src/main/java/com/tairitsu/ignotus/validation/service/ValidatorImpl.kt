@@ -184,19 +184,22 @@ class ValidatorImpl : Validator {
     }
 
     override fun <T> validate(content: String?, validation: Map<String, Any>, basePath: String, type: Class<T>): T {
-        @Suppress("DuplicatedCode")
-        if (content == null) {
-            throw ValidationInvalidException(ValidationInvalidException.Reason.NULL_CONTENT)
-        }
         val mapper = JSONMapperRegister.objectMapperProvider.objectMapper
-        val typeRef = object : TypeReference<HashMap<String, Any?>>() {}
-        val tree = mapper.readValue(content, typeRef)
-        this.validate(tree, validation, basePath)
+        val tree = validateStringAndReturnMap(content, validation, basePath)
+        return mapper.convertValue(tree, type)
+    }
+
+    override fun <T> validate(content: String?, validation: Map<String, Any>, basePath: String, type: TypeReference<T>): T {
+        val mapper = JSONMapperRegister.objectMapperProvider.objectMapper
+        val tree = validateStringAndReturnMap(content, validation, basePath)
         return mapper.convertValue(tree, type)
     }
 
     override fun validate(content: String?, validation: Map<String, Any>, basePath: String) {
-        @Suppress("DuplicatedCode")
+        validateStringAndReturnMap(content, validation, basePath)
+    }
+
+    private fun validateStringAndReturnMap(content: String?, validation: Map<String, Any>, basePath: String): Map<String, Any?> {
         if (content == null) {
             throw ValidationInvalidException(ValidationInvalidException.Reason.NULL_CONTENT)
         }
@@ -204,6 +207,25 @@ class ValidatorImpl : Validator {
         val typeRef = object : TypeReference<HashMap<String, Any?>>() {}
         val tree = mapper.readValue(content, typeRef)
         this.validate(tree, validation, basePath)
+        return tree
+    }
+
+    override fun <T> validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String, type: Class<T>): T {
+        val mapper = JSONMapperRegister.objectMapperProvider.objectMapper
+        validate(content, validation, basePath)
+        return mapper.convertValue(content, type)
+    }
+
+    override fun <T: Any> validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String, type: KClass<T>): T {
+        val mapper = JSONMapperRegister.objectMapperProvider.objectMapper
+        validate(content, validation, basePath)
+        return mapper.convertValue(content, type.java)
+    }
+
+    override fun <T> validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String, type: TypeReference<T>): T {
+        val mapper = JSONMapperRegister.objectMapperProvider.objectMapper
+        validate(content, validation, basePath)
+        return mapper.convertValue(content, type)
     }
 
     override fun validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String) {
@@ -298,7 +320,8 @@ class ValidatorImpl : Validator {
                     val t = rule.split(Regex(":"), 1)
                     val validatorName = t[0]
                     if (validatorName == "required") {
-                        ret.add(ValidateException("$step is required", newKey))
+                        ret.add(ValidateException(Translation.lang("validation.required",
+                            mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(step))), newKey))
                     }
                 }
             }

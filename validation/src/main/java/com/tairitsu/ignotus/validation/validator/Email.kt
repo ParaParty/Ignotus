@@ -31,6 +31,6 @@ class ValidatorEmail : AttributeValidatorInterface {
 
         val check = if (arg is String && arg == "filter_unicode") RegexpWithoutUnicode else RegexpWithUnicode
 
-        if (!value.matches((check))) fail(Translation.lang("validation.max.email", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
+        if (!value.matches((check))) fail(Translation.lang("validation.email", mapOf("attribute" to ValidatorAttributesHelper.getAttributeFriendlyName(attribute))))
     }
 }

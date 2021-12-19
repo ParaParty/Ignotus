@@ -1,5 +1,6 @@
 package com.tairitsu.ignotus.validation
 
+import com.fasterxml.jackson.core.type.TypeReference
 import kotlin.reflect.KClass
 
 
@@ -7,26 +8,107 @@ interface Validator {
 
     /**
      * 验证器入口
-     *
-     * @param content 被验证的对象
-     * @param basePath 输出报错的时候，报错信息的基础路径
      */
-    fun validate(content: Any?, basePath: String = "")
+    fun validate(content: Any?) = validate(content, "")
 
     /**
      * 验证器入口
      */
-    fun <T : Any> validate(content: String?, validation: Map<String, Any>, basePath: String = "", type: KClass<T>): T
+    fun validate(content: Any?, basePath: String)
 
     /**
      * 验证器入口
      */
-    fun <T> validate(content: String?, validation: Map<String, Any>, basePath: String = "", type: Class<T>): T
+    fun <T : Any> validate(content: String?, validation: Map<String, Any>, basePath: String, type: KClass<T>): T
 
     /**
      * 验证器入口
      */
-    fun validate(content: String?, validation: Map<String, Any>, basePath: String = "")
+    fun <T : Any> validate(content: String?, validation: Map<String, Any>, type: KClass<T>): T =
+        validate(content, validation, "", type)
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(content: String?, validation: Map<String, Any>, basePath: String, type: Class<T>): T
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(content: String?, validation: Map<String, Any>, type: Class<T>): T =
+        validate(content, validation, "", type)
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(content: String?, validation: Map<String, Any>, basePath: String, type: TypeReference<T>): T
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(content: String?, validation: Map<String, Any>, type: TypeReference<T>): T =
+        validate(content, validation, "", type)
+
+    /**
+     * 验证器入口
+     */
+    fun validate(content: String?, validation: Map<String, Any>, basePath: String)
+
+    /**
+     * 验证器入口
+     */
+    fun validate(content: String?, validation: Map<String, Any>) =
+        validate(content, validation, "")
+
+    /**
+     * 验证器入口
+     */
+    fun <T : Any> validate(
+        content: Map<String, Any?>,
+        validation: Map<String, Any>,
+        basePath: String,
+        type: KClass<T>,
+    ): T
+
+    /**
+     * 验证器入口
+     */
+    fun <T : Any> validate(
+        content: Map<String, Any?>,
+        validation: Map<String, Any>,
+        type: KClass<T>,
+    ): T = validate(content, validation, "", type)
+
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String, type: Class<T>): T
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(content: Map<String, Any?>, validation: Map<String, Any>, type: Class<T>): T =
+        validate(content, validation, "", type)
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(
+        content: Map<String, Any?>,
+        validation: Map<String, Any>,
+        basePath: String,
+        type: TypeReference<T>,
+    ): T
+
+    /**
+     * 验证器入口
+     */
+    fun <T> validate(
+        content: Map<String, Any?>,
+        validation: Map<String, Any>,
+        type: TypeReference<T>,
+    ): T = validate(content, validation, "", type)
 
     /**
      * 验证器入口
@@ -42,5 +124,11 @@ interface Validator {
      *
      * @throw ApiExceptionBag
      */
-    fun validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String = "")
+    fun validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String)
+
+    /**
+     * 验证器入口
+     */
+    fun validate(content: Map<String, Any?>, validation: Map<String, Any>) =
+        validate(content, validation, "")
 }
