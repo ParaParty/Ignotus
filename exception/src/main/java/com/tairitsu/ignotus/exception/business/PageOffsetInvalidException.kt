@@ -18,9 +18,9 @@ class PageOffsetInvalidException(parameterName: String, reason: Reason) : Single
 
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
 
-        this.detail = translateDetail(CODE, reason.s)
+        this.detail = Translation.translateDetail(CODE, reason.s)
 
         val t = HashMap<String, String>()
         this.source = t

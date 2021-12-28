@@ -12,10 +12,10 @@ class AuthenticateFailedException : SingleApiException {
 
     constructor(detail: String) : super(403, CODE, detail)
 
-    constructor() : super(403, CODE, translateDetail(CODE))
+    constructor() : super(403, CODE, Translation.translateDetail(CODE))
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
     }
 }
 

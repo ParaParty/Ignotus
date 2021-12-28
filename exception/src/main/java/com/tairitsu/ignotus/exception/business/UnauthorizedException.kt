@@ -12,9 +12,9 @@ class UnauthorizedException : SingleApiException {
 
     constructor(detail: String) : super(401, CODE, detail)
 
-    constructor() : super(401, CODE, translateDetail(CODE))
+    constructor() : super(401, CODE, Translation.translateDetail(CODE))
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
     }
 }

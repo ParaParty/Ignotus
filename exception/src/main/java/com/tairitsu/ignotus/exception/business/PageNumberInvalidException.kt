@@ -20,11 +20,11 @@ class PageNumberInvalidException(parameterName: String, reason: Reason, pageStar
 
     init {
         detail = when (reason) {
-            Reason.FAIL_TO_PARSE -> translateDetail(CODE, "fail_to_parse")
-            Reason.OUT_OF_RANGE -> translateDetail(CODE, "out_of_range", Collections.singletonMap("min", pageStartsAt))
+            Reason.FAIL_TO_PARSE -> Translation.translateDetail(CODE, "fail_to_parse")
+            Reason.OUT_OF_RANGE -> Translation.translateDetail(CODE, "out_of_range", Collections.singletonMap("min", pageStartsAt))
         }
 
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
 
         val t = HashMap<String, String>()
         this.source = t

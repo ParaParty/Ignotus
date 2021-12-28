@@ -16,11 +16,11 @@ class PageSizeInvalidException(parameterName: String, reason: Reason, minLimit: 
     }
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
 
         this.detail = when (reason) {
-            Reason.FAIL_TO_PARSE -> translateDetail(CODE, reason.s)
-            Reason.OUT_OF_RANGE -> translateDetail(CODE, reason.s, mapOf("min" to minLimit, "max" to maxLimit))
+            Reason.FAIL_TO_PARSE -> Translation.translateDetail(CODE, reason.s)
+            Reason.OUT_OF_RANGE -> Translation.translateDetail(CODE, reason.s, mapOf("min" to minLimit, "max" to maxLimit))
         }
 
         val t = HashMap<String, String>()

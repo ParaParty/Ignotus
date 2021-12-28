@@ -17,10 +17,10 @@ class SerializerException(reason: Reason) : SingleApiException(500, CODE, ""), L
     }
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
         this.detail = when (reason) {
-            Reason.API_RESULT_UNACCEPTABLE_TYPE -> translateDetail(CODE, reason.s)
-            Reason.RELATED_OBJECT_UNACCEPTABLE_TYPE -> translateDetail(CODE, reason.s)
+            Reason.API_RESULT_UNACCEPTABLE_TYPE -> Translation.translateDetail(CODE, reason.s)
+            Reason.RELATED_OBJECT_UNACCEPTABLE_TYPE -> Translation.translateDetail(CODE, reason.s)
         }
     }
 }

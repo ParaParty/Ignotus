@@ -7,7 +7,7 @@ import com.tairitsu.ignotus.exception.SingleApiException
  */
 class PageInvalidException(reason: Reason) : SingleApiException(500,
     CODE,
-    translateDetail(CODE, reason.s)) {
+    Translation.translateDetail(CODE, reason.s)) {
 
     companion object {
         const val CODE = "page_invalid"
@@ -18,6 +18,6 @@ class PageInvalidException(reason: Reason) : SingleApiException(500,
     }
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
     }
 }

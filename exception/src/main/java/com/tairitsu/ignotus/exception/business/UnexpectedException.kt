@@ -36,10 +36,10 @@ class UnexpectedException : SingleApiException {
     private fun initExceptionInformation() {
         this.name = exception!!.javaClass.name
 
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
 
         if (!ExceptionConfig.IS_DEBUG) {
-            this.detail = translateDetail(CODE)
+            this.detail = Translation.translateDetail(CODE)
         }
 
         if (ExceptionConfig.IS_DEBUG) {

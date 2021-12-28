@@ -24,15 +24,15 @@ class ValidationInvalidException(reason: Reason, args: Map<String, Any> = Collec
     }
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
         this.detail = when (reason) {
-            Reason.NULL_CONTENT -> translateDetail(CODE, reason.s)
-            Reason.INVALID_VALIDATION_RULE -> translateDetail(CODE, reason.s, args)
+            Reason.NULL_CONTENT -> Translation.translateDetail(CODE, reason.s)
+            Reason.INVALID_VALIDATION_RULE -> Translation.translateDetail(CODE, reason.s, args)
             Reason.VALIDATOR_DUPLICATED -> {
                 this.status = HttpStatus.INTERNAL_SERVER_ERROR
-                translateDetail(CODE, reason.s, args)
+                Translation.translateDetail(CODE, reason.s, args)
             }
-            Reason.VALIDATOR_NOT_FOUND -> translateDetail(CODE, reason.s, args)
+            Reason.VALIDATOR_NOT_FOUND -> Translation.translateDetail(CODE, reason.s, args)
         }
     }
 }

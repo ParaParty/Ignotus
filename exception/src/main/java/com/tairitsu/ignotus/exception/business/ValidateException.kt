@@ -11,7 +11,7 @@ class ValidateException(detail: String, pointer: String) : SingleApiException(42
     }
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
 
         val t = HashMap<String, String>()
         t["pointer"] = pointer

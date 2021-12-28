@@ -25,13 +25,17 @@ class RelationshipInvalidException(
     }
 
     init {
-        this.title = translateTitle(CODE)
+        this.title = Translation.translateTitle(CODE)
 
         this.detail = when (reason) {
-            Reason.INVALID_RELATED_OBJECT -> translateDetail(ValidationInvalidException.CODE, reason.s, args)
-            Reason.INVALID_RELATED_COLLECTION -> translateDetail(ValidationInvalidException.CODE, reason.s, args)
-            Reason.EMPTY_RELATIONSHIP_NAME -> translateDetail(ValidationInvalidException.CODE, reason.s, args)
-            Reason.RELATIONSHIP_METHOD_NOT_FOUND -> translateDetail(ValidationInvalidException.CODE, reason.s, args)
+            Reason.INVALID_RELATED_OBJECT ->
+                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
+            Reason.INVALID_RELATED_COLLECTION ->
+                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
+            Reason.EMPTY_RELATIONSHIP_NAME ->
+                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
+            Reason.RELATIONSHIP_METHOD_NOT_FOUND ->
+                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
         }
 
         val t = HashMap<String, String>()
