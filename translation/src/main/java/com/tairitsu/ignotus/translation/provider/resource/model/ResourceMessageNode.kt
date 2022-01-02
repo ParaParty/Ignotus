@@ -32,7 +32,11 @@ class ResourceMessageNode {
     }
 
     fun walkOrCreate(prefix: String): ResourceMessageNode {
-        return walkOrCreate(prefix.split("."))
+        return if (prefix.isBlank()) {
+            this
+        } else {
+            walkOrCreate(prefix.split("."))
+        }
     }
 
     private fun walkOrCreate(prefix: List<String>): ResourceMessageNode {
