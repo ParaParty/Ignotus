@@ -18,6 +18,11 @@
             "name": "ignotus.cache.auto-configuration.enabled",
             "type": "java.lang.Boolean",
             "description": "是否启用自动配置。"
+        },
+        {
+            "name": "ignotus.cache.auto-configuration.type",
+            "type": "java.lang.String",
+            "description": "自动配置的存储类型是什么。"
         }
     ],
     "hints": [

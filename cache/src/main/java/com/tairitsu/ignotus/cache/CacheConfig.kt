@@ -11,4 +11,6 @@ open class CacheConfig {
 
 open class CacheAutoConfigurationConfig {
     var enabled: Boolean = true
+
+    var type: String = "auto"
 }
