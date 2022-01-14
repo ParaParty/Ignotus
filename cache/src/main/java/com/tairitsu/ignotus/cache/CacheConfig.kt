@@ -13,4 +13,6 @@ open class CacheAutoConfigurationConfig {
     var enabled: Boolean = true
 
     var type: String = "auto"
+
+    var storagePath: String = "ignotus/storage/cache/"
 }
