@@ -1,7 +1,13 @@
 package com.tairitsu.ignotus.cache.filesystem
 
-import com.tairitsu.ignotus.cache.CacheConfig
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.tairitsu.ignotus.cache.CacheService
+import org.springframework.util.DigestUtils
+import java.io.File
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
@@ -11,10 +17,22 @@ import java.util.function.Supplier
 import kotlin.concurrent.withLock
 
 
-class FilesystemCacheService(private val config: CacheConfig) : CacheService {
+class FilesystemCacheService(private val storagePath: String) : CacheService {
 
-    val lock = ReentrantLock()
-    val lockMap = ConcurrentHashMap<String, String>()
+    private val lock = ReentrantLock()
+    private val lockMap = ConcurrentHashMap<String, String>()
+
+    private val objectMapper = JsonMapper.builder()
+        .addModule(JavaTimeModule())
+        .addModule(KotlinModule.Builder().build())
+        .build()
+
+    init {
+        objectMapper.propertyNamingStrategy = PropertyNamingStrategies.SnakeCaseStrategy()
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    }
+
+    private val baseStoragePath = File(storagePath)
 
     companion object {
         private val LOCK_CAPACITY = Duration.ofSeconds(30).toMillis()
@@ -69,7 +87,74 @@ class FilesystemCacheService(private val config: CacheConfig) : CacheService {
         }
     }
 
-    
+    private fun getValue(key: String): CacheEntry? {
+        val hash = DigestUtils.md5DigestAsHex(key.toByteArray())
+        val path = hash.subSequence(0, 2).toString()
+        val file = File(File(baseStoragePath, path), "$hash.json")
+
+        if (!file.exists()) {
+            return null
+        }
+
+        val buffer = file.bufferedReader()
+        val data = objectMapper.readValue(buffer, CacheSet::class.java)
+
+        val record = data[key] ?: return null
+        val now = System.currentTimeMillis()
+
+        return if (now < record.validUntilMillis) {
+            record
+        } else {
+            null
+        }
+    }
+
+    private fun setValue(record: CacheEntry): Boolean {
+        val hash = DigestUtils.md5DigestAsHex(record.id.toByteArray())
+        val path = hash.subSequence(0, 2).toString()
+        val file = File(File(baseStoragePath, path), "$hash.json")
+
+        val buffer = if (file.exists()) {
+            file.bufferedReader()
+        } else {
+            null
+        }
+
+        val data = if (buffer == null) {
+            CacheSet()
+        } else {
+            objectMapper.readValue(buffer, CacheSet::class.java)
+        }
+
+        data[record.id] = record
+
+        objectMapper.writeValue(file.writer(), data)
+        return true
+    }
+
+    private fun delValue(record: CacheEntry): Boolean {
+        val hash = DigestUtils.md5DigestAsHex(record.id.toByteArray())
+        val path = hash.subSequence(0, 2).toString()
+        val file = File(File(baseStoragePath, path), "$hash.json")
+
+        val buffer = if (file.exists()) {
+            file.bufferedReader()
+        } else {
+            null
+        }
+
+        val data = if (buffer == null) {
+            CacheSet()
+        } else {
+            objectMapper.readValue(buffer, CacheSet::class.java)
+        }
+
+        data.remove(record.id)
+
+        objectMapper.writeValue(file.writer(), data)
+        return true
+    }
+
     /**
      * Retrieve an item from the cache and delete it.
      *

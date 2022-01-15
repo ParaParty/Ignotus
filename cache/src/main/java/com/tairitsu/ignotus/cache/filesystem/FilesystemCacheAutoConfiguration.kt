@@ -13,6 +13,6 @@ open class FilesystemCacheAutoConfiguration {
     @Bean("IgnotusFilesystemCache")
     @Conditional(value = [FilesystemAutoConfigurationCondition::class])
     open fun FilesystemCache(config: CacheConfig): FilesystemCacheService {
-        return FilesystemCacheService(config)
+        return FilesystemCacheService(config.autoConfiguration.storagePath)
     }
 }
