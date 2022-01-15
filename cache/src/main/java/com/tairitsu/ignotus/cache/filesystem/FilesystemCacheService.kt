@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.tairitsu.ignotus.cache.CacheService
+import com.tairitsu.ignotus.support.util.Base64Utils.base64Encode
+import com.tairitsu.ignotus.support.util.JSON.jsonToObject
+import com.tairitsu.ignotus.support.util.JSON.toJson
 import org.springframework.util.DigestUtils
 import java.io.File
 import java.time.Duration
@@ -17,7 +20,7 @@ import java.util.function.Supplier
 import kotlin.concurrent.withLock
 
 
-class FilesystemCacheService(private val storagePath: String) : CacheService {
+class FilesystemCacheService(storagePath: String) : CacheService {
 
     private val lock = ReentrantLock()
     private val lockMap = ConcurrentHashMap<String, String>()
@@ -66,7 +69,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
     private fun releaseLock(key: String): Boolean {
         return lock.withLock t@{
             val lastLockStr = lockMap[key] ?: return@t false
-            val lastLock = try {
+            @Suppress("UNUSED_VARIABLE") val lastLock = try {
                 lastLockStr.toLong()
             } catch (ignored: Exception) {
                 return@t false
@@ -87,6 +90,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
         }
     }
 
+    @Suppress("DuplicatedCode")
     private fun getValue(key: String): CacheEntry? {
         val hash = DigestUtils.md5DigestAsHex(key.toByteArray())
         val path = hash.subSequence(0, 2).toString()
@@ -102,13 +106,16 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
         val record = data[key] ?: return null
         val now = System.currentTimeMillis()
 
-        return if (now < record.validUntilMillis) {
+        return if (record.validUntilMillis == 0L || now < record.validUntilMillis) {
             record
         } else {
             null
         }
     }
 
+    private fun hasValue(key: String) = getValue(key) != null
+
+    @Suppress("DuplicatedCode")
     private fun setValue(record: CacheEntry): Boolean {
         val hash = DigestUtils.md5DigestAsHex(record.id.toByteArray())
         val path = hash.subSequence(0, 2).toString()
@@ -132,8 +139,9 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
         return true
     }
 
-    private fun delValue(record: CacheEntry): Boolean {
-        val hash = DigestUtils.md5DigestAsHex(record.id.toByteArray())
+    @Suppress("DuplicatedCode")
+    private fun delValue(key: String): CacheEntry? {
+        val hash = DigestUtils.md5DigestAsHex(key.toByteArray())
         val path = hash.subSequence(0, 2).toString()
         val file = File(File(baseStoragePath, path), "$hash.json")
 
@@ -149,9 +157,35 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
             objectMapper.readValue(buffer, CacheSet::class.java)
         }
 
-        data.remove(record.id)
+        val ret = data[key]
+        data.remove(key)
 
         objectMapper.writeValue(file.writer(), data)
+        return ret
+    }
+
+    @Suppress("DuplicatedCode")
+    private  fun <T> putValue(key: String, value: T, ttl: Long): Boolean {
+        val now = System.currentTimeMillis()
+        val validUntil = now + ttl * 1000
+        val validUntilDate = Date(validUntil).toString()
+
+        val record = CacheEntry()
+        record.id = key.base64Encode()
+        record.value = value?.toJson() ?: "null"
+        record.validUntilMillis = validUntil
+        record.validUntil = validUntilDate
+
+        setValue(record)
+        return true
+    }
+
+    @Suppress("DuplicatedCode")
+    private  fun <T> putValueForever(key: String, value: T): Boolean {
+        val record = CacheEntry()
+        record.id = key
+        record.value = value?.toJson() ?: "null"
+        setValue(record)
         return true
     }
 
@@ -164,7 +198,17 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return
      */
     override fun <T> pull(key: String, type: Class<T>, default: T?): T? {
-        TODO("Not yet implemented")
+        var ret: T? = null
+
+        lock(key) {
+            val record = getValue(key)
+            if (record != null) {
+                delValue(key)
+                ret = record.value.jsonToObject(type)
+            }
+        }
+
+        return ret
     }
 
     /**
@@ -175,7 +219,10 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> put(key: String, value: T): Boolean {
-        TODO("Not yet implemented")
+        lock(key) {
+            putValueForever(key, value)
+        }
+        return true
     }
 
     /**
@@ -187,7 +234,10 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> put(key: String, value: T, ttl: Long): Boolean {
-        TODO("Not yet implemented")
+        lock(key) {
+            putValue(key, value, ttl)
+        }
+        return true
     }
 
     /**
@@ -199,7 +249,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> put(key: String, value: T, ttl: Duration): Boolean {
-        TODO("Not yet implemented")
+        return put(key, value as Any, ttl.seconds)
     }
 
     /**
@@ -211,7 +261,8 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> put(key: String, value: T, expiresAt: LocalDateTime): Boolean {
-        TODO("Not yet implemented")
+        val duration = Duration.between(LocalDateTime.now(), expiresAt)
+        return put(key, value, duration.seconds)
     }
 
     /**
@@ -223,7 +274,14 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> add(key: String, value: T, ttl: Long): Boolean {
-        TODO("Not yet implemented")
+        val ret = false
+        lock(key) {
+            if (!hasValue(key)) {
+                putValue(key, value, ttl)
+                return true
+            }
+        }
+        return ret
     }
 
     /**
@@ -235,7 +293,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> add(key: String, value: T, ttl: Duration): Boolean {
-        TODO("Not yet implemented")
+        return add(key, value, ttl.seconds)
     }
 
     /**
@@ -247,7 +305,8 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> add(key: String, value: T, expiresAt: LocalDateTime): Boolean {
-        TODO("Not yet implemented")
+        val duration = Duration.between(LocalDateTime.now(), expiresAt)
+        return add(key, value, duration.seconds)
     }
 
     /**
@@ -258,7 +317,27 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return Long
      */
     override fun increment(key: String, value: Long): Long? {
-        TODO("Not yet implemented")
+        var ret: Long? = null
+
+        lock(key) {
+            val record = getValue(key) ?: CacheEntry().also { s ->
+                s.id = key
+                s.value = "0"
+            }
+
+            val newValue = try {
+                record.value.toLong() + value
+            } catch (ignored: Exception) {
+                null
+            }
+
+            if (newValue != null) {
+                record.value = "" + newValue
+                ret = newValue
+            }
+        }
+
+        return ret
     }
 
     /**
@@ -269,7 +348,27 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return Long
      */
     override fun decrement(key: String, value: Long): Long? {
-        TODO("Not yet implemented")
+        var ret: Long? = null
+
+        lock(key) {
+            val record = getValue(key) ?: CacheEntry().also { s ->
+                s.id = key
+                s.value = "0"
+            }
+
+            val newValue = try {
+                record.value.toLong() - value
+            } catch (ignored: Exception) {
+                null
+            }
+
+            if (newValue != null) {
+                record.value = "" + newValue
+                ret = newValue
+            }
+        }
+
+        return ret
     }
 
     /**
@@ -280,7 +379,29 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun <T> forever(key: String, value: T): Boolean {
-        TODO("Not yet implemented")
+        return put(key, value)
+    }
+
+    private fun <T> rememberOptional(key: String, ttl: Duration? = null, type: Class<T>, callback: Supplier<T>): T? {
+        var ret: T? = null
+        lock(key) {
+            if (hasValue(key)) {
+                ret = getValue(key)?.value?.jsonToObject(type)
+            }
+
+            if (ret == null) {
+                val value = callback.get()
+
+                val result = if (ttl == null) {
+                    putValueForever(key, value as Any)
+                } else {
+                    putValue(key, value as Any, ttl.seconds)
+                }
+
+                ret = if (result) value else null
+            }
+        }
+        return ret
     }
 
     /**
@@ -293,7 +414,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return
      */
     override fun <T> remember(key: String, ttl: Long, type: Class<T>, callback: Supplier<T>): T? {
-        TODO("Not yet implemented")
+        return remember(key, Duration.ofSeconds(ttl), type, callback)
     }
 
     /**
@@ -306,7 +427,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return
      */
     override fun <T> remember(key: String, ttl: Duration, type: Class<T>, callback: Supplier<T>): T? {
-        TODO("Not yet implemented")
+        return rememberOptional(key, ttl, type, callback)
     }
 
     /**
@@ -319,7 +440,8 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return
      */
     override fun <T> remember(key: String, expiresAt: LocalDateTime, type: Class<T>, callback: Supplier<T>): T? {
-        TODO("Not yet implemented")
+        val duration = Duration.between(LocalDateTime.now(), expiresAt)
+        return remember(key, duration, type, callback)
     }
 
     /**
@@ -331,7 +453,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return mixed
      */
     override fun <T> remember(key: String, type: Class<T>, callback: Supplier<T>): T? {
-        TODO("Not yet implemented")
+        return rememberOptional(key, null, type, callback)
     }
 
     /**
@@ -343,7 +465,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return
      */
     override fun <T> sear(key: String, type: Class<T>, callback: Supplier<T>): T? {
-        TODO("Not yet implemented")
+        return remember(key, type, callback)
     }
 
     /**
@@ -355,7 +477,7 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return mixed
      */
     override fun <T> rememberForever(key: String, type: Class<T>, callback: Supplier<T>): T? {
-        TODO("Not yet implemented")
+        return remember(key, type, callback)
     }
 
     /**
@@ -365,7 +487,10 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun forget(key: String): Boolean {
-        TODO("Not yet implemented")
+        lock(key) {
+            delValue(key)
+        }
+        return true
     }
 
     /**
@@ -375,7 +500,11 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return bool
      */
     override fun has(key: String): Boolean {
-        TODO("Not yet implemented")
+        var ret = false
+        lock(key) {
+            ret = hasValue(key)
+        }
+        return ret
     }
 
     /**
@@ -387,7 +516,10 @@ class FilesystemCacheService(private val storagePath: String) : CacheService {
      * @return
      */
     override fun <T> get(key: String, type: Class<T>, default: T?): T? {
-        TODO("Not yet implemented")
+        var ret: T? = default
+        lock(key) {
+            ret = getValue(key)?.value?.jsonToObject(type)
+        }
+        return ret
     }
-
 }
