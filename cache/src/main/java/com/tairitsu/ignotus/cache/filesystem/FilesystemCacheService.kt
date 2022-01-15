@@ -11,6 +11,8 @@ import com.tairitsu.ignotus.support.util.JSON.jsonToObject
 import com.tairitsu.ignotus.support.util.JSON.toJson
 import org.springframework.util.DigestUtils
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
@@ -119,7 +121,8 @@ class FilesystemCacheService(storagePath: String) : CacheService {
     private fun setValue(record: CacheEntry): Boolean {
         val hash = DigestUtils.md5DigestAsHex(record.id.toByteArray())
         val path = hash.subSequence(0, 2).toString()
-        val file = File(File(baseStoragePath, path), "$hash.json")
+        val folder = File(baseStoragePath, path)
+        val file = File(folder, "$hash.json")
 
         val buffer = if (file.exists()) {
             file.bufferedReader()
@@ -135,6 +138,8 @@ class FilesystemCacheService(storagePath: String) : CacheService {
 
         data[record.id] = record
 
+
+        Files.createDirectories(Paths.get(folder.toURI()))
         objectMapper.writeValue(file.writer(), data)
         return true
     }

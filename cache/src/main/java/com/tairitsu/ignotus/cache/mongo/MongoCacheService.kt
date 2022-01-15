@@ -161,7 +161,7 @@ class MongoCacheService(private val mongoTemplate: MongoTemplate) : CacheService
      * @return bool
      */
     override fun <T> put(key: String, value: T, ttl: Duration): Boolean {
-        return put(key, value as Any, ttl.seconds)
+        return put(key, value, ttl.seconds)
     }
 
     /**
@@ -408,7 +408,7 @@ class MongoCacheService(private val mongoTemplate: MongoTemplate) : CacheService
             return null
         }
         val value = cache.value
-        return value.jsonToObject(type)
+        return value.jsonToObject(type) ?: default
     }
 }
 

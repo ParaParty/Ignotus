@@ -35,6 +35,10 @@ ignotus:
             min-limit: 1
             default-limit: 20
             max-limit: 200
+    cache:
+        auto-configuration:
+            enabled: true
+            type: filesystem
 
 server:
     port: 12300

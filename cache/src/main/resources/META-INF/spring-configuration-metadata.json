@@ -22,7 +22,12 @@
         {
             "name": "ignotus.cache.auto-configuration.type",
             "type": "java.lang.String",
-            "description": "自动配置的存储类型是什么。"
+            "description": "自动配置的存储类型是什么。(redis, mongo, filesystem)"
+        },
+        {
+            "name": "ignotus.cache.auto-configuration.storage-path",
+            "type": "java.lang.String",
+            "description": "当 type 是 filesystem 时，存储路径是哪里。"
         }
     ],
     "hints": [

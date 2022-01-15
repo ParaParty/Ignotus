@@ -357,6 +357,6 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>
      */
     override fun <T> get(key: String, type: Class<T>, default: T?): T? {
         val value = redisTemplate.opsForValue().get(key)
-        return value?.jsonToObject(type)
+        return value?.jsonToObject(type) ?: default
     }
 }
