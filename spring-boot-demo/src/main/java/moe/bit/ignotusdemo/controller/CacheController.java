@@ -18,7 +18,13 @@ public class CacheController {
 
     @GetMapping("api/cache/{key}")
     @JsonApiController()
-    public String put(@PathVariable("key") String key) {
+    public String get(@PathVariable("key") String key) {
         return cache.get(key, String.class, null);
+    }
+
+    @PostMapping("api/cache-remember/{key}")
+    @JsonApiController()
+    public String remember(@RequestBody String value, @PathVariable("key") String key) {
+        return cache.remember(key, String.class, () -> value);
     }
 }

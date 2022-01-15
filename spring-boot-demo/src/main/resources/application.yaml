@@ -38,7 +38,7 @@ ignotus:
     cache:
         auto-configuration:
             enabled: true
-            type: filesystem
+            type: auto
 
 server:
     port: 12300

@@ -42,6 +42,7 @@ dependencies {
 
     // Cache redis 支持
     api 'org.springframework.boot:spring-boot-starter-data-redis:2.6.1'
+    api 'org.springframework.integration:spring-integration-redis:5.5.3'
 
     // Jackson 扩展
     api 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0'

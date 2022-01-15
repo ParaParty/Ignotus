@@ -8,60 +8,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.RedisTemplate
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
 
-class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>) : CacheService {
-
+abstract class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>) : CacheService {
     private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
-    companion object {
-        private const val LOCK_PREFIX = "_LOCK:"
-        private val LOCK_CAPACITY = Duration.ofSeconds(30).toMillis()
-    }
-
-    private fun setLock(key: String): Boolean {
-        val lockKey = LOCK_PREFIX + key
-
-        val now: Long = Date().time
-        val nowStr = now.toString()
-        if (redisTemplate.opsForValue().setIfAbsent(lockKey, nowStr) == true) {
-            return true
-        }
-
-        val lastLock = redisTemplate.opsForValue().get(lockKey)?.toLong() ?: return false
-
-        if (lastLock + LOCK_CAPACITY < now) {
-            redisTemplate.opsForValue().set(lockKey, nowStr)
-            return true
-        }
-
-        return false
-    }
-
-    private fun releaseLock(key: String): Boolean {
-        val lockKey = LOCK_PREFIX + key
-        try {
-            redisTemplate.opsForValue().get(lockKey)?.toLong() ?: return false
-            redisTemplate.opsForValue().operations.delete(lockKey)
-            return true
-        } catch (e: Exception) {
-            log.error(e.message, e)
-            return false
-        }
-    }
-
-    private inline fun lock(key: String, block: () -> Unit) {
-        while (true) {
-            if (setLock(key)) {
-                block()
-                releaseLock(key)
-                break
-            }
-        }
-    }
+    abstract fun lock(key: String, block: () -> Unit)
 
     /**
      * Retrieve an item from the cache and delete it.
@@ -147,7 +101,9 @@ class RedisCacheService(private val redisTemplate: RedisTemplate<String, String>
     override fun <T> add(key: String, value: T, ttl: Long): Boolean {
         var ret = false
         lock(key) {
-            if (redisTemplate.opsForValue().setIfAbsent(key, value?.toJson() ?: "null", ttl, TimeUnit.SECONDS) == true) {
+            if (redisTemplate.opsForValue()
+                    .setIfAbsent(key, value?.toJson() ?: "null", ttl, TimeUnit.SECONDS) == true
+            ) {
                 ret = true
             }
         }
