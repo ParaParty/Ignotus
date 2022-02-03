@@ -1,6 +1,7 @@
 package com.tairitsu.ignotus.serializer
 
 import com.tairitsu.ignotus.serializer.vo.BaseResponse
+import com.tairitsu.ignotus.serializer.vo.RootResponse
 import com.tairitsu.ignotus.support.util.ServletRequestExtension.getExtractedInclude
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpStatus
@@ -46,6 +47,26 @@ class ResponseHandler : ResponseBodyAdvice<Any?> {
                     skip = true
                 }
             }
+            is RootResponse -> {
+                data.data?.let { dataCopy ->
+                    when (dataCopy) {
+                        is BaseResponse -> BaseResponse.loadRelationship(
+                            dataCopy,
+                            extractedInclude
+                        )
+                        is Collection<*> -> {
+                            BaseResponse.loadRelationship(dataCopy, extractedInclude)
+                            if (dataCopy.isNotEmpty() && dataCopy.first() !is BaseResponse) {
+                                skip = true
+                            }
+                        }
+                        else -> {
+                            skip = true
+                            // throw RelationshipInvalidException("Api result is not a BaseResponse or a set of BaseResponses.")
+                        }
+                    }
+                }
+            }
             else -> {
                 skip = true
                 // throw RelationshipInvalidException("Api result is not a BaseResponse or a set of BaseResponses.")
@@ -66,7 +87,7 @@ class ResponseHandler : ResponseBodyAdvice<Any?> {
 
         if (skip) return data
 
-        val ret = Serializer.serialize(data!!, servletRequest)
+        val ret = Serializer.serializeTopLevel(data!!, servletRequest)
 
         return ret
     }

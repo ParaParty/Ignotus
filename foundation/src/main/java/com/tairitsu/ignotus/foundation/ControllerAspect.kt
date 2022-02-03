@@ -125,11 +125,11 @@ open class ControllerAspect {
         }
 
         val available = ArrayList(optionalInclude)
-        ret.forEach(fun(s: String) {
+        ret.forEach { s: String ->
             if (!available.contains(s)) {
                 throw IncludeInvalidException()
             }
-        })
+        }
 
         val result = ret.toSet()
         request.setExtractedInclude(result)

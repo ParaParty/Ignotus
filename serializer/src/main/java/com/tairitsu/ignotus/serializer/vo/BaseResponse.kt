@@ -2,6 +2,8 @@ package com.tairitsu.ignotus.serializer.vo
 
 import com.tairitsu.ignotus.exception.relation.RelationshipInvalidException
 import com.tairitsu.ignotus.serializer.Serializer
+import com.tairitsu.ignotus.serializer.SerializerIgnore
+import com.tairitsu.ignotus.support.util.toRelatedFunction
 
 /**
  * 实体类基本定义
@@ -12,23 +14,45 @@ abstract class BaseResponse {
     /**
      * JSON:API 规范中 `type` 字段
      */
+    @SerializerIgnore
     abstract val modelType: String
+        @SerializerIgnore get
 
     /**
      * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
      * 本属性的值为一个从 [Serializer] 中继承的类。
      */
+    @SerializerIgnore
     open val modelSerializer: Class<*> = Serializer::class.java
+     @SerializerIgnore get
 
     /**
      * JSON:API 规范中 `id` 字段
      */
+    @SerializerIgnore
     abstract val id: String
+        @SerializerIgnore get
 
     /**
      * JSON:API 规范中 `relationship` 字段
      */
-    val relationships = mutableMapOf<String, Any?>()
+    @SerializerIgnore
+    internal val relationships = LinkedHashMap<String, Any?>()
+        @SerializerIgnore get
+
+    /**
+     * JSON:API 规范中 `links` 字段
+     */
+    @SerializerIgnore
+    internal var links: LinkedHashMap<String, String>? = null
+        @SerializerIgnore get
+
+    /**
+     * JSON:API 规范中 `meta` 字段
+     */
+    @SerializerIgnore
+    internal var meta: LinkedHashMap<String, Any?>? = null
+        @SerializerIgnore get
 
     /**
      * 给当前对象添加一个关系
@@ -113,11 +137,7 @@ abstract class BaseResponse {
         if (this.relationships[aRelation] == null || overwrite) {
             val type = this.javaClass
 
-            val functionName: String = if (aRelation[0] in 'a'..'z') {
-                "related" + (aRelation[0] - 0x20) + aRelation.substring(1)
-            } else {
-                "related$aRelation"
-            }
+            val functionName: String = aRelation.toRelatedFunction()
 
             try {
                 val aMethod = type.getMethod(functionName)
@@ -147,10 +167,10 @@ abstract class BaseResponse {
             if (value is BaseResponse) {
                 value.loadRelationship(next, overwrite)
             } else if (value is Collection<*> && value.isNotEmpty()) {
-                value.forEach(fun(s) {
+                value.forEach { s ->
                     val v = s as BaseResponse
                     v.loadRelationship(next, overwrite)
-                })
+                }
             }
         }
     }
@@ -165,6 +185,42 @@ abstract class BaseResponse {
         relations.forEach { s ->
             this.loadRelationship(s, overwrite)
         }
+    }
+
+    /**
+     * 给当前对象设置一个链接（请保证本函数不被并发）
+     */
+    fun setLink(key: String, value: String) {
+        if (this.links == null) {
+            this.links = LinkedHashMap()
+        }
+
+        this.links!![key] = value
+    }
+
+    /**
+     * 获取当前对象的一个链接
+     */
+    fun getLink(key: String): String? {
+        return this.links?.get(key)
+    }
+
+    /**
+     * 给当前对象设置一个元信息（请保证本函数不被并发）
+     */
+    fun setMeta(key: String, value: Any?) {
+        if (this.meta == null) {
+            this.meta = LinkedHashMap()
+        }
+
+        this.meta!![key] = value
+    }
+
+    /**
+     * 获取当前对象的一个元信息
+     */
+    fun getMeta(key: String): Any? {
+        return this.meta?.get(key)
     }
 
     companion object {
