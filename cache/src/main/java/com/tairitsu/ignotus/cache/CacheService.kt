@@ -118,7 +118,7 @@ interface CacheService {
      * @param  value
      * @return bool
      */
-    fun <T> forever(key: String, value: T): Boolean
+    fun <T> forever(key: String, value: T): Boolean = put(key, value)
 
     /**
      * Get an item from the cache, or execute the given Closure and store the result.
@@ -161,7 +161,7 @@ interface CacheService {
      * @param  callback
      * @return
      */
-    fun <T> sear(key: String, type: Class<T>, callback: Supplier<T>): T?
+    fun <T> sear(key: String, type: Class<T>, callback: Supplier<T>): T? = remember(key, type, callback)
 
     /**
      * Get an item from the cache, or execute the given Closure and store the result forever.
@@ -171,7 +171,7 @@ interface CacheService {
      * @param  type
      * @return mixed
      */
-    fun <T> rememberForever(key: String, type: Class<T>, callback: Supplier<T>): T?
+    fun <T> rememberForever(key: String, type: Class<T>, callback: Supplier<T>): T? = remember(key, type, callback)
 
     /**
      * Get an item from the cache, or execute the given Closure and store the result forever.

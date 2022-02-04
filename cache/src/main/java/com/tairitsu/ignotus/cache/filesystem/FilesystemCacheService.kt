@@ -376,17 +376,6 @@ class FilesystemCacheService(storagePath: String) : CacheService {
         return ret
     }
 
-    /**
-     * Store an item in the cache indefinitely.
-     *
-     * @param  key
-     * @param  value
-     * @return bool
-     */
-    override fun <T> forever(key: String, value: T): Boolean {
-        return put(key, value)
-    }
-
     private fun <T> rememberOptional(key: String, ttl: Duration? = null, type: Class<T>, callback: Supplier<T>): T? {
         var ret: T? = null
         lock(key) {
@@ -459,30 +448,6 @@ class FilesystemCacheService(storagePath: String) : CacheService {
      */
     override fun <T> remember(key: String, type: Class<T>, callback: Supplier<T>): T? {
         return rememberOptional(key, null, type, callback)
-    }
-
-    /**
-     * Get an item from the cache, or execute the given Closure and store the result forever.
-     *
-     * @param  key
-     * @param  type
-     * @param  callback
-     * @return
-     */
-    override fun <T> sear(key: String, type: Class<T>, callback: Supplier<T>): T? {
-        return remember(key, type, callback)
-    }
-
-    /**
-     * Get an item from the cache, or execute the given Closure and store the result forever.
-     *
-     * @param  key
-     * @param  callback
-     * @param  type
-     * @return mixed
-     */
-    override fun <T> rememberForever(key: String, type: Class<T>, callback: Supplier<T>): T? {
-        return remember(key, type, callback)
     }
 
     /**
