@@ -51,18 +51,18 @@ implementation 'com.tairitsu:ignotus-database-jpa:1.0.22'
 
 ## 构建
 ```bash
-./gradlew :database-exposed:build :database-jpa:build :support:build :cache:build :foundation:build :serializer:build :translation:build :exception:build :validation:build :translation:build :spring-boot-demo:build :spring-boot-jpa-demo:build
+./gradlew :database-exposed:build :database-jpa:build :support:build :cache:build :foundation:build :serializer:build :translation:build :exception:build :validation:build :spring-boot-demo:build :spring-boot-jpa-demo:build
 ```
 
 ```
-gradlew :database-exposed:build :database-jpa:build :support:build :cache:build :foundation:build :serializer:build :translation:build :exception:build :validation:build :translation:build :spring-boot-demo:build :spring-boot-jpa-demo:build
+gradlew :database-exposed:build :database-jpa:build :support:build :cache:build :foundation:build :serializer:build :translation:build :exception:build :validation:build :spring-boot-demo:build :spring-boot-jpa-demo:build
 ```
 
 ## 发布
 ```bash
-./gradlew clean :database-exposed:publish :database-jpa:publish :support:publish :cache:publish :foundation:publish :serializer:publish :translation:publish :exception:publish :validation:publish :translation:publish
+./gradlew clean :database-exposed:publish :database-jpa:publish :support:publish :cache:publish :foundation:publish :serializer:publish :translation:publish :exception:publish :validation:publish
 ```
 
 ```
-gradlew clean :database-exposed:publish :database-jpa:publish :support:publish :cache:publish :foundation:publish :serializer:publish :translation:publish :exception:publish :validation:publish :translation:publish
+gradlew clean :database-exposed:publish :database-jpa:publish :support:publish :cache:publish :foundation:publish :serializer:publish :translation:publish :exception:publish :validation:publish
 ```
