@@ -31,7 +31,7 @@ abstract class RedisCacheService(private val redisTemplate: RedisTemplate<String
         lock(key) {
             val value = redisTemplate.opsForValue().get(key)
             if (value != null) {
-                redisTemplate.opsForValue().operations.delete(key)
+                redisTemplate.delete(key)
                 ret = value.jsonToObject(type)
             }
         }
@@ -254,7 +254,7 @@ abstract class RedisCacheService(private val redisTemplate: RedisTemplate<String
      * @return bool
      */
     override fun forget(key: String): Boolean {
-        return redisTemplate.opsForValue().operations.delete(key) == true
+        return redisTemplate.delete(key) == true
     }
 
     /**
