@@ -2,7 +2,6 @@ package com.tairitsu.ignotus.exception.relation
 
 import com.tairitsu.ignotus.exception.LoggableException
 import com.tairitsu.ignotus.exception.SingleApiException
-import com.tairitsu.ignotus.exception.business.ValidationInvalidException
 import java.util.*
 
 /**
@@ -29,13 +28,13 @@ class RelationshipInvalidException(
 
         this.detail = when (reason) {
             Reason.INVALID_RELATED_OBJECT ->
-                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
+                Translation.translateDetail(CODE, reason.s, args)
             Reason.INVALID_RELATED_COLLECTION ->
-                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
+                Translation.translateDetail(CODE, reason.s, args)
             Reason.EMPTY_RELATIONSHIP_NAME ->
-                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
+                Translation.translateDetail(CODE, reason.s, args)
             Reason.RELATIONSHIP_METHOD_NOT_FOUND ->
-                Translation.translateDetail(ValidationInvalidException.CODE, reason.s, args)
+                Translation.translateDetail(CODE, reason.s, args)
         }
 
         val t = HashMap<String, String>()
