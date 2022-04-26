@@ -54,6 +54,10 @@
             "detail_invalid_validation_rule": "属性 '<attribute>' 的验证规则不合法。合法的验证规则为一个字符串、一个二元组、一个验证器实例或由上面三种元素组成的一个集合。",
             "validator_duplicated": "验证器 '<validator>' 重复，请检查服务端的验证器定义。",
             "validator_validator_not_found": "找不到名字为 '<validator>' 的验证器，请检查服务端的验证器定义。",
+        },
+        "too_many_requests": {
+            "title": "请求过于频繁",
+            "detail": "您在短时间内发出的请求过多，请稍后再试。",
         }
     },
     "relation": {

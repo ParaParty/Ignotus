@@ -54,6 +54,10 @@
             "detail_invalid_validation_rule": "Invalid validation rule for attribute '<attribute>' found. Validations rules must be a string, a 2-tuple, an instance of validator, or a collection containing a serial element of the type mentioned above.",
             "validator_duplicated": "Validator '<validator>' duplicated. Please check your validator configuration.",
             "validator_validator_not_found": "Validator '<validator>' not found. Please check your validator configuration.",
+        },
+        "too_many_requests": {
+            "title": "Too Many Requests",
+            "detail": "Too many requests you had made in a short time. Please try again later."
         }
     },
     "relation": {
