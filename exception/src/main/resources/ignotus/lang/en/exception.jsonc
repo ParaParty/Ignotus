@@ -10,7 +10,7 @@
         },
         "unauthorized": {
             "title": "Unauthorized",
-            "detail": "You are not authorized to perform this action. Please login to continue."
+            "detail": "You are not authorized to perform this action. Please log in to continue."
         },
         "model_not_found": {
             "title": "Model Not Found",
