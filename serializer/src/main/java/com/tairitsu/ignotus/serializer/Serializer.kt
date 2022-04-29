@@ -40,7 +40,8 @@ open class Serializer<T : BaseResponse> {
 
         for (field in fields) {
             val name = field.name
-            if (checkIgnore(field)) continue
+            val ignoreMode = checkIgnoreMode(field)
+            if (ignoreMode == IgnoreMode.FILTER) continue
 
 //            val javaField = field.javaField ?: continue
 //            field.isAccessible = true
@@ -51,6 +52,9 @@ open class Serializer<T : BaseResponse> {
             var done = false
             try {
                 val value = field.getter.call(model)
+                if (value == null && ignoreMode == IgnoreMode.OMITNULL) {
+                    continue;
+                }
                 ret[outputName] = value
                 done = true
             } catch (_: InvocationTargetException) {
@@ -70,6 +74,9 @@ open class Serializer<T : BaseResponse> {
             try {
                 val getMethod = field.javaGetter ?: type.java.getMethod(name.toGetterFunction())
                 val value = getMethod.invoke(model)
+                if (value == null && ignoreMode == IgnoreMode.OMITNULL) {
+                    continue;
+                }
                 ret[outputName] = value
 //                done = true
             } catch (_: InvocationTargetException) {
@@ -90,7 +97,8 @@ open class Serializer<T : BaseResponse> {
         return ret
     }
 
-    private fun checkIgnore(field: KProperty1<out T, *>): Boolean {
+    enum IgnoreMode{ NONE, OMITNULL, FILTER}
+    private fun checkIgnoreMode(field: KProperty1<out T, *>): IgnoreMode {
         if (field.name in preservedFields) {
             return true
         }
@@ -101,10 +109,13 @@ open class Serializer<T : BaseResponse> {
             val proxiedAnnotationMethods = proxiedAnnotationType.declaredMethods.associateBy { it.name }
             val annotationType = (proxiedAnnotationMethods["annotationType"]?.invoke(annotation) ?: continue) as Class<*>
             if (annotationType == SerializerIgnore::class.java) {
-                return true
+                return IgnoreMode.FILTER
+            }
+            if (annotationType == OmitNull::class.java) {
+                return IgnoreMode.OMITNULL
             }
         }
-        return false
+        return IgnoreMode.NONE
     }
 
     companion object {
