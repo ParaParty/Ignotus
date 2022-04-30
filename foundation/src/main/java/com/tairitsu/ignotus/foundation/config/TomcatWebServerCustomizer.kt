@@ -5,7 +5,7 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.stereotype.Component
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer as OriginalTomcatConnectorCustomizer
 
-@Component
+@Component("IgnotusTomcatWebServerCustomizer")
 class TomcatWebServerCustomizer : WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
     override fun customize(factory: TomcatServletWebServerFactory) {
         factory.addConnectorCustomizers(OriginalTomcatConnectorCustomizer { connector ->
