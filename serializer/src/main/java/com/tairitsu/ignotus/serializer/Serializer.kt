@@ -98,6 +98,7 @@ open class Serializer<T : BaseResponse> {
     }
 
     enum IgnoreMode{ NONE, OMITNULL, FILTER}
+
     private fun checkIgnoreMode(field: KProperty1<out T, *>): IgnoreMode {
         if (field.name in preservedFields) {
             return true
