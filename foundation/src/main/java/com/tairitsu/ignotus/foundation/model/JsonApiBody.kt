@@ -10,6 +10,8 @@ class JsonApiObject<T> {
 
     var id: String? = null
 
+    var meta: Map<String, Any?>? = null
+
     @Required
     var attributes: T? = null
 }
