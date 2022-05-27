@@ -19,105 +19,11 @@ import kotlin.reflect.jvm.javaGetter
 /**
  * 实体类的序列化类基本定义
  */
-open class Serializer<T : BaseResponse> {
-    private val log: Logger = LoggerFactory.getLogger(this::class.java)
+interface Serializer<T : BaseResponse> {
 
-    /**
-     * 关联请求
-     *
-     * 本次序列化是来自哪个请求的
-     */
-    open lateinit var request: HttpServletRequest
+    operator fun invoke(model: T) = defaultAttributeSerialize(model)
 
-    /**
-     * JSON:API 规范中的 `attributes` 字段的序列化方法。
-     */
-    open fun defaultAttributeSerialize(model: T): Map<String, Any?> {
-        val ret = LinkedHashMap<String, Any?>()
-
-        val type = model::class
-        val fields = type.declaredMemberProperties
-
-        for (field in fields) {
-            val name = field.name
-            val ignoreMode = checkIgnoreMode(field)
-            if (ignoreMode == IgnoreMode.FILTER) continue
-
-//            val javaField = field.javaField ?: continue
-//            field.isAccessible = true
-//            javaField.isAccessible = true
-
-            val outputName = JacksonNamingStrategyConfig.namingStrategy?.nameForField(null, null, name) ?: name
-
-            var done = false
-            try {
-                val value = field.getter.call(model)
-                if (value == null && ignoreMode == IgnoreMode.OMITNULL) {
-                    continue;
-                }
-                ret[outputName] = value
-                done = true
-            } catch (_: InvocationTargetException) {
-
-            } catch (_: IllegalAccessException) {
-
-            } catch (_: IllegalCallableAccessException) {
-
-            } catch (e: Exception){
-                log.error(e.message, e)
-            }
-
-            if (done) {
-                continue
-            }
-
-            try {
-                val getMethod = field.javaGetter ?: type.java.getMethod(name.toGetterFunction())
-                val value = getMethod.invoke(model)
-                if (value == null && ignoreMode == IgnoreMode.OMITNULL) {
-                    continue;
-                }
-                ret[outputName] = value
-//                done = true
-            } catch (_: InvocationTargetException) {
-
-            } catch (_: UninitializedPropertyAccessException) {
-
-            } catch (_: NoSuchMethodException) {
-
-            } catch (_: SecurityException) {
-
-            } catch (_: SecurityException) {
-
-            } catch (e: Exception) {
-                log.error(e.message, e)
-            }
-        }
-
-        return ret
-    }
-
-    enum IgnoreMode{ NONE, OMITNULL, FILTER}
-
-    private fun checkIgnoreMode(field: KProperty1<out T, *>): IgnoreMode {
-        if (field.name in preservedFields) {
-            return true
-        }
-
-        val annotations = field.annotations
-        for (annotation in annotations) {
-            val proxiedAnnotationType = annotation.javaClass
-            val proxiedAnnotationMethods = proxiedAnnotationType.declaredMethods.associateBy { it.name }
-            val annotationType = (proxiedAnnotationMethods["annotationType"]?.invoke(annotation) ?: continue) as Class<*>
-            if (annotationType == SerializerIgnore::class.java) {
-                return IgnoreMode.FILTER
-            }
-            if (annotationType == OmitNull::class.java) {
-                return IgnoreMode.OMITNULL
-            }
-        }
-        return IgnoreMode.NONE
-    }
+    fun defaultAttributeSerialize(model: T): Map<String, Any?>
 
     companion object {
         val preservedFields = setOf("modelType", "modelSerializer", "id", "relationships")
@@ -127,31 +33,36 @@ open class Serializer<T : BaseResponse> {
          */
         fun serializeTopLevel(data: Any, request: HttpServletRequest): Map<String, Any> {
             return when (data) {
-                is BaseResponse -> serializeTopLevelResourceSingleObject(data,
+                is BaseResponse -> serializeTopLevelResourceSingleObject(
+                    data,
                     request.getAttribute("json-api_links"),
                     request.getAttribute("json-api_meta"),
-                    request)
-                is Collection<*> -> serializeTopLevelResourceObjectsList(data,
+                )
+                is Collection<*> -> serializeTopLevelResourceObjectsList(
+                    data,
                     request.getAttribute("json-api_links"),
                     request.getAttribute("json-api_meta"),
-                    request)
+                )
                 is RootResponse -> {
                     data.data?.let { dataCopy ->
                         when (dataCopy) {
-                            is BaseResponse -> serializeTopLevelResourceSingleObject(dataCopy,
+                            is BaseResponse -> serializeTopLevelResourceSingleObject(
+                                dataCopy,
                                 data.links,
                                 data.meta,
-                                request)
-                            is Collection<*> -> serializeTopLevelResourceObjectsList(dataCopy,
+                            )
+                            is Collection<*> -> serializeTopLevelResourceObjectsList(
+                                dataCopy,
                                 data.links,
                                 data.meta,
-                                request)
+                            )
                             else -> throw SerializerException(SerializerException.Reason.API_RESULT_UNACCEPTABLE_TYPE)
                         }
-                    } ?: serializeTopLevelResourceObjectsList(Collections.EMPTY_LIST,
+                    } ?: serializeTopLevelResourceObjectsList(
+                        Collections.EMPTY_LIST,
                         data.links,
                         data.meta,
-                        request)
+                    )
                 }
                 else -> throw SerializerException(SerializerException.Reason.API_RESULT_UNACCEPTABLE_TYPE)
             }
@@ -166,13 +77,12 @@ open class Serializer<T : BaseResponse> {
             resources: Collection<*>,
             links: Any?,
             meta: Any?,
-            request: HttpServletRequest,
         ): Map<String, Any> {
             // 处理列表信息
             val data = ArrayList<Any>()
             resources.forEach { c ->
                 val s = c as BaseResponse
-                data.add(serializeSingleResourceObject(s, request))
+                data.add(serializeSingleResourceObject(s))
             }
 
             // 处理后的关联信息
@@ -188,7 +98,7 @@ open class Serializer<T : BaseResponse> {
             // 处理关联信息
             processIncludedRelationship(pendingModels, includedPool)
             val included = ArrayList<Any>()
-            includedPool.forEach { (_, v) -> included.add(serializeSingleResourceObject(v, request)) }
+            includedPool.forEach { (_, v) -> included.add(serializeSingleResourceObject(v)) }
 
             // 拼接最终的结果
             val ret = LinkedHashMap<String, Any>()
@@ -208,10 +118,9 @@ open class Serializer<T : BaseResponse> {
             model: BaseResponse,
             links: Any?,
             meta: Any?,
-            request: HttpServletRequest,
         ): Map<String, Any> {
             // 单条记录信息
-            val data = serializeSingleResourceObject(model, request)
+            val data = serializeSingleResourceObject(model)
 
             // 处理后的关联信息
             val includedPool = LinkedHashMap<String, BaseResponse>()
@@ -223,7 +132,7 @@ open class Serializer<T : BaseResponse> {
             // 处理关联信息
             processIncludedRelationship(pendingModels, includedPool)
             @Suppress("MemberVisibilityCanBePrivate", "MemberVisibilityCanBePrivate") val included = ArrayList<Any>()
-            includedPool.forEach { (_, v) -> included.add(serializeSingleResourceObject(v, request)) }
+            includedPool.forEach { (_, v) -> included.add(serializeSingleResourceObject(v)) }
 
             // 拼接最终的结果
             val ret = LinkedHashMap<String, Any>()
@@ -293,18 +202,20 @@ open class Serializer<T : BaseResponse> {
          */
         private fun serializeSingleResourceObject(
             model: BaseResponse,
-            request: HttpServletRequest,
         ): Map<String, Any> {
             val data = LinkedHashMap<String, Any>()
 
             val serializerType = model.modelSerializer
             @Suppress("UNCHECKED_CAST")
-            val serializerInstance = if (serializerType == Serializer::class.java) {
-                Serializer<BaseResponse>()
-            } else {
+            val serializerInstance = if (serializerType is Serializer<*>) {
+                serializerType as Serializer<BaseResponse>
+            } else if (serializerType == Serializer::class.java || serializerType == DefaultSerializer::class.java) {
+                DefaultSerializer.defaultSerializer
+            } else if (serializerType is Class<*>) {
                 serializerType.getDeclaredConstructor().newInstance() as Serializer<BaseResponse>
+            } else {
+                throw SerializerException(SerializerException.Reason.API_RESULT_UNACCEPTABLE_TYPE)
             }
-            serializerInstance.request = request
 
             val dataResult = serializerInstance.defaultAttributeSerialize(model)
             data["type"] = model.modelType

@@ -1,9 +1,11 @@
 package com.tairitsu.ignotus.serializer.vo
 
 import com.tairitsu.ignotus.exception.relation.RelationshipInvalidException
+import com.tairitsu.ignotus.serializer.DefaultSerializer
 import com.tairitsu.ignotus.serializer.Serializer
 import com.tairitsu.ignotus.serializer.SerializerIgnore
 import com.tairitsu.ignotus.support.util.toRelatedFunction
+import kotlin.reflect.KClass
 
 /**
  * 实体类基本定义
@@ -20,11 +22,31 @@ abstract class BaseResponse {
 
     /**
      * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
-     * 本属性的值为一个从 [Serializer] 中继承的类。
      */
     @SerializerIgnore
-    open val modelSerializer: Class<*> = Serializer::class.java
-     @SerializerIgnore get
+    var modelSerializer: Any = DefaultSerializer.defaultSerializer
+        @SerializerIgnore private set
+
+    /**
+     * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
+     */
+    fun setModelSerializer(serializer: Serializer<in BaseResponse>) {
+        this.modelSerializer = serializer
+    }
+
+    /**
+     * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
+     */
+    fun setModelSerializer(serializer: Class<in Serializer<in BaseResponse>>) {
+        this.modelSerializer = serializer
+    }
+
+    /**
+     * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
+     */
+    fun setModelSerializer(serializer: KClass<in Serializer<in BaseResponse>>) {
+        this.modelSerializer = serializer.java
+    }
 
     /**
      * JSON:API 规范中 `id` 字段
@@ -91,19 +113,23 @@ abstract class BaseResponse {
                 if (t is BaseResponse) {
                     this.relationships[key] = value
                 } else {
-                    throw RelationshipInvalidException(RelationshipInvalidException.Reason.INVALID_RELATED_COLLECTION, mapOf(
-                        "type" to this.modelType,
-                        "key" to key,
-                    ))
+                    throw RelationshipInvalidException(
+                        RelationshipInvalidException.Reason.INVALID_RELATED_COLLECTION, mapOf(
+                            "type" to this.modelType,
+                            "key" to key,
+                        )
+                    )
                 }
             }
         } else if (value == null) {
             this.relationships[key] = null
         } else {
-            throw RelationshipInvalidException(RelationshipInvalidException.Reason.INVALID_RELATED_OBJECT, mapOf(
-                "type" to this.modelType,
-                "key" to key,
-            ))
+            throw RelationshipInvalidException(
+                RelationshipInvalidException.Reason.INVALID_RELATED_OBJECT, mapOf(
+                    "type" to this.modelType,
+                    "key" to key,
+                )
+            )
         }
     }
 
@@ -130,7 +156,10 @@ abstract class BaseResponse {
         val path = relation.split('.')
 
         if (path.isEmpty()) {
-            throw RelationshipInvalidException(RelationshipInvalidException.Reason.EMPTY_RELATIONSHIP_NAME, mapOf("type" to this.modelType))
+            throw RelationshipInvalidException(
+                RelationshipInvalidException.Reason.EMPTY_RELATIONSHIP_NAME,
+                mapOf("type" to this.modelType)
+            )
         }
 
         val aRelation = path[0]
@@ -144,19 +173,23 @@ abstract class BaseResponse {
                 val value = aMethod.invoke(this)
                 this.setRelationship(aRelation, value)
             } catch (e: NoSuchMethodException) {
-                throw RelationshipInvalidException(RelationshipInvalidException.Reason.RELATIONSHIP_METHOD_NOT_FOUND, mapOf(
-                    "class" to type.name,
-                    "method" to functionName,
-                    "type" to modelType,
-                    "relation" to relation
-                ))
+                throw RelationshipInvalidException(
+                    RelationshipInvalidException.Reason.RELATIONSHIP_METHOD_NOT_FOUND, mapOf(
+                        "class" to type.name,
+                        "method" to functionName,
+                        "type" to modelType,
+                        "relation" to relation
+                    )
+                )
             } catch (e: SecurityException) {
-                throw RelationshipInvalidException(RelationshipInvalidException.Reason.RELATIONSHIP_METHOD_NOT_FOUND, mapOf(
-                    "class" to type.name,
-                    "method" to functionName,
-                    "type" to modelType,
-                    "relation" to relation
-                ))
+                throw RelationshipInvalidException(
+                    RelationshipInvalidException.Reason.RELATIONSHIP_METHOD_NOT_FOUND, mapOf(
+                        "class" to type.name,
+                        "method" to functionName,
+                        "type" to modelType,
+                        "relation" to relation
+                    )
+                )
             }
         }
 
