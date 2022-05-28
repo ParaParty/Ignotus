@@ -30,21 +30,21 @@ abstract class BaseResponse {
     /**
      * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
      */
-    fun setModelSerializer(serializer: Serializer<in BaseResponse>) {
+    fun setModelSerializer(serializer: Serializer<out BaseResponse>) {
         this.modelSerializer = serializer
     }
 
     /**
      * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
      */
-    fun setModelSerializer(serializer: Class<in Serializer<in BaseResponse>>) {
+    fun setModelSerializer(serializer: Class<out Serializer<out BaseResponse>>) {
         this.modelSerializer = serializer
     }
 
     /**
      * 本类型的 JSON:API 规范中的 `attributes` 字段的序列化类。
      */
-    fun setModelSerializer(serializer: KClass<in Serializer<in BaseResponse>>) {
+    fun setModelSerializer(serializer: KClass<out Serializer<out BaseResponse>>) {
         this.modelSerializer = serializer.java
     }
 
