@@ -11,38 +11,38 @@
 <dependency>
   <groupId>com.tairitsu</groupId>
   <artifactId>ignotus-exception</artifactId> <!-- 以全局异常处理模块为例 -->
-  <version>1.0.27</version>
+  <version>1.0.28</version>
 </dependency>
 ```
 
 ### Gradle
 ```groovy
 // JSON:API 输出格式的全局异常处理模块
-implementation 'com.tairitsu:ignotus-exception:1.0.27'
+implementation 'com.tairitsu:ignotus-exception:1.0.28'
 
 // JSON:API 格式的 Controller 定义助手
-implementation 'com.tairitsu:ignotus-foundation:1.0.27'
+implementation 'com.tairitsu:ignotus-foundation:1.0.28'
 
 // JSON:API 格式的数据序列化工具
-implementation 'com.tairitsu:ignotus-serializer:1.0.27'
+implementation 'com.tairitsu:ignotus-serializer:1.0.28'
 
 // 基本辅助类
-implementation 'com.tairitsu:ignotus-support:1.0.27'
+implementation 'com.tairitsu:ignotus-support:1.0.28'
 
 // Laravel 风格的数据验证器
-implementation 'com.tairitsu:ignotus-validation:1.0.27'
+implementation 'com.tairitsu:ignotus-validation:1.0.28'
 
 // Laravel 风格的键值对数据库封装
-implementation 'com.tairitsu:ignotus-cache:1.0.27'
+implementation 'com.tairitsu:ignotus-cache:1.0.28'
 
 // Laravel 风格的文本模板
-implementation 'com.tairitsu:ignotus-translation:1.0.27'
+implementation 'com.tairitsu:ignotus-translation:1.0.28'
 
 // 参考网友实现的 JetBrains-Exposed 自动时间戳封装
-implementation 'com.tairitsu:ignotus-database-exposed:1.0.27'
+implementation 'com.tairitsu:ignotus-database-exposed:1.0.28'
 
 // JPA 自动时间戳封装
-implementation 'com.tairitsu:ignotus-database-jpa:1.0.27'
+implementation 'com.tairitsu:ignotus-database-jpa:1.0.28'
 ```
 
 ## 使用介绍
