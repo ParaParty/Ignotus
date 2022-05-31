@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import com.tairitsu.ignotus.support.service.JSONMapperProvider
 import org.springframework.stereotype.Component
 
-@Component
+//@Component
 class JSONMapperProviderConfig : JSONMapperProvider {
     override val objectMapper: ObjectMapper = JsonMapper.builder()
         .addModule(ParameterNamesModule())

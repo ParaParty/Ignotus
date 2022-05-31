@@ -17,10 +17,7 @@ class DefaultJSONMapperProvider() : JSONMapperProvider {
     }
 
     override val objectMapper: ObjectMapper = JsonMapper.builder()
-        .addModule(ParameterNamesModule())
-        .addModule(Jdk8Module())
-        .addModule(JavaTimeModule())
-        .addModule(KotlinModule.Builder().build())
+        .findAndAddModules()
         .build()
 
     init {
