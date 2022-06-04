@@ -42,11 +42,38 @@ class ValidatorImpl : Validator {
     /**
      * 验证器合集
      */
-    private lateinit var validatorPool: HashMap<String, AttributeValidatorInterface>
+    private val validatorPool by lazy {
+        val ret = HashMap<String, AttributeValidatorInterface>()
+
+        val beans: Map<String, AttributeValidatorInterface> =
+            applicationContext.getBeansOfType(AttributeValidatorInterface::class.java)
+
+        beans.forEach { (k, v) ->
+            val name = run {
+                val s = if (k.startsWith("validator") || k.startsWith("Validator")) {
+                    k.substring("validator".length)
+                } else {
+                    k
+                }
+
+                if (s.length == 1) {
+                    s.lowercase()
+                } else {
+                    s[0].lowercase() + s.substring(1)
+                }
+            }
+
+            if (ret[name] != null) {
+                throw ValidationInvalidException(ValidationInvalidException.Reason.VALIDATOR_DUPLICATED,
+                    mapOf("validator" to name))
+            }
+            ret[name] = v
+        }
+
+        ret
+    }
 
     override fun validate(content: Any?, basePath: String) {
-        ensureInitialized()
-
         if (content == null) {
             return
         }
@@ -229,8 +256,6 @@ class ValidatorImpl : Validator {
     }
 
     override fun validate(content: Map<String, Any?>, validation: Map<String, Any>, basePath: String) {
-        ensureInitialized()
-
         validation.forEach { (k, v) ->
             if (
                 ((v !is String) && (v !is Collection<*>) && (v !is AttributeValidatorInterface) && (v !is Pair<*, *>))
@@ -250,37 +275,6 @@ class ValidatorImpl : Validator {
             val e = ApiExceptionBag()
             result.forEach { s -> e.add(s); }
             throw e
-        }
-    }
-
-    private fun ensureInitialized() {
-        if (this::validatorPool.isInitialized) return
-
-        validatorPool = HashMap()
-
-        val beans: Map<String, AttributeValidatorInterface> =
-            applicationContext.getBeansOfType(AttributeValidatorInterface::class.java)
-
-        beans.forEach { (k, v) ->
-            val name = run {
-                val s = if (k.startsWith("validator") || k.startsWith("Validator")) {
-                    k.substring("validator".length)
-                } else {
-                    k
-                }
-
-                if (s.length == 1) {
-                    s.lowercase()
-                } else {
-                    s[0].lowercase() + s.substring(1)
-                }
-            }
-
-            if (validatorPool[name] != null) {
-                throw ValidationInvalidException(ValidationInvalidException.Reason.VALIDATOR_DUPLICATED,
-                    mapOf("validator" to name))
-            }
-            validatorPool[name] = v
         }
     }
 
