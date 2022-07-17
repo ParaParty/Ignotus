@@ -8,7 +8,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.tairitsu.ignotus.cache.CacheService
 import com.tairitsu.ignotus.support.util.JSON.jsonToObject
 import com.tairitsu.ignotus.support.util.JSON.toJson
-import org.springframework.util.DigestUtils
+import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -19,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.ReentrantLock
 import java.util.function.Supplier
 import kotlin.concurrent.withLock
+
 class FilesystemCacheService(storagePath: String) : CacheService {
 
     private val lock = ReentrantLock()
@@ -89,9 +90,11 @@ class FilesystemCacheService(storagePath: String) : CacheService {
         }
     }
 
+    private fun String.getMd5(): String = DigestUtils.md5Hex(this).lowercase()
+
     @Suppress("DuplicatedCode")
     private fun getValue(key: String): CacheEntry? {
-        val hash = DigestUtils.md5DigestAsHex(key.toByteArray())
+        val hash = key.getMd5()
         val path = hash.subSequence(0, 2).toString()
         val file = File(File(baseStoragePath, path), "$hash.json")
 
@@ -116,7 +119,7 @@ class FilesystemCacheService(storagePath: String) : CacheService {
 
     @Suppress("DuplicatedCode")
     private fun setValue(record: CacheEntry): Boolean {
-        val hash = DigestUtils.md5DigestAsHex(record.id.toByteArray())
+        val hash = record.id.getMd5()
         val path = hash.subSequence(0, 2).toString()
         val folder = File(baseStoragePath, path)
         val file = File(folder, "$hash.json")
@@ -143,7 +146,7 @@ class FilesystemCacheService(storagePath: String) : CacheService {
 
     @Suppress("DuplicatedCode")
     private fun delValue(key: String): CacheEntry? {
-        val hash = DigestUtils.md5DigestAsHex(key.toByteArray())
+        val hash = key.getMd5()
         val path = hash.subSequence(0, 2).toString()
         val file = File(File(baseStoragePath, path), "$hash.json")
 

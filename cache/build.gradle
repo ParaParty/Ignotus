@@ -22,6 +22,8 @@ dependencies {
     compileOnly 'org.springframework.data:spring-data-mongodb:3.3.0'
     compileOnly 'org.springframework.boot:spring-boot-autoconfigure:2.5.6'
 
+    api 'commons-codec:commons-codec:1.15'
+
     api project(path: ':support')
 }
 
