@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.tairitsu.ignotus.cache.CacheService
-import com.tairitsu.ignotus.support.util.Base64Utils.base64Encode
 import com.tairitsu.ignotus.support.util.JSON.jsonToObject
 import com.tairitsu.ignotus.support.util.JSON.toJson
 import org.springframework.util.DigestUtils
@@ -20,8 +19,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.ReentrantLock
 import java.util.function.Supplier
 import kotlin.concurrent.withLock
-
-
 class FilesystemCacheService(storagePath: String) : CacheService {
 
     private val lock = ReentrantLock()
@@ -170,13 +167,13 @@ class FilesystemCacheService(storagePath: String) : CacheService {
     }
 
     @Suppress("DuplicatedCode")
-    private  fun <T> putValue(key: String, value: T, ttl: Long): Boolean {
+    private fun <T> putValue(key: String, value: T, ttl: Long): Boolean {
         val now = System.currentTimeMillis()
         val validUntil = now + ttl * 1000
         val validUntilDate = Date(validUntil).toString()
 
         val record = CacheEntry()
-        record.id = key.base64Encode()
+        record.id = key
         record.value = value?.toJson() ?: "null"
         record.validUntilMillis = validUntil
         record.validUntil = validUntilDate
@@ -186,7 +183,7 @@ class FilesystemCacheService(storagePath: String) : CacheService {
     }
 
     @Suppress("DuplicatedCode")
-    private  fun <T> putValueForever(key: String, value: T): Boolean {
+    private fun <T> putValueForever(key: String, value: T): Boolean {
         val record = CacheEntry()
         record.id = key
         record.value = value?.toJson() ?: "null"
